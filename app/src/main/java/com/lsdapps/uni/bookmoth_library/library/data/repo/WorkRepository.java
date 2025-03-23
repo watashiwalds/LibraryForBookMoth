@@ -52,6 +52,20 @@ public class WorkRepository {
         });
     }
 
+    public void getOwnedWorks(String token, InnerCallback<List<Work>> callback) {
+        api.getOwnedWorks(token).enqueue(new Callback<List<Work>>() {
+            @Override
+            public void onResponse(Call<List<Work>> call, Response<List<Work>> response) {
+                callback.onSuccess(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<List<Work>> call, Throwable t) {
+                callback.onError(t.toString());
+            }
+        });
+    }
+
     public void getWorkById(int work_id, InnerCallback<Work> callback) {
         api.getWorkById(work_id).enqueue(new Callback<Work>() {
             @Override

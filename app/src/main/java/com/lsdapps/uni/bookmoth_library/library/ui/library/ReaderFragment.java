@@ -13,16 +13,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.WorkRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetOwnedWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetWorksUseCase;
-import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkRecyclerViewAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ReaderFragment extends Fragment {
@@ -54,7 +54,7 @@ public class ReaderFragment extends Fragment {
     }
 
     private void fetchOwnedWorks() {
-        new GetWorksUseCase(new WorkRepository()).run(null, new InnerCallback<List<Work>>() {
+        new GetOwnedWorksUseCase(new WorkRepository()).run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
             @Override
             public void onSuccess(List<Work> body) {
                 works.addAll(body);

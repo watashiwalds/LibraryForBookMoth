@@ -18,6 +18,9 @@ public interface LibApiService {
     @GET("/libapi/cdn/cover/{cover}")
     Call<ResponseBody> getWorkCover(@Path("cover") String cover_url);
 
+    @GET("/libapi/owned")
+    Call<List<Work>> getOwnedWorks(@Header("Authorization") String token);
+
     @GET("/libapi/works")
     Call<List<Work>> getWorks(@QueryMap Map<String, String> query);
 
