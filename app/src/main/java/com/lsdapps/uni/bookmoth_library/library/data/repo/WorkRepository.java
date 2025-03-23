@@ -2,6 +2,7 @@ package com.lsdapps.uni.bookmoth_library.library.data.repo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
@@ -42,6 +43,12 @@ public class WorkRepository {
                         throw new RuntimeException(e);
                     }
                     callback.onSuccess(BitmapFactory.decodeByteArray(imageData, 0, imageData.length));
+                } else {
+                    try {
+                        callback.onError(response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 
@@ -53,33 +60,11 @@ public class WorkRepository {
     }
 
     public void getOwnedWorks(String token, InnerCallback<List<Work>> callback) {
-        api.getOwnedWorks(token).enqueue(new Callback<List<Work>>() {
-            @Override
-            public void onResponse(Call<List<Work>> call, Response<List<Work>> response) {
-                callback.onSuccess(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<List<Work>> call, Throwable t) {
-                callback.onError(t.toString());
-            }
-        });
+        api.getOwnedWorks(token).enqueue(NoProcessingCallback.make(callback));
     }
 
     public void getWorkById(int work_id, InnerCallback<Work> callback) {
-        api.getWorkById(work_id).enqueue(new Callback<Work>() {
-            @Override
-            public void onResponse(Call<Work> call, Response<Work> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Work> call, Throwable t) {
-                callback.onError(t.toString());
-            }
-        });
+        api.getWorkById(work_id).enqueue(NoProcessingCallback.make(callback));
     }
 
     public void getChaptersOfWork(int work_id, Map<String, String> args, InnerCallback<List<Chapter>> callback) {
@@ -94,18 +79,6 @@ public class WorkRepository {
         if (args == null) {
             args = Collections.emptyMap();
         }
-        api.getWorks(args).enqueue(new Callback<List<Work>>() {
-            @Override
-            public void onResponse(Call<List<Work>> call, Response<List<Work>> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Work>> call, Throwable t) {
-                callback.onError(t.toString());
-            }
-        });
+        api.getWorks(args).enqueue(NoProcessingCallback.make(callback));
     }
 }
