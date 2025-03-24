@@ -16,7 +16,7 @@ import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
-import com.lsdapps.uni.bookmoth_library.library.data.repo.ApiRepository;
+import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetOwnedWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
@@ -58,7 +58,7 @@ public class ReaderFragment extends Fragment {
     }
 
     private void fetchOwnedWorks() {
-        new GetOwnedWorksUseCase(new ApiRepository()).run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
+        new GetOwnedWorksUseCase(new LibApiRepository()).run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
             @Override
             public void onSuccess(List<Work> body) {
                 if (!works.isEmpty()) works.clear();

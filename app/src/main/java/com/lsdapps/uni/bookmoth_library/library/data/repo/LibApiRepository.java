@@ -19,10 +19,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ApiRepository {
+public class LibApiRepository {
     private LibApiService api;
 
-    public ApiRepository() {
+    public LibApiRepository() {
         api = RetrofitClient.getInstance().create(LibApiService.class);
     }
 
@@ -71,18 +71,19 @@ public class ApiRepository {
         api.getWorkById(work_id).enqueue(NoProcessingCallback.make(callback));
     }
 
-    public void getChaptersOfWork(int work_id, Map<String, String> args, InnerCallback<List<Chapter>> callback) {
-
-    }
-
-    public void getChapterById(int chapter_id, InnerCallback<Chapter> callback) {
-
-    }
-
     public void getWorks(Map<String, String> args, InnerCallback<List<Work>> callback) {
         if (args == null) {
             args = Collections.emptyMap();
         }
         api.getWorks(args).enqueue(NoProcessingCallback.make(callback));
+    }
+
+    public void getChaptersOfWork(int work_id, Map<String, String> args, InnerCallback<List<Chapter>> callback) {
+        if (args == null) args = Collections.emptyMap();
+        api.getChaptersOfWork(work_id, args).enqueue(NoProcessingCallback.make(callback));
+    }
+
+    public void getChapterById(int chapter_id, InnerCallback<Chapter> callback) {
+
     }
 }

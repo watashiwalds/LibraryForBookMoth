@@ -11,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.http.*;
 
 public interface LibApiService {
+    //CDN Call
     @Streaming
     @GET("/libapi/cdn/read/{content}")
     Call<ResponseBody> getChapterContent(@Path("content") String content_url);
@@ -18,6 +19,7 @@ public interface LibApiService {
     @GET("/libapi/cdn/cover/{cover}")
     Call<ResponseBody> getWorkCover(@Path("cover") String cover_url);
 
+    //Work-related list call
     @GET("/libapi/owned")
     Call<List<Work>> getOwnedWorks(@Header("Authorization") String token);
 
@@ -27,11 +29,12 @@ public interface LibApiService {
     @GET("/libapi/works")
     Call<List<Work>> getWorks(@QueryMap Map<String, String> query);
 
-    @GET("/libapi/work/{wid}")
-    Call<Work> getWorkById(@Path("wid") int work_id);
-
     @GET("/libapi/work/{wid}/chapters")
     Call<List<Chapter>> getChaptersOfWork(@Path("wid") int work_id, @QueryMap Map<String, String> query);
+
+    //Individual object call
+    @GET("/libapi/work/{wid}")
+    Call<Work> getWorkById(@Path("wid") int work_id);
 
     @GET("/libapi/chapter/{cid}")
     Call<Chapter> getChapterById(@Path("cid") int chapter_id);
