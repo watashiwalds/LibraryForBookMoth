@@ -6,4 +6,5 @@
     <string name="libmode_title_author">TÁC PHẨM CỦA BẠN</string>
     <string name="libmode_title_reader">THƯ VIỆN CỦA BẠN</string>
     <string name="liblabel_work_detail">Tác phẩm</string>
+    <string name="chapter_chapter">Chương </string>
 </resources>

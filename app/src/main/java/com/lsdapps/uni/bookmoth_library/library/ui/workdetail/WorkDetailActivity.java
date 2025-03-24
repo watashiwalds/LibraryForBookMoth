@@ -12,6 +12,7 @@ import com.lsdapps.uni.bookmoth_library.R;
 
 public class WorkDetailActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

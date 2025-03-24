@@ -29,7 +29,7 @@ public class WorkItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkItemRe
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_library_work, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_work_card, parent, false);
         return new ViewHolder(v, listener);
     }
 
