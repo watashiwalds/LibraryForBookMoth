@@ -1,6 +1,8 @@
 package com.lsdapps.uni.bookmoth_library.library.domain.model;
 
-public class Work {
+import java.io.Serializable;
+
+public class Work implements Serializable {
     private int work_id;
     private int profile_id;
     private String author_name;
