@@ -1,6 +1,5 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.adapter;
 
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +14,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
-import com.lsdapps.uni.bookmoth_library.library.data.repo.WorkRepository;
-import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
-import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetWorkCoverUseCase;
 
 import java.util.List;
 
-public class WorkRecyclerViewAdapter extends RecyclerView.Adapter<WorkRecyclerViewAdapter.ViewHolder> {
+public class WorkItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkItemRecyclerViewAdapter.ViewHolder> {
     private List<Work> works;
     private OnItemClickListener listener;
 
-    public WorkRecyclerViewAdapter(List<Work> works, OnItemClickListener listener) {
+    public WorkItemRecyclerViewAdapter(List<Work> works, OnItemClickListener listener) {
         this.works = works;
         this.listener = listener;
     }

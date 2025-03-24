@@ -19,7 +19,7 @@ import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.WorkRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetOwnedWorksUseCase;
-import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ReaderFragment extends Fragment {
     View view;
     ArrayList<Work> works;
     RecyclerView rv_works;
-    WorkRecyclerViewAdapter rv_works_adapter;
+    WorkItemRecyclerViewAdapter rv_works_adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class ReaderFragment extends Fragment {
 
         rv_works = view.findViewById(R.id.lib_rv_writelist);
         rv_works.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
-        rv_works_adapter = new WorkRecyclerViewAdapter(works, pos -> Toast.makeText(getContext(), "TEMP_ clicked " + pos, Toast.LENGTH_SHORT).show());
+        rv_works_adapter = new WorkItemRecyclerViewAdapter(works, pos -> Toast.makeText(getContext(), "TEMP_ clicked " + pos, Toast.LENGTH_SHORT).show());
         rv_works.setAdapter(rv_works_adapter);
     }
 
