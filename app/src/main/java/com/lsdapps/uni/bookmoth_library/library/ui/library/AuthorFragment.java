@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorFragment extends Fragment {
+    GetCreatedWorksUseCase getCreatedWorks;
     View view;
     ArrayList<Work> works;
     RecyclerView rv_works;
@@ -44,6 +45,8 @@ public class AuthorFragment extends Fragment {
     }
 
     private void initObjects() {
+        getCreatedWorks = new GetCreatedWorksUseCase(new LibApiRepository());
+
         works = new ArrayList<Work>();
 
         rv_works = view.findViewById(R.id.lib_rv_writelist);
@@ -55,7 +58,7 @@ public class AuthorFragment extends Fragment {
     }
 
     private void fetchCreatedWorks() {
-        new GetCreatedWorksUseCase(new LibApiRepository()).run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
+        getCreatedWorks.run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
             @Override
             public void onSuccess(List<Work> body) {
                 if (!works.isEmpty()) works.clear();
