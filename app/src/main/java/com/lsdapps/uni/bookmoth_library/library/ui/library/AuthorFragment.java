@@ -1,5 +1,6 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.library;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.lsdapps.uni.bookmoth_library.library.data.repo.WorkRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetCreatedWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.workdetail.WorkDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +50,9 @@ public class AuthorFragment extends Fragment {
 
         rv_works = view.findViewById(R.id.lib_rv_writelist);
         rv_works.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
-        rv_works_adapter = new WorkItemRecyclerViewAdapter(works, pos -> Toast.makeText(getContext(), "TEMP_ clicked " + pos, Toast.LENGTH_SHORT).show());
+        rv_works_adapter = new WorkItemRecyclerViewAdapter(works, pos -> {
+            Toast.makeText(requireContext(), "TODO Open EditActivity " + pos, Toast.LENGTH_SHORT).show();
+        });
         rv_works.setAdapter(rv_works_adapter);
     }
 
