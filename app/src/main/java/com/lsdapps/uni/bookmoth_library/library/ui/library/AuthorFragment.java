@@ -1,6 +1,5 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.library;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +16,10 @@ import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
-import com.lsdapps.uni.bookmoth_library.library.data.repo.WorkRepository;
+import com.lsdapps.uni.bookmoth_library.library.data.repo.ApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetCreatedWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
-import com.lsdapps.uni.bookmoth_library.library.ui.workdetail.WorkDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +55,7 @@ public class AuthorFragment extends Fragment {
     }
 
     private void fetchCreatedWorks() {
-        new GetCreatedWorksUseCase(new WorkRepository()).run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
+        new GetCreatedWorksUseCase(new ApiRepository()).run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
             @Override
             public void onSuccess(List<Work> body) {
                 if (!works.isEmpty()) works.clear();

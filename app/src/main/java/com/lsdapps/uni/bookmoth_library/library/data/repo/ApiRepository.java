@@ -2,7 +2,6 @@ package com.lsdapps.uni.bookmoth_library.library.data.repo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
@@ -20,10 +19,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WorkRepository {
+public class ApiRepository {
     private LibApiService api;
 
-    public WorkRepository() {
+    public ApiRepository() {
         api = RetrofitClient.getInstance().create(LibApiService.class);
     }
 

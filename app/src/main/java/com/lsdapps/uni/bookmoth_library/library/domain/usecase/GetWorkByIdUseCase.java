@@ -1,13 +1,13 @@
 package com.lsdapps.uni.bookmoth_library.library.domain.usecase;
 
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
-import com.lsdapps.uni.bookmoth_library.library.data.repo.WorkRepository;
+import com.lsdapps.uni.bookmoth_library.library.data.repo.ApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 
 public class GetWorkByIdUseCase {
-    private final WorkRepository repo;
+    private final ApiRepository repo;
 
-    public GetWorkByIdUseCase(WorkRepository repo) {
+    public GetWorkByIdUseCase(ApiRepository repo) {
         this.repo = repo;
     }
 

@@ -3,12 +3,12 @@ package com.lsdapps.uni.bookmoth_library.library.domain.usecase;
 import android.graphics.Bitmap;
 
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
-import com.lsdapps.uni.bookmoth_library.library.data.repo.WorkRepository;
+import com.lsdapps.uni.bookmoth_library.library.data.repo.ApiRepository;
 
 public class GetWorkCoverUseCase {
-    private final WorkRepository repo;
+    private final ApiRepository repo;
 
-    public GetWorkCoverUseCase(WorkRepository repo) {
+    public GetWorkCoverUseCase(ApiRepository repo) {
         this.repo = repo;
     }
 
