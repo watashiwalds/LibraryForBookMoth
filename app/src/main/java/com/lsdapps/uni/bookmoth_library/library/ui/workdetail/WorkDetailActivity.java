@@ -1,7 +1,7 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.workdetail;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -23,7 +23,6 @@ import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDetailsRecyclerViewAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class WorkDetailActivity extends AppCompatActivity {
@@ -34,6 +33,8 @@ public class WorkDetailActivity extends AppCompatActivity {
 
     RecyclerView rv_workDetails;
     WorkDetailsRecyclerViewAdapter rv_workDetails_adapter;
+
+    ImageButton btn_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class WorkDetailActivity extends AppCompatActivity {
         setIntent(getIntent());
 
         initObjects();
+        initFunctions();
         fetchChapters(work.getWork_id());
     }
 
@@ -59,14 +61,18 @@ public class WorkDetailActivity extends AppCompatActivity {
 
         rv_workDetails = findViewById(R.id.wkdt_rv_details);
         rv_workDetails.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rv_workDetails_adapter = new WorkDetailsRecyclerViewAdapter(work, chapters, new OnItemClickListener() {
-            @Override
-            public void onItemClick(int pos) {
-                pos = pos - 1; //In this usecase, RecyclerView have title which make overall pos++. Need to decrease
-                Toast.makeText(WorkDetailActivity.this, "[TODO] Reader " + chapters.get(pos).getContent_url(), Toast.LENGTH_SHORT).show();
-            }
+        rv_workDetails_adapter = new WorkDetailsRecyclerViewAdapter(work, chapters, pos -> {
+            Toast.makeText(WorkDetailActivity.this, "[TODO] Reader " + chapters.get(pos).getContent_url(), Toast.LENGTH_SHORT).show();
         });
         rv_workDetails.setAdapter(rv_workDetails_adapter);
+
+        btn_back = findViewById(R.id.imgbtn_back);
+    }
+
+    public void initFunctions() {
+        btn_back.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     private void fetchChapters(int work_id) {
