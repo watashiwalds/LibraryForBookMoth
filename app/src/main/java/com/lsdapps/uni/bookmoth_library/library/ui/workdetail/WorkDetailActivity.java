@@ -13,8 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
+import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChaptersOfWorkUseCase;
+import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDetailsRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -22,6 +27,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class WorkDetailActivity extends AppCompatActivity {
+    GetChaptersOfWorkUseCase getChaptersOfWork;
+
     Work work;
     ArrayList<Chapter> chapters;
 
@@ -45,16 +52,36 @@ public class WorkDetailActivity extends AppCompatActivity {
     }
 
     private void initObjects() {
+        getChaptersOfWork = new GetChaptersOfWorkUseCase(new LibApiRepository());
+
         work = (Work) getIntent().getSerializableExtra("work");
         chapters = new ArrayList<>();
 
         rv_workDetails = findViewById(R.id.wkdt_rv_details);
         rv_workDetails.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rv_workDetails_adapter = new WorkDetailsRecyclerViewAdapter(work, chapters);
+        rv_workDetails_adapter = new WorkDetailsRecyclerViewAdapter(work, chapters, new OnItemClickListener() {
+            @Override
+            public void onItemClick(int pos) {
+                pos = pos - 1; //In this usecase, RecyclerView have title which make overall pos++. Need to decrease
+                Toast.makeText(WorkDetailActivity.this, "[TODO] Reader " + chapters.get(pos).getContent_url(), Toast.LENGTH_SHORT).show();
+            }
+        });
         rv_workDetails.setAdapter(rv_workDetails_adapter);
     }
 
-    private void fetchChapters(int workId) {
+    private void fetchChapters(int work_id) {
+        getChaptersOfWork.run(work_id, null, new InnerCallback<List<Chapter>>() {
+            @Override
+            public void onSuccess(List<Chapter> body) {
+                if (!chapters.isEmpty()) chapters.clear();
+                chapters.addAll(body);
+                rv_workDetails_adapter.notifyItemRangeInserted(1, chapters.size());
+            }
 
+            @Override
+            public void onError(String errorMessage) {
+                ErrorDialog.showError(WorkDetailActivity.this, errorMessage);
+            }
+        });
     }
 }

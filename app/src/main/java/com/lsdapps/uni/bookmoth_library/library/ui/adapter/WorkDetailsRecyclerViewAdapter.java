@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewholder.ChapterItemRecyclerViewHolder;
@@ -25,13 +26,16 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     private Work work;
     private List<Chapter> chapters;
+    private OnItemClickListener chapterClick;
 
-    public WorkDetailsRecyclerViewAdapter(Work work, List<Chapter> chapters) {
+    public WorkDetailsRecyclerViewAdapter(Work work, List<Chapter> chapters, OnItemClickListener chapterClick) {
         this.work = work;
         this.chapters = chapters;
+        this.chapterClick = chapterClick;
     }
 
-    private int getViewType(int pos) {
+    @Override
+    public int getItemViewType(int pos) {
         return pos == 0 ? VIEWTYPE_HEADER : VIEWTYPE_ITEM;
     }
 
@@ -43,7 +47,7 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             return new WorkInfosCardRecyclerViewHolder(v);
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chapter_list, parent, false);
-            return new ChapterItemRecyclerViewHolder(v);
+            return new ChapterItemRecyclerViewHolder(v, chapterClick);
         }
     }
 
@@ -59,15 +63,15 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             }
             hdr.author.setText(work.getAuthor_name());
             hdr.title.setText(work.getTitle());
-            hdr.pdate.setText(work.getPost_date().substring(0, 10));
-            hdr.viewcount.setText(work.getView_count());
+            hdr.pdate.setText(DateTimeFormat.format(work.getPost_date(), DateTimeFormat.DATE_ONLY));
+            hdr.viewcount.setText(String.valueOf(work.getView_count()));
             hdr.price.setText(String.format(Locale.getDefault(), "%.2f", work.getPrice()));
             hdr.desc.setText(work.getDescription());
         } else if (holder instanceof ChapterItemRecyclerViewHolder) {
             ChapterItemRecyclerViewHolder hdr = (ChapterItemRecyclerViewHolder) holder;
             Chapter item = chapters.get(position - 1); //exclude title in RecyclerView
-            hdr.index.setText(item.getContent_url().split("_")[1]);
-            hdr.pdate.setText(item.getPost_date());
+            hdr.index.setText(item.getContent_url().split("\\.")[0].split("_")[1]);
+            hdr.pdate.setText(DateTimeFormat.format(item.getPost_date(), DateTimeFormat.DATE_TIME));
             hdr.title.setText(item.getTitle());
         }
     }
