@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/imgbtn_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="#00FFFFFF"
@@ -39,9 +39,9 @@
             android:textColor="@color/general"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButton"
-            app:layout_constraintStart_toEndOf="@+id/imageButton"
-            app:layout_constraintTop_toTopOf="@+id/imageButton" />
+            app:layout_constraintBottom_toBottomOf="@+id/imgbtn_back"
+            app:layout_constraintStart_toEndOf="@+id/imgbtn_back"
+            app:layout_constraintTop_toTopOf="@+id/imgbtn_back" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
