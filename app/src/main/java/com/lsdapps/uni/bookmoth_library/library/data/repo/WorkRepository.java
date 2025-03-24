@@ -32,6 +32,7 @@ public class WorkRepository {
     }
 
     public void getWorkCover(String cover_url, InnerCallback<Bitmap> callback) {
+        if (cover_url.isBlank()) return;
         api.getWorkCover(cover_url).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -61,6 +62,10 @@ public class WorkRepository {
 
     public void getOwnedWorks(String token, InnerCallback<List<Work>> callback) {
         api.getOwnedWorks(token).enqueue(NoProcessingCallback.make(callback));
+    }
+
+    public void getCreatedWorks(String token, InnerCallback<List<Work>> callback) {
+        api.getCreatedWorks(token).enqueue(NoProcessingCallback.make(callback));
     }
 
     public void getWorkById(int work_id, InnerCallback<Work> callback) {

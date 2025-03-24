@@ -21,6 +21,9 @@ public interface LibApiService {
     @GET("/libapi/owned")
     Call<List<Work>> getOwnedWorks(@Header("Authorization") String token);
 
+    @GET("/libapi/created")
+    Call<List<Work>> getCreatedWorks(@Header("Authorization") String token);
+
     @GET("/libapi/works")
     Call<List<Work>> getWorks(@QueryMap Map<String, String> query);
 

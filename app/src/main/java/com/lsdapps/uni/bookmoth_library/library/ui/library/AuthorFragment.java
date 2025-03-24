@@ -16,15 +16,20 @@ import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
+import com.lsdapps.uni.bookmoth_library.library.data.devlab.LabRepository;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.WorkRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetCreatedWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetOwnedWorksUseCase;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkRecyclerViewAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-public class ReaderFragment extends Fragment {
+public class AuthorFragment extends Fragment {
     View view;
     ArrayList<Work> works;
     RecyclerView rv_works;
@@ -32,7 +37,7 @@ public class ReaderFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_library_reader, container, false);
+        return inflater.inflate(R.layout.fragment_library_author, container, false);
     }
 
     @Override
@@ -40,7 +45,7 @@ public class ReaderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         initObjects();
-        fetchOwnedWorks();
+        fetchCreatedWorks();
     }
 
     private void initObjects() {
@@ -52,8 +57,8 @@ public class ReaderFragment extends Fragment {
         rv_works.setAdapter(rv_works_adapter);
     }
 
-    private void fetchOwnedWorks() {
-        new GetOwnedWorksUseCase(new WorkRepository()).run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
+    private void fetchCreatedWorks() {
+        new GetCreatedWorksUseCase(new WorkRepository()).run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
             @Override
             public void onSuccess(List<Work> body) {
                 if (!works.isEmpty()) works.clear();

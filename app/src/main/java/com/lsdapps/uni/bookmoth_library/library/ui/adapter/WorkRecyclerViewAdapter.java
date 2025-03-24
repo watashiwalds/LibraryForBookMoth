@@ -43,7 +43,8 @@ public class WorkRecyclerViewAdapter extends RecyclerView.Adapter<WorkRecyclerVi
 
         holder.title.setText(String.valueOf(item.getTitle()));
         holder.author.setText(String.valueOf(item.getAuthor_name()));
-        Glide.with(holder.itemView)
+        if (item.getCover_url() != null && !item.getCover_url().isBlank())
+            Glide.with(holder.itemView)
                 .load(ApiConst.API_URL + ApiConst.CDN_COVER + item.getCover_url())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(holder.cover);

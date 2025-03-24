@@ -3,4 +3,6 @@
     <string name="mainnav_thuvien">Thư viện</string>
     <string name="libmode_toAuthor">Viết tác phẩm</string>
     <string name="libmode_toReader">Đọc tác phẩm</string>
+    <string name="libmode_title_author">TÁC PHẨM CỦA BẠN</string>
+    <string name="libmode_title_reader">THƯ VIỆN CỦA BẠN</string>
 </resources>
