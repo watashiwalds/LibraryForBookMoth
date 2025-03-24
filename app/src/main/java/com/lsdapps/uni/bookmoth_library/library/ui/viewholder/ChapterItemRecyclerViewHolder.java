@@ -10,6 +10,7 @@ import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 
 public class ChapterItemRecyclerViewHolder extends RecyclerView.ViewHolder {
+    public int arrayIndex;
     public TextView index;
     public TextView pdate;
     public TextView title;
@@ -22,8 +23,8 @@ public class ChapterItemRecyclerViewHolder extends RecyclerView.ViewHolder {
 
         itemView.setOnClickListener(v -> {
             if (listener != null) {
-                int pos = getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION) {
+                int pos = arrayIndex;
+                if (getAdapterPosition() != RecyclerView.NO_POSITION) {
                     listener.onItemClick(pos);
                 }
             }

@@ -67,10 +67,14 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             hdr.viewcount.setText(String.valueOf(work.getView_count()));
             hdr.price.setText(String.format(Locale.getDefault(), "%.2f", work.getPrice()));
             hdr.desc.setText(work.getDescription());
-        } else if (holder instanceof ChapterItemRecyclerViewHolder) {
+            if (hdr.desc.getText().length() <= 0)
+                hdr.desc.setVisibility(View.GONE);
+        }
+        else if (holder instanceof ChapterItemRecyclerViewHolder) {
             ChapterItemRecyclerViewHolder hdr = (ChapterItemRecyclerViewHolder) holder;
-            Chapter item = chapters.get(position - 1); //exclude title in RecyclerView
-            hdr.index.setText(item.getContent_url().split("\\.")[0].split("_")[1]);
+            hdr.arrayIndex = (chapters.size() - 1) - (position - 1); //exclude title in RecyclerView | this was some live-though dumb solution to add arrayIndex
+            Chapter item = chapters.get(hdr.arrayIndex);
+            hdr.index.setText(String.valueOf(chapters.indexOf(item)+1));
             hdr.pdate.setText(DateTimeFormat.format(item.getPost_date(), DateTimeFormat.DATE_TIME));
             hdr.title.setText(item.getTitle());
         }
