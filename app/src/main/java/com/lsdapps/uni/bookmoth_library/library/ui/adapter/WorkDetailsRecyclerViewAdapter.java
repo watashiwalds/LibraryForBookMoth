@@ -72,7 +72,7 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
         }
         else if (holder instanceof ChapterItemRecyclerViewHolder) {
             ChapterItemRecyclerViewHolder hdr = (ChapterItemRecyclerViewHolder) holder;
-            hdr.arrayIndex = (chapters.size() - 1) - (position - 1); //exclude title in RecyclerView | this was some live-though dumb solution to add arrayIndex
+            hdr.arrayIndex = (chapters.size() - 1) - (position - 1); //exclude title in RecyclerView | this was some live-though dumb solution to add arrayIndex and reverse array order
             Chapter item = chapters.get(hdr.arrayIndex);
             hdr.index.setText(String.valueOf(chapters.indexOf(item)+1));
             hdr.pdate.setText(DateTimeFormat.format(item.getPost_date(), DateTimeFormat.DATE_TIME));
