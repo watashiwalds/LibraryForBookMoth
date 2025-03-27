@@ -43,7 +43,7 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEWTYPE_HEADER) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_workdetail_overallinfos, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_obj_wkdt_header, parent, false);
             return new WorkInfosCardRecyclerViewHolder(v);
         } else {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chapter_list, parent, false);
