@@ -7,4 +7,7 @@
     <string name="libmode_title_reader">THƯ VIỆN CỦA BẠN</string>
     <string name="liblabel_work_detail">Tác phẩm</string>
     <string name="chapter_chapter">Chương </string>
+    <string name="contentselection_discuss">Trích dẫn</string>
+    <string name="contentselection_search">Tìm kiếm</string>
+    <string name="contentselection_report">Báo cáo</string>
 </resources>

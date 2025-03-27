@@ -11,9 +11,9 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/rdr_nsv_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fillViewport="true"
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
@@ -27,6 +27,9 @@
                 android:id="@+id/rdr_tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingVertical="8dp"
+                android:textIsSelectable="true"
+
                 android:ellipsize="end"
                 android:singleLine="false"
                 android:text="dgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh" />
@@ -39,15 +42,14 @@
         android:id="@+id/rdr_tb_header"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="top"/>
+        android:layout_gravity="top"
+        app:contentInsetStart="0dp" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/rdr_tb_bottom"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_gravity="bottom"
-        app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"/>
+        android:layout_gravity="bottom"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
