@@ -2,6 +2,8 @@ package com.lsdapps.uni.bookmoth_library.library.data.repo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -26,8 +29,33 @@ public class LibApiRepository {
         api = RetrofitClient.getInstance().create(LibApiService.class);
     }
 
-    public void getChapterContent(String content_url, InnerCallback<ResponseBody> callback) {
+    public void getChapterContent(String token, String content_url, InnerCallback<String> callback) {
+        api.getChapterContent(token, content_url).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Executors.newSingleThreadExecutor().execute(() -> { //Executor open a new thread to run heavy task
+                        try {
+                            String content = response.body().string();
+                            new Handler(Looper.getMainLooper()).post(() -> callback.onSuccess(content)); //Handler wait for Executor result (post) to push it to main thread (Looper.getMainLooper())
+                        } catch (IOException e) {
+                            new Handler(Looper.getMainLooper()).post(() -> callback.onError(e.toString()));
+                        }
+                    });
+                } else {
+                    try {
+                        callback.onError(response.errorBody().string());
+                    } catch (IOException e) {
+                        callback.onError(e.toString());
+                    }
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callback.onError(t.toString());
+            }
+        });
     }
 
     public void getWorkCover(String cover_url, InnerCallback<Bitmap> callback) {
@@ -39,15 +67,15 @@ public class LibApiRepository {
                     byte[] imageData;
                     try {
                         imageData = response.body().bytes();
+                        callback.onSuccess(BitmapFactory.decodeByteArray(imageData, 0, imageData.length));
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        callback.onError(e.toString());
                     }
-                    callback.onSuccess(BitmapFactory.decodeByteArray(imageData, 0, imageData.length));
                 } else {
                     try {
                         callback.onError(response.errorBody().string());
                     } catch (IOException e) {
-                        throw new RuntimeException(e);
+                        callback.onError(e.toString());
                     }
                 }
             }

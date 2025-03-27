@@ -16,10 +16,20 @@ import androidx.core.widget.NestedScrollView;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
+import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
+import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
+import com.lsdapps.uni.bookmoth_library.library.ui.workdetail.WorkDetailActivity;
+
+import io.noties.markwon.Markwon;
 
 public class ReaderActivity extends AppCompatActivity {
+    GetChapterContentUseCase getChapterContent;
+
     NestedScrollView nestedContainer;
     BottomAppBar headerBar;
     BottomAppBar bottomBar;
@@ -31,6 +41,7 @@ public class ReaderActivity extends AppCompatActivity {
     Chapter chapter;
     String work_title;
     int index;
+    Markwon makeMarkwon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +68,14 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void initObjects() {
+        getChapterContent = new GetChapterContentUseCase(new LibApiRepository());
+
         nestedContainer = findViewById(R.id.rdr_nsv_content);
         headerBar = findViewById(R.id.rdr_tb_header);
         bottomBar = findViewById(R.id.rdr_tb_bottom);
         contentView = findViewById(R.id.rdr_tv_content);
+
+        makeMarkwon = Markwon.create(this);
     }
 
     private Boolean barVisible = true;
@@ -147,6 +162,16 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void fetchContent() {
+        getChapterContent.run(ApiConst.TEST_TOKEN, chapter.getContent_url(), new InnerCallback<String>() {
+            @Override
+            public void onSuccess(String body) {
+                makeMarkwon.setMarkdown(contentView, body);
+            }
 
+            @Override
+            public void onError(String errorMessage) {
+                ErrorDialog.showError(ReaderActivity.this, errorMessage);
+            }
+        });
     }
 }

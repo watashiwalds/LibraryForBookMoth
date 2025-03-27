@@ -71,7 +71,7 @@ public class ReaderFragment extends Fragment {
 
             @Override
             public void onError(String errorMessage) {
-                ErrorDialog.showError(getParentFragment().getContext(), errorMessage);
+                ErrorDialog.showError(requireContext(), errorMessage);
             }
         });
     }

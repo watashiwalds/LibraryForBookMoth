@@ -32,7 +32,7 @@
 
                 android:ellipsize="end"
                 android:singleLine="false"
-                android:text="dgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh\ndgdhfjgh" />
+                android:text="" />
 
         </LinearLayout>
 

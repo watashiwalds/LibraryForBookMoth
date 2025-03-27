@@ -14,7 +14,7 @@ public interface LibApiService {
     //CDN Call
     @Streaming
     @GET("/libapi/cdn/read/{content}")
-    Call<ResponseBody> getChapterContent(@Path("content") String content_url);
+    Call<ResponseBody> getChapterContent(@Header("Authorization") String token, @Path("content") String content_url);
 
     @GET("/libapi/cdn/cover/{cover}")
     Call<ResponseBody> getWorkCover(@Path("cover") String cover_url);
