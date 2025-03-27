@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="general">#000000</color>
+    <color name="background">#FFFFFF</color>
+    <color name="faintbox">@color/material_dynamic_neutral99</color>
 </resources>
