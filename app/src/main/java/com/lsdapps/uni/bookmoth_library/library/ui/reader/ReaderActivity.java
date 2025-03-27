@@ -23,7 +23,8 @@ import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
-import com.lsdapps.uni.bookmoth_library.library.ui.workdetail.WorkDetailActivity;
+
+import java.util.List;
 
 import io.noties.markwon.Markwon;
 
@@ -39,8 +40,8 @@ public class ReaderActivity extends AppCompatActivity {
     TextView tv_chapindex;
 
     Chapter chapter;
-    String work_title;
     int index;
+    String work_title;
     Markwon makeMarkwon;
 
     @Override

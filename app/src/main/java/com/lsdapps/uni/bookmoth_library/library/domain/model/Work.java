@@ -1,8 +1,6 @@
 package com.lsdapps.uni.bookmoth_library.library.domain.model;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 public class Work implements Serializable {
     private int work_id;
