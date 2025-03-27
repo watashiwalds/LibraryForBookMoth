@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,13 +17,20 @@ import androidx.core.widget.NestedScrollView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
+import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 
 public class ReaderActivity extends AppCompatActivity {
     NestedScrollView nestedContainer;
     BottomAppBar headerBar;
     BottomAppBar bottomBar;
-
     TextView contentView;
+
+    TextView tv_title;
+    TextView tv_chapindex;
+
+    Chapter chapter;
+    String work_title;
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,15 @@ public class ReaderActivity extends AppCompatActivity {
 
         initObjects();
         initGraphical();
+        initPostObjects();
         initFunctions();
+
+        chapter = (Chapter) getIntent().getSerializableExtra("chapter");
+        index = getIntent().getIntExtra("index_dsp", -1);
+        work_title = getIntent().getStringExtra("worktitle");
+        displayInformations();
+
+        fetchContent();
     }
 
     private void initObjects() {
@@ -77,6 +91,11 @@ public class ReaderActivity extends AppCompatActivity {
         contentView.setOnClickListener(view -> {
             setNavbarVisibility(!barVisible);
         });
+    }
+
+    private void initPostObjects() {
+        tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
+        tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
     }
 
     private void initFunctions() {
@@ -120,5 +139,14 @@ public class ReaderActivity extends AppCompatActivity {
         headerBar.findViewById(R.id.imgbtn_back).setOnClickListener(v -> {
             finish();
         });
+    }
+
+    private void displayInformations() {
+        tv_title.setText(chapter.getTitle() != null ? chapter.getTitle() : work_title);
+        tv_chapindex.setText(getString(R.string.chapter_chapter) + String.format(" %d", index + 1) + (chapter.getTitle() == null ? "" : " - " + work_title));
+    }
+
+    private void fetchContent() {
+
     }
 }
