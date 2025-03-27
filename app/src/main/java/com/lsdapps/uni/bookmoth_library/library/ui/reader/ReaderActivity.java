@@ -1,11 +1,13 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 
+import android.graphics.fonts.FontFamily;
+import android.graphics.fonts.FontStyle;
 import android.os.Bundle;
 import android.view.ActionMode;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -29,35 +31,49 @@ import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import io.noties.markwon.Markwon;
 
 public class ReaderActivity extends AppCompatActivity {
-    int activity_height;
-    int content_height;
+    private int activity_height;
+    private int content_height;
 
-    GetChapterContentUseCase getChapterContent;
+    private GetChapterContentUseCase getChapterContent;
 
-    NestedScrollView nestedContainer;
-    BottomAppBar headerBar;
-    BottomAppBar bottomBar;
-    TextView contentView;
+    private NestedScrollView nestedContainer;
+    private BottomAppBar headerBar;
+    private BottomAppBar bottomBar;
+    private TextView contentView;
 
-    FrameLayout scrollFrame;
-    SeekBar scrollBar;
-    TextView scrolledPage;
-    int nowPage;
+    private FrameLayout scrollFrame;
+    private SeekBar scrollBar;
+    private TextView scrolledPage;
+    private int nowPage;
 
-    TextView tv_title;
-    TextView tv_chapindex;
+    private final int EXPANSION_NONE = 0;
+    private final int EXPANSION_TEXTFORMAT = 1;
+    private final int EXPANSION_CHAPTERLIST = 2;
+    private View expansion_textFormat;
+    private View expansion_chapterList;
+    private int nowBottomExpansion = EXPANSION_NONE;
+    private FrameLayout bottomExpansion;
+    //TODO: Make a config loader from file for these value
+    private int format_textSize = 14;
+    private FontFamily format_fontFamily;
 
-    List<Chapter> chapters;
-    Chapter chapter;
-    int nowIndex;
-    String work_title;
-    Markwon makeMarkwon;
+    private TextView tv_title;
+    private TextView tv_chapindex;
+
+    private List<Chapter> chapters;
+    private Chapter chapter;
+    private int nowIndex;
+    private String work_title;
+    private Markwon makeMarkwon;
+
+    private Boolean barVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +95,7 @@ public class ReaderActivity extends AppCompatActivity {
         work_title = getIntent().getStringExtra("worktitle");
 
         chapter = chapters.get(nowIndex);
-        displayInformations();
+        displayHeaderInformation();
 
         fetchContent();
     }
@@ -96,10 +112,38 @@ public class ReaderActivity extends AppCompatActivity {
         scrollBar = findViewById(R.id.rdr_sb_scroll);
         scrolledPage = findViewById(R.id.rdr_tv_scroll);
 
+        bottomExpansion = findViewById(R.id.rdr_fl_bottomexpand);
+
         makeMarkwon = Markwon.create(this);
+
+        expansionSetup();
     }
 
-    private Boolean barVisible = true;
+    private void expansionSetup() {
+        expansion_textFormat = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_textformat, bottomExpansion, false);
+        SeekBar textSize = expansion_textFormat.findViewById(R.id.rdr_stg_textsize);
+        textSize.setProgress((format_textSize-14)/4);
+        ArrayList<TextView> textDemos = new ArrayList<>();
+        textDemos.add(expansion_textFormat.findViewById(R.id.textdemo_regular));
+        textDemos.add(expansion_textFormat.findViewById(R.id.textdemo_bold));
+        textDemos.add(expansion_textFormat.findViewById(R.id.textdemo_italic));
+        textDemos.add(expansion_textFormat.findViewById(R.id.textdemo_bolditalic));
+        textSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                format_textSize = 14 + (4 * i);
+                for (TextView tv: textDemos) tv.setTextSize(format_textSize);
+                contentView.setTextSize(format_textSize);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+//        expansion_chapterList = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_chapterlist, bottomExpansion, false);
+    }
+
     private void setNavbarVisibility(Boolean bool) {
         if (bool && !barVisible) {
             barVisible = true;
@@ -111,6 +155,8 @@ public class ReaderActivity extends AppCompatActivity {
             UniversalAnimate.animateWallHiding(headerBar, UniversalAnimate.PLACEMENT_TOP, true);
             UniversalAnimate.animateWallHiding(bottomBar, UniversalAnimate.PLACEMENT_BOTTOM, true);
             UniversalAnimate.animateWallHiding(scrollFrame, UniversalAnimate.PLACEMENT_END, true);
+            nowBottomExpansion = EXPANSION_NONE;
+            UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, true);
         }
     }
 
@@ -124,6 +170,7 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void initFunctions() {
+        //hiding toolbars when scrolling, show on start/end of NestedScrollView
         nestedContainer.post(() -> {
             nestedContainer.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
                 if (scrollY == 0 || scrollY >= (nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight() - 1)) {
@@ -135,9 +182,12 @@ public class ReaderActivity extends AppCompatActivity {
             });
         });
 
+        //toggle toolbars when click content TextView
         contentView.setOnClickListener(view -> {
             setNavbarVisibility(!barVisible);
         });
+
+        //setup custom function when selecting text (also remove copy function)
         contentView.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
@@ -174,12 +224,14 @@ public class ReaderActivity extends AppCompatActivity {
             public void onDestroyActionMode(ActionMode actionMode) {
 
             }
-        }); //custom action for selection
+        });
 
+        //back button
         headerBar.findViewById(R.id.imgbtn_back).setOnClickListener(v -> {
             finish();
         });
 
+        //next and previous chapter buttons
         bottomBar.findViewById(R.id.rdr_imgbtn_next).setOnClickListener(v -> {
             if (!fetchNextChapter())
                 InnerToast.show(this, getString(R.string.reader_nextchapter_none));
@@ -193,6 +245,19 @@ public class ReaderActivity extends AppCompatActivity {
                 InnerToast.show(this, String.format(Locale.getDefault(), "%s %d", getString(R.string.reader_prevchapter_done), nowIndex+1));
         });
 
+        //textFormat expansion
+        bottomBar.findViewById(R.id.rdr_imgbtn_textformat).setOnClickListener(v -> {
+            if (nowBottomExpansion == EXPANSION_TEXTFORMAT) {
+                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, bottomExpansion.getTranslationY() == 0);
+            } else {
+                bottomExpansion.removeAllViews();
+                bottomExpansion.addView(expansion_textFormat);
+                nowBottomExpansion = EXPANSION_TEXTFORMAT;
+                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
+            }
+        });
+
+        //scrollbar setup, handle slide/show hide and dynamic page
         scrollBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -225,7 +290,7 @@ public class ReaderActivity extends AppCompatActivity {
         });
     }
 
-    private void displayInformations() {
+    private void displayHeaderInformation() {
         tv_title.setText(chapter.getTitle() != null ? chapter.getTitle() : work_title);
         tv_chapindex.setText(String.format(Locale.getDefault(), "%s %d %s", getString(R.string.chapter_chapter), nowIndex + 1, (chapter.getTitle() == null ? "" : " - " + work_title)));
     }
@@ -251,7 +316,7 @@ public class ReaderActivity extends AppCompatActivity {
         }
         chapter = chapters.get(++nowIndex);
         fetchContent();
-        displayInformations();
+        displayHeaderInformation();
         return true;
     }
 
@@ -261,7 +326,7 @@ public class ReaderActivity extends AppCompatActivity {
         }
         chapter = chapters.get(--nowIndex);
         fetchContent();
-        displayInformations();
+        displayHeaderInformation();
         return true;
     }
 }
