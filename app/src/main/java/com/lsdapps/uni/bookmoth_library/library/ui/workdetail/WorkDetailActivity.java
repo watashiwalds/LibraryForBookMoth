@@ -1,5 +1,6 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.workdetail;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChaptersOfWorkUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDetailsRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.reader.ReaderActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +64,9 @@ public class WorkDetailActivity extends AppCompatActivity {
         rv_workDetails = findViewById(R.id.wkdt_rv_details);
         rv_workDetails.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rv_workDetails_adapter = new WorkDetailsRecyclerViewAdapter(work, chapters, pos -> {
-            Toast.makeText(WorkDetailActivity.this, "[TODO] Reader " + chapters.get(pos).getContent_url(), Toast.LENGTH_SHORT).show();
+            Intent reader = new Intent(this, ReaderActivity.class);
+            reader.putExtra("chapter", chapters.get(pos));
+            startActivity(reader);
         });
         rv_workDetails.setAdapter(rv_workDetails_adapter);
 
