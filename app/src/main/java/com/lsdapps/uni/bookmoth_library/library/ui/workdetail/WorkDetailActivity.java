@@ -65,9 +65,9 @@ public class WorkDetailActivity extends AppCompatActivity {
         rv_workDetails.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rv_workDetails_adapter = new WorkDetailsRecyclerViewAdapter(work, chapters, pos -> {
             Intent reader = new Intent(this, ReaderActivity.class);
-            reader.putExtra("chapter", chapters.get(pos));
+            reader.putExtra("chapters", chapters);
             reader.putExtra("worktitle", work.getTitle());
-            reader.putExtra("index_dsp", pos);
+            reader.putExtra("index", pos);
             startActivity(reader);
         });
         rv_workDetails.setAdapter(rv_workDetails_adapter);

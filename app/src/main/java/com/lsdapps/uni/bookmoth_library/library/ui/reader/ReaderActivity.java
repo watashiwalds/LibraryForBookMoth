@@ -19,12 +19,14 @@ import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
 
 import java.util.List;
+import java.util.Locale;
 
 import io.noties.markwon.Markwon;
 
@@ -39,8 +41,9 @@ public class ReaderActivity extends AppCompatActivity {
     TextView tv_title;
     TextView tv_chapindex;
 
+    List<Chapter> chapters;
     Chapter chapter;
-    int index;
+    int nowIndex;
     String work_title;
     Markwon makeMarkwon;
 
@@ -60,9 +63,11 @@ public class ReaderActivity extends AppCompatActivity {
         initPostObjects();
         initFunctions();
 
-        chapter = (Chapter) getIntent().getSerializableExtra("chapter");
-        index = getIntent().getIntExtra("index_dsp", -1);
+        chapters = (List<Chapter>) getIntent().getSerializableExtra("chapters");
+        nowIndex = getIntent().getIntExtra("index", 0);
         work_title = getIntent().getStringExtra("worktitle");
+
+        chapter = chapters.get(nowIndex);
         displayInformations();
 
         fetchContent();
@@ -152,14 +157,28 @@ public class ReaderActivity extends AppCompatActivity {
 
             }
         }); //custom action for selection
+
         headerBar.findViewById(R.id.imgbtn_back).setOnClickListener(v -> {
             finish();
+        });
+
+        bottomBar.findViewById(R.id.rdr_imgbtn_next).setOnClickListener(v -> {
+            if (!fetchNextChapter())
+                InnerToast.show(this, getString(R.string.reader_nextchapter_none));
+            else
+                InnerToast.show(this, String.format(Locale.getDefault(), "%s %d", getString(R.string.reader_nextchapter_done), nowIndex));
+        });
+        bottomBar.findViewById(R.id.rdr_imgbtn_prev).setOnClickListener(v -> {
+            if (!fetchPrevChapter())
+                InnerToast.show(this, getString(R.string.reader_prevchapter_none));
+            else
+                InnerToast.show(this, String.format(Locale.getDefault(), "%s %d", getString(R.string.reader_prevchapter_done), nowIndex));
         });
     }
 
     private void displayInformations() {
         tv_title.setText(chapter.getTitle() != null ? chapter.getTitle() : work_title);
-        tv_chapindex.setText(getString(R.string.chapter_chapter) + String.format(" %d", index + 1) + (chapter.getTitle() == null ? "" : " - " + work_title));
+        tv_chapindex.setText(String.format(Locale.getDefault(), "%s %d %s", getString(R.string.chapter_chapter), nowIndex + 1, (chapter.getTitle() == null ? "" : " - " + work_title)));
     }
 
     private void fetchContent() {
@@ -174,5 +193,25 @@ public class ReaderActivity extends AppCompatActivity {
                 ErrorDialog.showError(ReaderActivity.this, errorMessage);
             }
         });
+    }
+
+    private boolean fetchNextChapter() {
+        if (nowIndex >= chapters.size() - 1) {
+            return false;
+        }
+        chapter = chapters.get(++nowIndex);
+        fetchContent();
+        displayInformations();
+        return true;
+    }
+
+    private boolean fetchPrevChapter() {
+        if (nowIndex <= 0) {
+            return false;
+        }
+        chapter = chapters.get(--nowIndex);
+        fetchContent();
+        displayInformations();
+        return true;
     }
 }

@@ -10,4 +10,8 @@
     <string name="contentselection_discuss">Trích dẫn</string>
     <string name="contentselection_search">Tìm kiếm</string>
     <string name="contentselection_report">Báo cáo</string>
+    <string name="reader_nextchapter_none">Hiện không có chương tiếp theo</string>
+    <string name="reader_nextchapter_done">Đang xem chương </string>
+    <string name="reader_prevchapter_none">Đã đến chương đầu tiên</string>
+    <string name="reader_prevchapter_done">Đang quay lại chương </string>
 </resources>
