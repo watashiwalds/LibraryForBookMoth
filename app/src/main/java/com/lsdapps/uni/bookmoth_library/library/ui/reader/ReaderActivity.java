@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,12 +35,20 @@ import java.util.Locale;
 import io.noties.markwon.Markwon;
 
 public class ReaderActivity extends AppCompatActivity {
+    int activity_height;
+    int content_height;
+
     GetChapterContentUseCase getChapterContent;
 
     NestedScrollView nestedContainer;
     BottomAppBar headerBar;
     BottomAppBar bottomBar;
     TextView contentView;
+
+    FrameLayout scrollFrame;
+    SeekBar scrollBar;
+    TextView scrolledPage;
+    int nowPage;
 
     TextView tv_title;
     TextView tv_chapindex;
@@ -60,7 +72,6 @@ public class ReaderActivity extends AppCompatActivity {
 
         initObjects();
         initGraphical();
-        initPostObjects();
         initFunctions();
 
         chapters = (List<Chapter>) getIntent().getSerializableExtra("chapters");
@@ -81,6 +92,10 @@ public class ReaderActivity extends AppCompatActivity {
         bottomBar = findViewById(R.id.rdr_tb_bottom);
         contentView = findViewById(R.id.rdr_tv_content);
 
+        scrollFrame = findViewById(R.id.rdr_fl_scroll);
+        scrollBar = findViewById(R.id.rdr_sb_scroll);
+        scrolledPage = findViewById(R.id.rdr_tv_scroll);
+
         makeMarkwon = Markwon.create(this);
     }
 
@@ -90,16 +105,25 @@ public class ReaderActivity extends AppCompatActivity {
             barVisible = true;
             UniversalAnimate.animateWallHiding(headerBar, UniversalAnimate.PLACEMENT_TOP, false);
             UniversalAnimate.animateWallHiding(bottomBar, UniversalAnimate.PLACEMENT_BOTTOM, false);
+            UniversalAnimate.animateWallHiding(scrollFrame, UniversalAnimate.PLACEMENT_END, false);
         } else if (!bool && barVisible) {
             barVisible = false;
             UniversalAnimate.animateWallHiding(headerBar, UniversalAnimate.PLACEMENT_TOP, true);
             UniversalAnimate.animateWallHiding(bottomBar, UniversalAnimate.PLACEMENT_BOTTOM, true);
+            UniversalAnimate.animateWallHiding(scrollFrame, UniversalAnimate.PLACEMENT_END, true);
         }
     }
 
     private void initGraphical() {
         headerBar.addView(getLayoutInflater().inflate(R.layout.toolbar_rdr_header, headerBar, false));
         bottomBar.addView(getLayoutInflater().inflate(R.layout.toolbar_rdr_bottom, bottomBar, false));
+        tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
+        tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
+        scrolledPage.setVisibility(View.GONE);
+        scrollFrame.setVisibility(View.GONE);
+    }
+
+    private void initFunctions() {
         nestedContainer.post(() -> {
             nestedContainer.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
                 if (scrollY == 0 || scrollY >= (nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight() - 1)) {
@@ -107,19 +131,13 @@ public class ReaderActivity extends AppCompatActivity {
                     return;
                 }
                 if (scrollY > oldScrollY) setNavbarVisibility(false);
+                scrollBar.setProgress(scrollY);
             });
         });
+
         contentView.setOnClickListener(view -> {
             setNavbarVisibility(!barVisible);
         });
-    }
-
-    private void initPostObjects() {
-        tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
-        tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
-    }
-
-    private void initFunctions() {
         contentView.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
@@ -166,13 +184,44 @@ public class ReaderActivity extends AppCompatActivity {
             if (!fetchNextChapter())
                 InnerToast.show(this, getString(R.string.reader_nextchapter_none));
             else
-                InnerToast.show(this, String.format(Locale.getDefault(), "%s %d", getString(R.string.reader_nextchapter_done), nowIndex));
+                InnerToast.show(this, String.format(Locale.getDefault(), "%s %d", getString(R.string.reader_nextchapter_done), nowIndex+1));
         });
         bottomBar.findViewById(R.id.rdr_imgbtn_prev).setOnClickListener(v -> {
             if (!fetchPrevChapter())
                 InnerToast.show(this, getString(R.string.reader_prevchapter_none));
             else
-                InnerToast.show(this, String.format(Locale.getDefault(), "%s %d", getString(R.string.reader_prevchapter_done), nowIndex));
+                InnerToast.show(this, String.format(Locale.getDefault(), "%s %d", getString(R.string.reader_prevchapter_done), nowIndex+1));
+        });
+
+        scrollBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if ((i / activity_height) + 1 != nowPage) {
+                    nowPage = (i / activity_height) + 1;
+                    scrolledPage.setText(String.format(Locale.getDefault(), "%d/%d", nowPage, (scrollBar.getMax() / activity_height) + 1));
+                }
+                nestedContainer.scrollTo(0, i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                scrolledPage.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                scrolledPage.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void initOnContentLoaded() {
+        nestedContainer.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            activity_height = this.getWindow().getDecorView().getHeight();
+            content_height = nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight();
+            scrollFrame.setVisibility(View.VISIBLE);
+            scrollBar.setMax(content_height);
+            nowPage = 0;
         });
     }
 
@@ -186,6 +235,7 @@ public class ReaderActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String body) {
                 makeMarkwon.setMarkdown(contentView, body);
+                initOnContentLoaded();
             }
 
             @Override
