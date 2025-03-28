@@ -19,7 +19,7 @@ import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderScrollViewMod
 import java.util.Locale;
 
 public class ScrollFragment extends Fragment {
-    private ReaderScrollViewModel readerVM;
+    private ReaderScrollViewModel viewModel;
 
     private int activity_height;
 
@@ -52,19 +52,19 @@ public class ScrollFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        readerVM = new ViewModelProvider(requireActivity()).get(ReaderScrollViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ReaderScrollViewModel.class);
         initInner();
         initObservers();
     }
 
     private void initObservers() {
-        readerVM.getActivityHeight().observe(getViewLifecycleOwner(), value -> activity_height = value);
-        readerVM.getContentHeight().observe(getViewLifecycleOwner(), v -> {
+        viewModel.getActivityHeight().observe(getViewLifecycleOwner(), value -> activity_height = value);
+        viewModel.getContentHeight().observe(getViewLifecycleOwner(), v -> {
             scrollBar.setMax(v);
             maxPage = (v / activity_height) + 1;
             scrolledPage.setText(String.format(Locale.getDefault(), "%d/%d", nowPage, maxPage));
         });
-        readerVM.getViewScrollPosition().observe(getViewLifecycleOwner(), scrollBar::setProgress);
+        viewModel.getViewScrollPosition().observe(getViewLifecycleOwner(), scrollBar::setProgress);
     }
 
     private void initInner() {
@@ -76,7 +76,7 @@ public class ScrollFragment extends Fragment {
                     nowPage = (i / activity_height) + 1;
                     scrolledPage.setText(String.format(Locale.getDefault(), "%d/%d", nowPage, maxPage));
                 }
-                readerVM.setBarScrollPosition(i);
+                viewModel.setBarScrollPosition(i);
             }
 
             @Override

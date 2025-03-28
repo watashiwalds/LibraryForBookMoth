@@ -37,7 +37,7 @@ import java.util.Locale;
 import io.noties.markwon.Markwon;
 
 public class ReaderActivity extends AppCompatActivity {
-    private ReaderScrollViewModel readerVM;
+    private ReaderScrollViewModel scrollViewModel;
     private GetChapterContentUseCase getChapterContent;
     private FragmentManager fragmentManager;
 
@@ -79,7 +79,7 @@ public class ReaderActivity extends AppCompatActivity {
             return insets;
         });
 
-        readerVM = new ViewModelProvider(this).get(ReaderScrollViewModel.class);
+        scrollViewModel = new ViewModelProvider(this).get(ReaderScrollViewModel.class);
 
         initObjects();
         initGraphical();
@@ -151,12 +151,12 @@ public class ReaderActivity extends AppCompatActivity {
             nestedContainer.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
                 if (scrollY == 0 || scrollY >= (nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight() - 1)) {
                     setNavbarVisibility(true);
-                    readerVM.setViewScrollPosition(scrollY);
+                    scrollViewModel.setViewScrollPosition(scrollY);
                     return;
                 }
                 if (nowBottomExpansion != EXPANSION_NONE && barVisible) return;
                 if (scrollY > oldScrollY) setNavbarVisibility(false);
-                readerVM.setViewScrollPosition(scrollY);
+                scrollViewModel.setViewScrollPosition(scrollY);
             });
         });
 
@@ -236,13 +236,13 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void initObservers() {
-        readerVM.getBarScrollPosition().observe(this, v -> nestedContainer.scrollTo(0, v));
+        scrollViewModel.getBarScrollPosition().observe(this, v -> nestedContainer.scrollTo(0, v));
     }
 
     private void initOnContentLoaded() {
         nestedContainer.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             rightExpansion.setVisibility(View.VISIBLE);
-            readerVM.setHeights(this.getWindow().getDecorView().getHeight(), nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight());
+            scrollViewModel.setHeights(this.getWindow().getDecorView().getHeight(), nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight());
         });
     }
 
