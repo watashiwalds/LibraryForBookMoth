@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
@@ -151,6 +152,7 @@ public class ReaderActivity extends AppCompatActivity {
                     setNavbarVisibility(true);
                     return;
                 }
+                if (nowBottomExpansion != EXPANSION_NONE && barVisible) return;
                 if (scrollY > oldScrollY) setNavbarVisibility(false);
                 scrollFragment.setProgress(scrollY);
             });
