@@ -1,14 +1,11 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 
-import android.graphics.fonts.FontFamily;
 import android.os.Bundle;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.lsdapps.uni.bookmoth_library.R;
@@ -31,14 +29,15 @@ import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import io.noties.markwon.Markwon;
 
 public class ReaderActivity extends AppCompatActivity {
+    private ReaderViewModel readerVM;
     private GetChapterContentUseCase getChapterContent;
     private FragmentManager fragmentManager;
 
@@ -49,7 +48,6 @@ public class ReaderActivity extends AppCompatActivity {
 
     private FrameLayout rightExpansion;
     private ScrollFragment scrollFragment;
-
 
     private FrameLayout bottomExpansion;
     private final int EXPANSION_NONE = 0;
@@ -81,9 +79,12 @@ public class ReaderActivity extends AppCompatActivity {
             return insets;
         });
 
+        readerVM = new ViewModelProvider(this).get(ReaderViewModel.class);
+
         initObjects();
         initGraphical();
         initFunctions();
+        initObservers();
 
         chapters = (List<Chapter>) getIntent().getSerializableExtra("chapters");
         nowIndex = getIntent().getIntExtra("index", 0);
@@ -113,11 +114,11 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void expansionSetup() {
-        scrollFragment = ScrollFragment.newInstance(R.id.rdr_nsv_content);
+        scrollFragment = ScrollFragment.newInstance();
         fragmentManager.beginTransaction().replace(R.id.rdr_fl_rightexpand, scrollFragment).commit();
         rightExpansion.setVisibility(View.GONE);
 
-        textformatFragment = TextFormatFragment.newInstance(R.id.rdr_tv_content);
+//        textformatFragment = TextFormatFragment.newInstance(R.id.rdr_tv_content);
 //        expansion_chapterList = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_chapterlist, bottomExpansion, false);
     }
 
@@ -150,11 +151,12 @@ public class ReaderActivity extends AppCompatActivity {
             nestedContainer.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
                 if (scrollY == 0 || scrollY >= (nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight() - 1)) {
                     setNavbarVisibility(true);
+                    readerVM.setViewScrollPosition(scrollY);
                     return;
                 }
                 if (nowBottomExpansion != EXPANSION_NONE && barVisible) return;
                 if (scrollY > oldScrollY) setNavbarVisibility(false);
-                scrollFragment.setProgress(scrollY);
+                readerVM.setViewScrollPosition(scrollY);
             });
         });
 
@@ -222,21 +224,25 @@ public class ReaderActivity extends AppCompatActivity {
         });
 
         //textFormat expansion
-        bottomBar.findViewById(R.id.rdr_imgbtn_textformat).setOnClickListener(v -> {
-            if (nowBottomExpansion == EXPANSION_TEXTFORMAT) {
-                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, bottomExpansion.getTranslationY() == 0);
-            } else {
-                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, textformatFragment).commit();
-                nowBottomExpansion = EXPANSION_TEXTFORMAT;
-                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
-            }
-        });
+//        bottomBar.findViewById(R.id.rdr_imgbtn_textformat).setOnClickListener(v -> {
+//            if (nowBottomExpansion == EXPANSION_TEXTFORMAT) {
+//                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, bottomExpansion.getTranslationY() == 0);
+//            } else {
+//                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, textformatFragment).commit();
+//                nowBottomExpansion = EXPANSION_TEXTFORMAT;
+//                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
+//            }
+//        });
+    }
+
+    private void initObservers() {
+        readerVM.getBarScrollPosition().observe(this, v -> nestedContainer.scrollTo(0, v));
     }
 
     private void initOnContentLoaded() {
         nestedContainer.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             rightExpansion.setVisibility(View.VISIBLE);
-            scrollFragment.setHeightValues(this.getWindow().getDecorView().getHeight(), nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight());
+            readerVM.setHeights(this.getWindow().getDecorView().getHeight(), nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight());
         });
     }
 
