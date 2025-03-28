@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -48,16 +49,14 @@ public class ReaderActivity extends AppCompatActivity {
     private FrameLayout rightExpansion;
     private ScrollFragment scrollFragment;
 
+
+    private FrameLayout bottomExpansion;
     private final int EXPANSION_NONE = 0;
     private final int EXPANSION_TEXTFORMAT = 1;
     private final int EXPANSION_CHAPTERLIST = 2;
-    private View expansion_textFormat;
-    private View expansion_chapterList;
+    private Fragment textformatFragment;
     private int nowBottomExpansion = EXPANSION_NONE;
-    private FrameLayout bottomExpansion;
     //TODO: Make a config loader from file for these value
-    private int format_textSize = 14;
-    private FontFamily format_fontFamily;
 
     private TextView tv_title;
     private TextView tv_chapindex;
@@ -105,8 +104,6 @@ public class ReaderActivity extends AppCompatActivity {
         contentView = findViewById(R.id.rdr_tv_content);
 
         rightExpansion = findViewById(R.id.rdr_fl_rightexpand);
-        scrollFragment = ScrollFragment.newInstance(nestedContainer);
-
         bottomExpansion = findViewById(R.id.rdr_fl_bottomexpand);
 
         makeMarkwon = Markwon.create(this);
@@ -115,27 +112,11 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void expansionSetup() {
-        expansion_textFormat = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_textformat, bottomExpansion, false);
-        SeekBar textSize = expansion_textFormat.findViewById(R.id.rdr_stg_textsize);
-        textSize.setProgress((format_textSize-14)/4);
-        ArrayList<TextView> textDemos = new ArrayList<>();
-        textDemos.add(expansion_textFormat.findViewById(R.id.textdemo_regular));
-        textDemos.add(expansion_textFormat.findViewById(R.id.textdemo_bold));
-        textDemos.add(expansion_textFormat.findViewById(R.id.textdemo_italic));
-        textDemos.add(expansion_textFormat.findViewById(R.id.textdemo_bolditalic));
-        textSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                format_textSize = 14 + (4 * i);
-                for (TextView tv: textDemos) tv.setTextSize(format_textSize);
-                contentView.setTextSize(format_textSize);
-            }
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
+        scrollFragment = ScrollFragment.newInstance(nestedContainer);
+        fragmentManager.beginTransaction().replace(R.id.rdr_fl_rightexpand, scrollFragment).commit();
+        rightExpansion.setVisibility(View.GONE);
 
+        textformatFragment = TextFormatFragment.newInstance(contentView);
 //        expansion_chapterList = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_chapterlist, bottomExpansion, false);
     }
 
@@ -160,9 +141,6 @@ public class ReaderActivity extends AppCompatActivity {
         bottomBar.addView(getLayoutInflater().inflate(R.layout.toolbar_rdr_bottom, bottomBar, false));
         tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
         tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
-
-        fragmentManager.beginTransaction().replace(R.id.rdr_fl_rightexpand, scrollFragment).commit();
-        rightExpansion.setVisibility(View.GONE);
     }
 
     private void initFunctions() {
@@ -246,8 +224,7 @@ public class ReaderActivity extends AppCompatActivity {
             if (nowBottomExpansion == EXPANSION_TEXTFORMAT) {
                 UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, bottomExpansion.getTranslationY() == 0);
             } else {
-                bottomExpansion.removeAllViews();
-                bottomExpansion.addView(expansion_textFormat);
+                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, textformatFragment).commit();
                 nowBottomExpansion = EXPANSION_TEXTFORMAT;
                 UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
             }
