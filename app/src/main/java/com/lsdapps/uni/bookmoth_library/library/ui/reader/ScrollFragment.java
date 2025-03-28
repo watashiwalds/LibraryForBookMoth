@@ -21,7 +21,7 @@ import java.util.Locale;
 public class ScrollFragment extends Fragment {
     private ReaderScrollViewModel viewModel;
 
-    private int activity_height;
+    private int activity_height = 1;
 
     private SeekBar scrollBar;
     private TextView scrolledPage;
