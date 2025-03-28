@@ -6,6 +6,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +19,12 @@ import android.widget.TextView;
 
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderTextFormatViewModel;
 
 import java.util.ArrayList;
 
 public class TextFormatFragment extends Fragment {
-    private TextView contentView;
-    private int contentView_id;
+    private ReaderTextFormatViewModel viewModel;
 
     private SeekBar textSize;
     private ArrayList<TextView> textDemos = new ArrayList<>();;
@@ -35,20 +38,13 @@ public class TextFormatFragment extends Fragment {
 
     public TextFormatFragment() {}
 
-    public static TextFormatFragment newInstance(int contentView_id) {
-        TextFormatFragment tff = new TextFormatFragment();
-        Bundle args = new Bundle();
-        args.putInt("contentView_id", contentView_id);
-        tff.setArguments(args);
-        return tff;
+    public static TextFormatFragment newInstance() {
+        return new TextFormatFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            contentView_id = getArguments().getInt("contentView_id");
-        }
     }
 
     @Override
@@ -74,19 +70,25 @@ public class TextFormatFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        contentView = getActivity().findViewById(contentView_id);
-        ori_textSize = contentView.getTextSize() / requireContext().getResources().getDisplayMetrics().scaledDensity;
+        viewModel = new ViewModelProvider(getActivity()).get(ReaderTextFormatViewModel.class);
+        ori_textSize = viewModel.getTextSize().getValue();
         initialize();
     }
 
     private void initialize() {
+        if (ori_textSize > textDemos.get(0).getTextSize() / requireContext().getResources().getDisplayMetrics().scaledDensity) {
+            float deltaSize = ori_textSize - textDemos.get(0).getTextSize() / requireContext().getResources().getDisplayMetrics().scaledDensity;
+            setDemoTextSize(ori_textSize);
+            ori_textSize -= deltaSize;
+            textSize.setProgress((int)(deltaSize / (ori_textSize/4)));
+        }
+
         textSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 var_textSize = ori_textSize + ((int)(ori_textSize / 4) * i);
-                InnerToast.show(requireContext(), String.format("%.2f %.2f", var_textSize, ori_textSize));
-                for (TextView tv: textDemos) tv.setTextSize(var_textSize);
-                contentView.setTextSize(var_textSize);
+                setDemoTextSize(var_textSize);
+                viewModel.setTextSize(var_textSize);
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
@@ -97,5 +99,9 @@ public class TextFormatFragment extends Fragment {
         fontListAdapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, availableFonts);
         fontFamily.setAdapter(fontListAdapter);
         fontListAdapter.notifyDataSetChanged();
+    }
+
+    private void setDemoTextSize(float value) {
+        for (TextView tv: textDemos) tv.setTextSize(value);
     }
 }

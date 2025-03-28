@@ -30,6 +30,7 @@ import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderScrollViewModel;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderTextFormatViewModel;
 
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +39,7 @@ import io.noties.markwon.Markwon;
 
 public class ReaderActivity extends AppCompatActivity {
     private ReaderScrollViewModel scrollViewModel;
+    private ReaderTextFormatViewModel textFormatViewModel;
     private GetChapterContentUseCase getChapterContent;
     private FragmentManager fragmentManager;
 
@@ -49,13 +51,12 @@ public class ReaderActivity extends AppCompatActivity {
     private FrameLayout rightExpansion;
     private ScrollFragment scrollFragment;
 
-    private FrameLayout bottomExpansion;
     private final int EXPANSION_NONE = 0;
     private final int EXPANSION_TEXTFORMAT = 1;
     private final int EXPANSION_CHAPTERLIST = 2;
+    private FrameLayout bottomExpansion;
     private Fragment textformatFragment;
-    private int nowBottomExpansion = EXPANSION_NONE;
-    //TODO: Make a config loader from file for these value
+    private int nowBottomExpansion;
 
     private TextView tv_title;
     private TextView tv_chapindex;
@@ -80,6 +81,7 @@ public class ReaderActivity extends AppCompatActivity {
         });
 
         scrollViewModel = new ViewModelProvider(this).get(ReaderScrollViewModel.class);
+        textFormatViewModel = new ViewModelProvider(this).get(ReaderTextFormatViewModel.class);
 
         initObjects();
         initGraphical();
@@ -118,7 +120,7 @@ public class ReaderActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.rdr_fl_rightexpand, scrollFragment).commit();
         rightExpansion.setVisibility(View.GONE);
 
-//        textformatFragment = TextFormatFragment.newInstance(R.id.rdr_tv_content);
+        textformatFragment = TextFormatFragment.newInstance();
 //        expansion_chapterList = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_chapterlist, bottomExpansion, false);
     }
 
@@ -143,6 +145,7 @@ public class ReaderActivity extends AppCompatActivity {
         bottomBar.addView(getLayoutInflater().inflate(R.layout.toolbar_rdr_bottom, bottomBar, false));
         tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
         tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
+        for (Fragment f : fragmentManager.getFragments()) fragmentManager.beginTransaction().remove(f).commit();
     }
 
     private void initFunctions() {
@@ -223,20 +226,23 @@ public class ReaderActivity extends AppCompatActivity {
                 InnerToast.show(this, String.format(Locale.getDefault(), "%s %d", getString(R.string.reader_prevchapter_done), nowIndex+1));
         });
 
-        //textFormat expansion
-//        bottomBar.findViewById(R.id.rdr_imgbtn_textformat).setOnClickListener(v -> {
-//            if (nowBottomExpansion == EXPANSION_TEXTFORMAT) {
-//                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, bottomExpansion.getTranslationY() == 0);
-//            } else {
-//                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, textformatFragment).commit();
-//                nowBottomExpansion = EXPANSION_TEXTFORMAT;
-//                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
-//            }
-//        });
+        bottomBar.findViewById(R.id.rdr_imgbtn_textformat).setOnClickListener(v -> {
+            if (nowBottomExpansion == EXPANSION_TEXTFORMAT) {
+                nowBottomExpansion = EXPANSION_NONE;
+                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, true);
+            } else {
+                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, textformatFragment).commit();
+                nowBottomExpansion = EXPANSION_TEXTFORMAT;
+                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
+            }
+        });
     }
 
     private void initObservers() {
+        textFormatViewModel.setTextSize(contentView.getTextSize() / getResources().getDisplayMetrics().scaledDensity);
+
         scrollViewModel.getBarScrollPosition().observe(this, v -> nestedContainer.scrollTo(0, v));
+        textFormatViewModel.getTextSize().observe(this, contentView::setTextSize);
     }
 
     private void initOnContentLoaded() {
