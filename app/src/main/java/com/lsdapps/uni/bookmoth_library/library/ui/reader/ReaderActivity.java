@@ -1,10 +1,8 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 
 import android.graphics.fonts.FontFamily;
-import android.graphics.fonts.FontStyle;
 import android.os.Bundle;
 import android.view.ActionMode;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
