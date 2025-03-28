@@ -2,6 +2,8 @@ package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
@@ -26,20 +28,23 @@ public class ScrollFragment extends Fragment {
     private int nowPage;
 
     private NestedScrollView nestedContainer;
+    private int nestedContainer_id;
 
-    private ScrollFragment(NestedScrollView n) {
-        activity_height = 0;
-        content_height = 1;
-        nestedContainer = n;
-    };
+    public ScrollFragment() {}
 
-    public static ScrollFragment newInstance(NestedScrollView nestedContainer) {
-        return new ScrollFragment(nestedContainer);
+    public static ScrollFragment newInstance(int nestedContainer_id) {
+        ScrollFragment sf = new ScrollFragment();
+        Bundle args = new Bundle();
+        args.putInt("nestedContainer_id", nestedContainer_id);
+        return sf;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            nestedContainer_id = getArguments().getInt("nestedContainer_id");
+        }
     }
 
     @Override
@@ -49,8 +54,14 @@ public class ScrollFragment extends Fragment {
         scrollBar = v.findViewById(R.id.rdr_sb_scroll);
         scrolledPage = v.findViewById(R.id.rdr_tv_scroll);
         nowPage = 0;
-        initialize();
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        nestedContainer = getActivity().findViewById(nestedContainer_id);
+        initialize();
     }
 
     private void initialize() {

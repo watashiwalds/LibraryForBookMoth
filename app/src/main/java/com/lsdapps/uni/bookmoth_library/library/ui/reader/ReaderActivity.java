@@ -113,11 +113,11 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void expansionSetup() {
-        scrollFragment = ScrollFragment.newInstance(nestedContainer);
+        scrollFragment = ScrollFragment.newInstance(R.id.rdr_nsv_content);
         fragmentManager.beginTransaction().replace(R.id.rdr_fl_rightexpand, scrollFragment).commit();
         rightExpansion.setVisibility(View.GONE);
 
-        textformatFragment = TextFormatFragment.newInstance(contentView);
+        textformatFragment = TextFormatFragment.newInstance(R.id.rdr_tv_content);
 //        expansion_chapterList = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_chapterlist, bottomExpansion, false);
     }
 
