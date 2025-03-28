@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -146,6 +147,7 @@ public class ReaderActivity extends AppCompatActivity {
         tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
         tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
         for (Fragment f : fragmentManager.getFragments()) fragmentManager.beginTransaction().remove(f).commit();
+        contentView.setTypeface(ResourcesCompat.getFont(this, R.font.alegreya));
     }
 
     private void initFunctions() {
@@ -243,6 +245,7 @@ public class ReaderActivity extends AppCompatActivity {
 
         scrollViewModel.getBarScrollPosition().observe(this, v -> nestedContainer.scrollTo(0, v));
         textFormatViewModel.getTextSize().observe(this, contentView::setTextSize);
+        textFormatViewModel.getFontFamily().observe(this, v -> contentView.setTypeface(ResourcesCompat.getFont(this, v)));
     }
 
     private void initOnContentLoaded() {

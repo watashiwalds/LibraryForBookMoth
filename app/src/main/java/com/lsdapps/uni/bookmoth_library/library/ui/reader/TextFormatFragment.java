@@ -1,10 +1,12 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 
+import android.graphics.Typeface;
 import android.graphics.fonts.FontFamily;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -30,11 +33,11 @@ public class TextFormatFragment extends Fragment {
     private ArrayList<TextView> textDemos = new ArrayList<>();;
     private Spinner fontFamily;
     private ArrayList<String> availableFonts = new ArrayList<>();
+    private ArrayList<Integer> ridFonts = new ArrayList<>();
     private ArrayAdapter<String> fontListAdapter;
 
     private float ori_textSize;
     private float var_textSize;
-    private FontFamily format_fontFamily;
 
     public TextFormatFragment() {}
 
@@ -63,6 +66,10 @@ public class TextFormatFragment extends Fragment {
         availableFonts.add("Bitter");
         availableFonts.add("Bookely");
         availableFonts.add("Literata");
+        ridFonts.add(R.font.alegreya);
+        ridFonts.add(R.font.bitter);
+        ridFonts.add(R.font.bookerly);
+        ridFonts.add(R.font.literata);
 
         return v;
     }
@@ -98,10 +105,26 @@ public class TextFormatFragment extends Fragment {
 
         fontListAdapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, availableFonts);
         fontFamily.setAdapter(fontListAdapter);
-        fontListAdapter.notifyDataSetChanged();
+        fontFamily.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                setDemoFontFamily(ridFonts.get(pos));
+                viewModel.setFontFamily(ridFonts.get(pos));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
     }
 
     private void setDemoTextSize(float value) {
         for (TextView tv: textDemos) tv.setTextSize(value);
+    }
+    private void setDemoFontFamily(int rid) {
+        Typeface tf = ResourcesCompat.getFont(requireContext(), rid);
+        textDemos.get(0).setTypeface(tf, Typeface.NORMAL);
+        textDemos.get(1).setTypeface(tf, Typeface.ITALIC);
+        textDemos.get(2).setTypeface(tf, Typeface.BOLD);
+        textDemos.get(3).setTypeface(tf, Typeface.BOLD_ITALIC);
     }
 }
