@@ -21,12 +21,12 @@
             android:background="@color/faintbox"
             android:max="6"
             android:progress="0"
-            app:layout_constraintBottom_toTopOf="@+id/rdr_stg_textfont"
-            app:layout_constraintEnd_toEndOf="@+id/rdr_stg_textfont"
-            app:layout_constraintStart_toStartOf="@+id/rdr_stg_textfont" />
+            app:layout_constraintBottom_toTopOf="@+id/rdr_sp_fontfamily"
+            app:layout_constraintEnd_toEndOf="@+id/rdr_sp_fontfamily"
+            app:layout_constraintStart_toStartOf="@+id/rdr_sp_fontfamily" />
 
         <Spinner
-            android:id="@+id/rdr_stg_textfont"
+            android:id="@+id/rdr_sp_fontfamily"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
