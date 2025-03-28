@@ -14,12 +14,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.lsdapps.uni.bookmoth_library.R;
-import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderViewModel;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderScrollViewModel;
 
 import java.util.Locale;
 
 public class ScrollFragment extends Fragment {
-    private ReaderViewModel readerVM;
+    private ReaderScrollViewModel readerVM;
 
     private int activity_height;
 
@@ -52,7 +52,7 @@ public class ScrollFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        readerVM = new ViewModelProvider(requireActivity()).get(ReaderViewModel.class);
+        readerVM = new ViewModelProvider(requireActivity()).get(ReaderScrollViewModel.class);
         initInner();
         initObservers();
     }

@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ReaderViewModel extends ViewModel {
-    //Scroll section
+public class ReaderScrollViewModel extends ViewModel {
         //Initialize scroll range
     private final MutableLiveData<Integer> activityHeight = new MutableLiveData<>();
     private final MutableLiveData<Integer> contentHeight = new MutableLiveData<>();
@@ -22,14 +21,4 @@ public class ReaderViewModel extends ViewModel {
     public LiveData<Integer> getViewScrollPosition() {return viewScrollPosition;}
     public void setBarScrollPosition(int pos) {barScrollPosition.setValue(pos);}
     public LiveData<Integer> getBarScrollPosition() {return barScrollPosition;}
-
-
-    //Text format section
-    private final MutableLiveData<Float> textSize = new MutableLiveData<>();
-    public void setTextSize(float value) {
-        textSize.setValue(value);
-    }
-    public LiveData<Float> getTextSize() {
-        return textSize;
-    }
 }

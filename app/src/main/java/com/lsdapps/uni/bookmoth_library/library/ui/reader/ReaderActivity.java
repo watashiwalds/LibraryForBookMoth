@@ -29,7 +29,7 @@ import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
-import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderViewModel;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderScrollViewModel;
 
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +37,7 @@ import java.util.Locale;
 import io.noties.markwon.Markwon;
 
 public class ReaderActivity extends AppCompatActivity {
-    private ReaderViewModel readerVM;
+    private ReaderScrollViewModel readerVM;
     private GetChapterContentUseCase getChapterContent;
     private FragmentManager fragmentManager;
 
@@ -79,7 +79,7 @@ public class ReaderActivity extends AppCompatActivity {
             return insets;
         });
 
-        readerVM = new ViewModelProvider(this).get(ReaderViewModel.class);
+        readerVM = new ViewModelProvider(this).get(ReaderScrollViewModel.class);
 
         initObjects();
         initGraphical();
