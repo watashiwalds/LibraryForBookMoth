@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.lsdapps.uni.bookmoth_library.R;
@@ -36,20 +37,16 @@ import java.util.Locale;
 import io.noties.markwon.Markwon;
 
 public class ReaderActivity extends AppCompatActivity {
-    private int activity_height;
-    private int content_height;
-
     private GetChapterContentUseCase getChapterContent;
+    private FragmentManager fragmentManager;
 
     private NestedScrollView nestedContainer;
     private BottomAppBar headerBar;
     private BottomAppBar bottomBar;
     private TextView contentView;
 
-    private FrameLayout scrollFrame;
-    private SeekBar scrollBar;
-    private TextView scrolledPage;
-    private int nowPage;
+    private FrameLayout rightExpansion;
+    private ScrollFragment scrollFragment;
 
     private final int EXPANSION_NONE = 0;
     private final int EXPANSION_TEXTFORMAT = 1;
@@ -100,15 +97,15 @@ public class ReaderActivity extends AppCompatActivity {
 
     private void initObjects() {
         getChapterContent = new GetChapterContentUseCase(new LibApiRepository());
+        fragmentManager = getSupportFragmentManager();
 
         nestedContainer = findViewById(R.id.rdr_nsv_content);
         headerBar = findViewById(R.id.rdr_tb_header);
         bottomBar = findViewById(R.id.rdr_tb_bottom);
         contentView = findViewById(R.id.rdr_tv_content);
 
-        scrollFrame = findViewById(R.id.rdr_fl_scroll);
-        scrollBar = findViewById(R.id.rdr_sb_scroll);
-        scrolledPage = findViewById(R.id.rdr_tv_scroll);
+        rightExpansion = findViewById(R.id.rdr_fl_rightexpand);
+        scrollFragment = ScrollFragment.newInstance(nestedContainer);
 
         bottomExpansion = findViewById(R.id.rdr_fl_bottomexpand);
 
@@ -147,12 +144,12 @@ public class ReaderActivity extends AppCompatActivity {
             barVisible = true;
             UniversalAnimate.animateWallHiding(headerBar, UniversalAnimate.PLACEMENT_TOP, false);
             UniversalAnimate.animateWallHiding(bottomBar, UniversalAnimate.PLACEMENT_BOTTOM, false);
-            UniversalAnimate.animateWallHiding(scrollFrame, UniversalAnimate.PLACEMENT_END, false);
+            UniversalAnimate.animateWallHiding(rightExpansion, UniversalAnimate.PLACEMENT_END, false);
         } else if (!bool && barVisible) {
             barVisible = false;
             UniversalAnimate.animateWallHiding(headerBar, UniversalAnimate.PLACEMENT_TOP, true);
             UniversalAnimate.animateWallHiding(bottomBar, UniversalAnimate.PLACEMENT_BOTTOM, true);
-            UniversalAnimate.animateWallHiding(scrollFrame, UniversalAnimate.PLACEMENT_END, true);
+            UniversalAnimate.animateWallHiding(rightExpansion, UniversalAnimate.PLACEMENT_END, true);
             nowBottomExpansion = EXPANSION_NONE;
             UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, true);
         }
@@ -163,8 +160,9 @@ public class ReaderActivity extends AppCompatActivity {
         bottomBar.addView(getLayoutInflater().inflate(R.layout.toolbar_rdr_bottom, bottomBar, false));
         tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
         tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
-        scrolledPage.setVisibility(View.GONE);
-        scrollFrame.setVisibility(View.GONE);
+
+        fragmentManager.beginTransaction().replace(R.id.rdr_fl_rightexpand, scrollFragment).commit();
+        rightExpansion.setVisibility(View.GONE);
     }
 
     private void initFunctions() {
@@ -176,7 +174,7 @@ public class ReaderActivity extends AppCompatActivity {
                     return;
                 }
                 if (scrollY > oldScrollY) setNavbarVisibility(false);
-                scrollBar.setProgress(scrollY);
+                scrollFragment.setProgress(scrollY);
             });
         });
 
@@ -254,37 +252,12 @@ public class ReaderActivity extends AppCompatActivity {
                 UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
             }
         });
-
-        //scrollbar setup, handle slide/show hide and dynamic page
-        scrollBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                if ((i / activity_height) + 1 != nowPage) {
-                    nowPage = (i / activity_height) + 1;
-                    scrolledPage.setText(String.format(Locale.getDefault(), "%d/%d", nowPage, (scrollBar.getMax() / activity_height) + 1));
-                }
-                nestedContainer.scrollTo(0, i);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                scrolledPage.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                scrolledPage.setVisibility(View.GONE);
-            }
-        });
     }
 
     private void initOnContentLoaded() {
         nestedContainer.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-            activity_height = this.getWindow().getDecorView().getHeight();
-            content_height = nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight();
-            scrollFrame.setVisibility(View.VISIBLE);
-            scrollBar.setMax(content_height);
-            nowPage = 0;
+            rightExpansion.setVisibility(View.VISIBLE);
+            scrollFragment.setHeightValues(this.getWindow().getDecorView().getHeight(), nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight());
         });
     }
 
