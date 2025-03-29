@@ -1,6 +1,9 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,9 +30,11 @@ import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueExchange;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderColorAdjustViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderScrollViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderTextFormatViewModel;
 
@@ -41,6 +46,7 @@ import io.noties.markwon.Markwon;
 public class ReaderActivity extends AppCompatActivity {
     private ReaderScrollViewModel scrollViewModel;
     private ReaderTextFormatViewModel textFormatViewModel;
+    private ReaderColorAdjustViewModel colorAdjustViewModel;
     private GetChapterContentUseCase getChapterContent;
     private FragmentManager fragmentManager;
 
@@ -48,15 +54,18 @@ public class ReaderActivity extends AppCompatActivity {
     private BottomAppBar headerBar;
     private BottomAppBar bottomBar;
     private TextView contentView;
+    private FrameLayout brightnessFilter;
 
     private FrameLayout rightExpansion;
     private ScrollFragment scrollFragment;
 
     private final int EXPANSION_NONE = 0;
     private final int EXPANSION_TEXTFORMAT = 1;
-    private final int EXPANSION_CHAPTERLIST = 2;
+    private final int EXPANSION_COLORADJUST = 2;
+    private final int EXPANSION_CHAPTERLIST = 3;
     private FrameLayout bottomExpansion;
-    private Fragment textformatFragment;
+    private Fragment textFormatFragment;
+    private Fragment colorAdjustFragment;
     private int nowBottomExpansion;
 
     private TextView tv_title;
@@ -83,11 +92,12 @@ public class ReaderActivity extends AppCompatActivity {
 
         scrollViewModel = new ViewModelProvider(this).get(ReaderScrollViewModel.class);
         textFormatViewModel = new ViewModelProvider(this).get(ReaderTextFormatViewModel.class);
+        colorAdjustViewModel = new ViewModelProvider(this).get(ReaderColorAdjustViewModel.class);
 
         initObjects();
         initGraphical();
         initFunctions();
-        initObservers();
+        initLiveData();
 
         chapters = (List<Chapter>) getIntent().getSerializableExtra("chapters");
         nowIndex = getIntent().getIntExtra("index", 0);
@@ -107,6 +117,7 @@ public class ReaderActivity extends AppCompatActivity {
         headerBar = findViewById(R.id.rdr_tb_header);
         bottomBar = findViewById(R.id.rdr_tb_bottom);
         contentView = findViewById(R.id.rdr_tv_content);
+        brightnessFilter = findViewById(R.id.rdr_fl_brightnessfilter);
 
         rightExpansion = findViewById(R.id.rdr_fl_rightexpand);
         bottomExpansion = findViewById(R.id.rdr_fl_bottomexpand);
@@ -121,7 +132,8 @@ public class ReaderActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.rdr_fl_rightexpand, scrollFragment).commit();
         rightExpansion.setVisibility(View.GONE);
 
-        textformatFragment = TextFormatFragment.newInstance();
+        textFormatFragment = TextFormatFragment.newInstance();
+        colorAdjustFragment = ColorAdjustFragment.newInstance();
 //        expansion_chapterList = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_chapterlist, bottomExpansion, false);
     }
 
@@ -233,19 +245,33 @@ public class ReaderActivity extends AppCompatActivity {
                 nowBottomExpansion = EXPANSION_NONE;
                 UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, true);
             } else {
-                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, textformatFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, textFormatFragment).commit();
                 nowBottomExpansion = EXPANSION_TEXTFORMAT;
+                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
+            }
+        });
+
+        bottomBar.findViewById(R.id.rdr_imgbtn_coloradjust).setOnClickListener(v -> {
+            if (nowBottomExpansion == EXPANSION_COLORADJUST) {
+                nowBottomExpansion = EXPANSION_NONE;
+                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, true);
+            } else {
+                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, colorAdjustFragment).commit();
+                nowBottomExpansion = EXPANSION_COLORADJUST;
                 UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
             }
         });
     }
 
-    private void initObservers() {
+    private void initLiveData() {
         textFormatViewModel.setTextSize(contentView.getTextSize() / getResources().getDisplayMetrics().scaledDensity);
+        colorAdjustViewModel.setBrightness(ValueExchange.transparencyHexToPercent(((ColorDrawable)brightnessFilter.getBackground()).getColor()));
+        colorAdjustViewModel.setColorTint(((ColorDrawable)brightnessFilter.getBackground()).getColor());
 
         scrollViewModel.getBarScrollPosition().observe(this, v -> nestedContainer.scrollTo(0, v));
         textFormatViewModel.getTextSize().observe(this, contentView::setTextSize);
         textFormatViewModel.getFontFamily().observe(this, v -> contentView.setTypeface(ResourcesCompat.getFont(this, v)));
+        colorAdjustViewModel.getBrightness().observe(this, v -> brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(v, colorAdjustViewModel.getColorTint().getValue()))));
     }
 
     private void initOnContentLoaded() {
