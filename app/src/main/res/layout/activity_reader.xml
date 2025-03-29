@@ -39,6 +39,17 @@
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
+        android:id="@+id/rdr_fl_brightnessfilter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:clickable="false"
+        android:contextClickable="false"
+        android:longClickable="false">
+
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/rdr_fl_rightexpand"
         android:layout_width="24dp"
         android:layout_height="match_parent"

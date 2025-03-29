@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/baseline_navigate_before_24" />
 
     <ImageButton
-        android:id="@+id/rdr_imgbtn_theme"
+        android:id="@+id/rdr_imgbtn_coloradjust"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:backgroundTint="#00FFFFFF"
@@ -38,7 +38,7 @@
         android:backgroundTint="#00FFFFFF"
         android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/rdr_imgbtn_theme"
+        app:layout_constraintStart_toEndOf="@id/rdr_imgbtn_coloradjust"
         app:layout_constraintEnd_toStartOf="@id/rdr_imgbtn_textformat"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/general"
