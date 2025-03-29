@@ -182,7 +182,6 @@ public class ReaderActivity extends AppCompatActivity {
         bottomBar.addView(getLayoutInflater().inflate(R.layout.toolbar_rdr_bottom, bottomBar, false));
         tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
         tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
-//        for (Fragment f : fragmentManager.getFragments()) fragmentManager.beginTransaction().remove(f).commit();
         setBottomExpansionVisibility(false);
         contentView.setTypeface(ResourcesCompat.getFont(this, R.font.alegreya));
     }
