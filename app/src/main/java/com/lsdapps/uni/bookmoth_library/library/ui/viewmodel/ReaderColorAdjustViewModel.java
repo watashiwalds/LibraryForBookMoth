@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueExchange;
+
 public class ReaderColorAdjustViewModel extends ViewModel {
     private final MutableLiveData<Integer> brightness = new MutableLiveData<>();
     private final MutableLiveData<Integer> colorTint = new MutableLiveData<>();

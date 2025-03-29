@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
@@ -55,13 +56,13 @@ public class ColorAdjustFragment extends Fragment {
         frameColor = v.findViewById(R.id.rdr_sp_framecolor);
 
         textValues = new ArrayList<>();
-        textValues.add(new ImageTextItem(getResources().getString(R.string.color_white), false, 0xF8F8F8));
-        textValues.add(new ImageTextItem(getResources().getString(R.string.color_black), false, 0x080808));
-        textValues.add(new ImageTextItem(getResources().getString(R.string.color_ink), false, 0x15195D));
+        textValues.add(new ImageTextItem(getResources().getString(R.string.color_white), false, 0xFFF8F8F8));
+        textValues.add(new ImageTextItem(getResources().getString(R.string.color_black), false, 0xFF080808));
+        textValues.add(new ImageTextItem(getResources().getString(R.string.color_ink), false, 0xFF15195D));
         frameValues = new ArrayList<>();
-        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_light), false, 0xFFFFFF));
-        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_amoled), false, 0x000000));
-        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_paper), false, 0xFFFFEE));
+        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_amoled), false, 0xFF000000));
+        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_light), false, 0xFFFFFFFF));
+        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_paper), false, 0xFFFFFFEE));
 
         return v;
     }
@@ -91,10 +92,29 @@ public class ColorAdjustFragment extends Fragment {
         });
 
             //color things
+
         ImageTextSpinnerAdapter textCAdapter = new ImageTextSpinnerAdapter(requireContext(), textValues);
         textColor.setAdapter(textCAdapter);
+        textColor.setSelection(textValues.indexOf(textValues.stream().filter(k -> k.getRid() == viewModel.getTextColor().getValue()).findFirst().get()));
+        textColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                viewModel.setTextColor(textValues.get(i).getRid());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
 
         ImageTextSpinnerAdapter frameCAdapter = new ImageTextSpinnerAdapter(requireContext(), frameValues);
         frameColor.setAdapter(frameCAdapter);
+        frameColor.setSelection(frameValues.indexOf(frameValues.stream().filter(k -> k.getRid() == viewModel.getFrameColor().getValue()).findFirst().get()));
+        frameColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                viewModel.setFrameColor(frameValues.get(i).getRid());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
     }
 }

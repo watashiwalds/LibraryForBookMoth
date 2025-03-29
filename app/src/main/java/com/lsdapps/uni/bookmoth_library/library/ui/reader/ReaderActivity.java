@@ -3,6 +3,7 @@ package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -95,6 +96,7 @@ public class ReaderActivity extends AppCompatActivity {
 
         initObjects();
         initGraphical();
+        loadVisualConfig();
         initFunctions();
         initLiveData();
 
@@ -183,7 +185,6 @@ public class ReaderActivity extends AppCompatActivity {
         tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
         tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
         setBottomExpansionVisibility(false);
-        contentView.setTypeface(ResourcesCompat.getFont(this, R.font.alegreya));
     }
 
     private void initFunctions() {
@@ -293,13 +294,30 @@ public class ReaderActivity extends AppCompatActivity {
 
     private void initLiveData() {
         textFormatViewModel.setTextSize(contentView.getTextSize() / getResources().getDisplayMetrics().scaledDensity);
-        colorAdjustViewModel.setBrightness(ValueExchange.transparencyHexToPercent(((ColorDrawable)brightnessFilter.getBackground()).getColor()));
+        colorAdjustViewModel.setBrightness(ValueExchange.transparencyHexToSolidPercent(((ColorDrawable)brightnessFilter.getBackground()).getColor()));
         colorAdjustViewModel.setColorTint(((ColorDrawable)brightnessFilter.getBackground()).getColor());
 
         scrollViewModel.getBarScrollPosition().observe(this, v -> nestedContainer.scrollTo(0, v));
+
         textFormatViewModel.getTextSize().observe(this, contentView::setTextSize);
         textFormatViewModel.getFontFamily().observe(this, v -> contentView.setTypeface(ResourcesCompat.getFont(this, v)));
+
         colorAdjustViewModel.getBrightness().observe(this, v -> brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(v, colorAdjustViewModel.getColorTint().getValue()))));
+        colorAdjustViewModel.getTextColor().observe(this, v -> {
+            Log.d("RECEIVE TEXTCOLOR", String.valueOf(v));
+            contentView.setTextColor(v);
+        });
+        colorAdjustViewModel.getFrameColor().observe(this, v -> nestedContainer.setBackgroundColor(v));
+
+        loadVisualConfig();
+    }
+
+    private void loadVisualConfig() {
+        //TODO: Here lies dummy for on-coming config file loading
+        textFormatViewModel.setFontFamily(R.font.alegreya);
+        colorAdjustViewModel.setTextColor(0xFFF8F8F8);
+        colorAdjustViewModel.setFrameColor(0xFF000000);
+        colorAdjustViewModel.setBrightness(100);
     }
 
     private void initOnContentLoaded() {
