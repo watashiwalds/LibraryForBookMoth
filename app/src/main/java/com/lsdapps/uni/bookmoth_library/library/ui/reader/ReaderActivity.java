@@ -1,5 +1,6 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.lsdapps.uni.bookmoth_library.R;
-import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
+import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
@@ -49,6 +50,7 @@ public class ReaderActivity extends AppCompatActivity {
     private ReaderColorAdjustViewModel colorAdjustViewModel;
     private GetChapterContentUseCase getChapterContent;
     private FragmentManager fragmentManager;
+    private SharedPreferences readerSettings;
 
     private NestedScrollView nestedContainer;
     private BottomAppBar headerBar;
@@ -89,6 +91,8 @@ public class ReaderActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        readerSettings = getSharedPreferences("BookmothLib_Reader", MODE_PRIVATE);
 
         scrollViewModel = new ViewModelProvider(this).get(ReaderScrollViewModel.class);
         textFormatViewModel = new ViewModelProvider(this).get(ReaderTextFormatViewModel.class);
@@ -314,7 +318,7 @@ public class ReaderActivity extends AppCompatActivity {
 
     private void loadVisualConfig() {
         //TODO: Here lies dummy for on-coming config file loading
-        textFormatViewModel.setFontFamily(R.font.alegreya);
+        textFormatViewModel.setFontFamily(getResources().getIdentifier(readerSettings.getString("fontfamily", "alegreya"), "font", getPackageName()));
         colorAdjustViewModel.setTextColor(0xFFF8F8F8);
         colorAdjustViewModel.setFrameColor(0xFF000000);
         colorAdjustViewModel.setBrightness(100);
@@ -333,7 +337,7 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void fetchContent() {
-        getChapterContent.run(ApiConst.TEST_TOKEN, chapter.getContent_url(), new InnerCallback<String>() {
+        getChapterContent.run(AppConst.TEST_TOKEN, chapter.getContent_url(), new InnerCallback<String>() {
             @Override
             public void onSuccess(String body) {
                 makeMarkwon.setMarkdown(contentView, body);

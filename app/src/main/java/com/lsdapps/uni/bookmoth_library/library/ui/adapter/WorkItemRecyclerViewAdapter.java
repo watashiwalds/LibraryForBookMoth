@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lsdapps.uni.bookmoth_library.R;
-import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
+import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class WorkItemRecyclerViewAdapter extends RecyclerView.Adapter<WorkItemRe
         holder.author.setText(String.valueOf(item.getAuthor_name()));
         if (item.getCover_url() != null && !item.getCover_url().isBlank())
             Glide.with(holder.itemView)
-                .load(ApiConst.API_URL + ApiConst.CDN_COVER + item.getCover_url())
+                .load(AppConst.API_URL + AppConst.CDN_COVER + item.getCover_url())
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(holder.cover);
     }

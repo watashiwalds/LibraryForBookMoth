@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lsdapps.uni.bookmoth_library.R;
-import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
+import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
@@ -58,7 +58,7 @@ public class AuthorFragment extends Fragment {
     }
 
     private void fetchCreatedWorks() {
-        getCreatedWorks.run(ApiConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
+        getCreatedWorks.run(AppConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
             @Override
             public void onSuccess(List<Work> body) {
                 if (!works.isEmpty()) works.clear();

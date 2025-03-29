@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lsdapps.uni.bookmoth_library.R;
-import com.lsdapps.uni.bookmoth_library.library.core.ApiConst;
+import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
@@ -57,7 +57,7 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             WorkInfosCardRecyclerViewHolder hdr = (WorkInfosCardRecyclerViewHolder) holder;
             if (work.getCover_url() != null && !work.getCover_url().isBlank()) {
                 Glide.with(hdr.cover)
-                        .load(ApiConst.API_URL + ApiConst.CDN_COVER + work.getCover_url())
+                        .load(AppConst.API_URL + AppConst.CDN_COVER + work.getCover_url())
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .into(hdr.cover);
             }
