@@ -32,7 +32,6 @@ public class TextFormatFragment extends Fragment {
     private Spinner fontFamily;
     private ArrayList<String> availableFonts;
     private ArrayList<Integer> ridFonts;
-    private ArrayAdapter<String> fontListAdapter;
 
     private float viewTextSize;
     private float defaultTextSize;
@@ -107,7 +106,7 @@ public class TextFormatFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        fontListAdapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, availableFonts);
+        ArrayAdapter<String> fontListAdapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, availableFonts);
         fontFamily.setAdapter(fontListAdapter);
         fontFamily.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

@@ -14,4 +14,10 @@
     <string name="reader_nextchapter_done">Đang xem chương </string>
     <string name="reader_prevchapter_none">Đã đến chương đầu tiên</string>
     <string name="reader_prevchapter_done">Đang quay lại chương </string>
+    <string name="color_white">Trắng</string>
+    <string name="color_black">Đen</string>
+    <string name="color_ink">Xanh mực</string>
+    <string name="color_light">Sáng</string>
+    <string name="color_amoled">AMOLED</string>
+    <string name="color_paper">Giấy vàng</string>
 </resources>

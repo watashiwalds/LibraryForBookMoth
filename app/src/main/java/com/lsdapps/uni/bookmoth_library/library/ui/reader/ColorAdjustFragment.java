@@ -15,7 +15,12 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.ui.adapter.ImageTextSpinnerAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewdata.ImageTextItem;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderColorAdjustViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ColorAdjustFragment extends Fragment {
     private ReaderColorAdjustViewModel viewModel;
@@ -23,6 +28,9 @@ public class ColorAdjustFragment extends Fragment {
     private SeekBar brightness;
     private Spinner textColor;
     private Spinner frameColor;
+
+    private List<ImageTextItem> textValues;
+    private List<ImageTextItem> frameValues;
 
     public ColorAdjustFragment() {
         // Required empty public constructor
@@ -45,6 +53,16 @@ public class ColorAdjustFragment extends Fragment {
         brightness = v.findViewById(R.id.rdr_sb_brightness);
         textColor = v.findViewById(R.id.rdr_sp_textcolor);
         frameColor = v.findViewById(R.id.rdr_sp_framecolor);
+
+        textValues = new ArrayList<>();
+        textValues.add(new ImageTextItem(getResources().getString(R.string.color_white), false, 0xF8F8F8));
+        textValues.add(new ImageTextItem(getResources().getString(R.string.color_black), false, 0x080808));
+        textValues.add(new ImageTextItem(getResources().getString(R.string.color_ink), false, 0x15195D));
+        frameValues = new ArrayList<>();
+        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_light), false, 0xFFFFFF));
+        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_amoled), false, 0x000000));
+        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_paper), false, 0xFFFFEE));
+
         return v;
     }
 
@@ -71,5 +89,12 @@ public class ColorAdjustFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
+            //color things
+        ImageTextSpinnerAdapter textCAdapter = new ImageTextSpinnerAdapter(requireContext(), textValues);
+        textColor.setAdapter(textCAdapter);
+
+        ImageTextSpinnerAdapter frameCAdapter = new ImageTextSpinnerAdapter(requireContext(), frameValues);
+        frameColor.setAdapter(frameCAdapter);
     }
 }
