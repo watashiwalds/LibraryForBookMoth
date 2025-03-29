@@ -3,7 +3,6 @@ package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -135,9 +134,16 @@ public class ReaderActivity extends AppCompatActivity {
         textFormatFragment = TextFormatFragment.newInstance();
         colorAdjustFragment = ColorAdjustFragment.newInstance();
 //        expansion_chapterList = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_chapterlist, bottomExpansion, false);
+
+        fragmentManager.beginTransaction()
+                .add(R.id.rdr_fl_bottomexpand, textFormatFragment, String.valueOf(EXPANSION_TEXTFORMAT))
+                .add(R.id.rdr_fl_bottomexpand, colorAdjustFragment, String.valueOf(EXPANSION_COLORADJUST))
+                .hide(textFormatFragment)
+                .hide(colorAdjustFragment)
+                .commit();
     }
 
-    private void setNavbarVisibility(Boolean bool) {
+    private void setBarsGraphicalVisibility(Boolean bool) {
         if (bool && !barVisible) {
             barVisible = true;
             UniversalAnimate.animateWallHiding(headerBar, UniversalAnimate.PLACEMENT_TOP, false);
@@ -148,9 +154,27 @@ public class ReaderActivity extends AppCompatActivity {
             UniversalAnimate.animateWallHiding(headerBar, UniversalAnimate.PLACEMENT_TOP, true);
             UniversalAnimate.animateWallHiding(bottomBar, UniversalAnimate.PLACEMENT_BOTTOM, true);
             UniversalAnimate.animateWallHiding(rightExpansion, UniversalAnimate.PLACEMENT_END, true);
+            setBottomExpansionVisibility(false);
+        }
+    }
+
+    private void setBottomExpansionVisibility(Boolean bool) {
+        if (!bool) {
             nowBottomExpansion = EXPANSION_NONE;
             UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, true);
+        } else {
+            UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
         }
+    }
+
+    private void showManagedBottomFragments(Fragment showThis) {
+        fragmentManager.beginTransaction()
+                .hide(textFormatFragment)
+                .hide(colorAdjustFragment)
+                .commit();
+        textFormatFragment.getView().setVisibility(View.GONE);
+        colorAdjustFragment.getView().setVisibility(View.GONE);
+        fragmentManager.beginTransaction().show(showThis).commit();
     }
 
     private void initGraphical() {
@@ -158,7 +182,8 @@ public class ReaderActivity extends AppCompatActivity {
         bottomBar.addView(getLayoutInflater().inflate(R.layout.toolbar_rdr_bottom, bottomBar, false));
         tv_title = headerBar.findViewById(R.id.rdr_tv_chaptitle);
         tv_chapindex = headerBar.findViewById(R.id.rdr_tv_chapindex);
-        for (Fragment f : fragmentManager.getFragments()) fragmentManager.beginTransaction().remove(f).commit();
+//        for (Fragment f : fragmentManager.getFragments()) fragmentManager.beginTransaction().remove(f).commit();
+        setBottomExpansionVisibility(false);
         contentView.setTypeface(ResourcesCompat.getFont(this, R.font.alegreya));
     }
 
@@ -167,19 +192,19 @@ public class ReaderActivity extends AppCompatActivity {
         nestedContainer.post(() -> {
             nestedContainer.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
                 if (scrollY == 0 || scrollY >= (nestedContainer.getChildAt(0).getHeight() - nestedContainer.getHeight() - 1)) {
-                    setNavbarVisibility(true);
+                    setBarsGraphicalVisibility(true);
                     scrollViewModel.setViewScrollPosition(scrollY);
                     return;
                 }
                 if (nowBottomExpansion != EXPANSION_NONE && barVisible) return;
-                if (scrollY > oldScrollY) setNavbarVisibility(false);
+                if (scrollY > oldScrollY) setBarsGraphicalVisibility(false);
                 scrollViewModel.setViewScrollPosition(scrollY);
             });
         });
 
         //toggle toolbars when click content TextView
         contentView.setOnClickListener(view -> {
-            setNavbarVisibility(!barVisible);
+            setBarsGraphicalVisibility(!barVisible);
         });
 
         //setup custom function when selecting text (also remove copy function)
@@ -241,24 +266,28 @@ public class ReaderActivity extends AppCompatActivity {
         });
 
         bottomBar.findViewById(R.id.rdr_imgbtn_textformat).setOnClickListener(v -> {
-            if (nowBottomExpansion == EXPANSION_TEXTFORMAT) {
-                nowBottomExpansion = EXPANSION_NONE;
-                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, true);
-            } else {
-                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, textFormatFragment).commit();
-                nowBottomExpansion = EXPANSION_TEXTFORMAT;
-                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
+            switch (nowBottomExpansion) {
+                case EXPANSION_NONE:
+                    nowBottomExpansion = EXPANSION_TEXTFORMAT;
+                    showManagedBottomFragments(textFormatFragment);
+                    setBottomExpansionVisibility(true);
+                    break;
+                default:
+                    setBottomExpansionVisibility(false);
+                    break;
             }
         });
 
         bottomBar.findViewById(R.id.rdr_imgbtn_coloradjust).setOnClickListener(v -> {
-            if (nowBottomExpansion == EXPANSION_COLORADJUST) {
-                nowBottomExpansion = EXPANSION_NONE;
-                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, true);
-            } else {
-                fragmentManager.beginTransaction().replace(R.id.rdr_fl_bottomexpand, colorAdjustFragment).commit();
-                nowBottomExpansion = EXPANSION_COLORADJUST;
-                UniversalAnimate.animateWallHiding(bottomExpansion, UniversalAnimate.PLACEMENT_BOTTOM, false);
+            switch (nowBottomExpansion) {
+                case EXPANSION_NONE:
+                    nowBottomExpansion = EXPANSION_COLORADJUST;
+                    showManagedBottomFragments(colorAdjustFragment);
+                    setBottomExpansionVisibility(true);
+                    break;
+                default:
+                    setBottomExpansionVisibility(false);
+                    break;
             }
         });
     }

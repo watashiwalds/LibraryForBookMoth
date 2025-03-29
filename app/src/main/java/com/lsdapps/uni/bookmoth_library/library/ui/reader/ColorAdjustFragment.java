@@ -61,6 +61,7 @@ public class ColorAdjustFragment extends Fragment {
         brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if (!b) return;
                 viewModel.setBrightness(i + 30);
             }
 

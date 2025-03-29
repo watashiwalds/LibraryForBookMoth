@@ -1,7 +1,6 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 
 import android.graphics.Typeface;
-import android.graphics.fonts.FontFamily;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,7 +20,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.lsdapps.uni.bookmoth_library.R;
-import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderTextFormatViewModel;
 
 import java.util.ArrayList;
@@ -32,12 +30,13 @@ public class TextFormatFragment extends Fragment {
     private SeekBar textSize;
     private ArrayList<TextView> textDemos = new ArrayList<>();;
     private Spinner fontFamily;
-    private ArrayList<String> availableFonts = new ArrayList<>();
-    private ArrayList<Integer> ridFonts = new ArrayList<>();
+    private ArrayList<String> availableFonts;
+    private ArrayList<Integer> ridFonts;
     private ArrayAdapter<String> fontListAdapter;
 
-    private float ori_textSize;
-    private float var_textSize;
+    private float viewTextSize;
+    private float defaultTextSize;
+    private float sizePerStep;
 
     public TextFormatFragment() {}
 
@@ -62,10 +61,12 @@ public class TextFormatFragment extends Fragment {
         textDemos.add(v.findViewById(R.id.textdemo_bolditalic));
 
         fontFamily = v.findViewById(R.id.rdr_sp_fontfamily);
+        availableFonts = new ArrayList<>();
         availableFonts.add("Alegreya");
         availableFonts.add("Bitter");
         availableFonts.add("Bookely");
         availableFonts.add("Literata");
+        ridFonts = new ArrayList<>();
         ridFonts.add(R.font.alegreya);
         ridFonts.add(R.font.bitter);
         ridFonts.add(R.font.bookerly);
@@ -78,24 +79,27 @@ public class TextFormatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(getActivity()).get(ReaderTextFormatViewModel.class);
-        ori_textSize = viewModel.getTextSize().getValue();
+        defaultTextSize = textDemos.get(0).getTextSize() / requireContext().getResources().getDisplayMetrics().scaledDensity;
+        sizePerStep = defaultTextSize / 4;
+        viewTextSize = viewModel.getTextSize().getValue();
         initialize();
     }
 
     private void initialize() {
-        if (ori_textSize > textDemos.get(0).getTextSize() / requireContext().getResources().getDisplayMetrics().scaledDensity) {
-            float deltaSize = ori_textSize - textDemos.get(0).getTextSize() / requireContext().getResources().getDisplayMetrics().scaledDensity;
-            setDemoTextSize(ori_textSize);
-            ori_textSize -= deltaSize;
-            textSize.setProgress((int)(deltaSize / (ori_textSize/4)));
+        viewModel.getTextSize().observe(requireActivity(), v -> viewTextSize = v);
+
+        if (viewTextSize > defaultTextSize) {
+            float deltaSize = viewTextSize - defaultTextSize;
+            setDemoTextSize(viewTextSize);
+            textSize.setProgress((int)(deltaSize / sizePerStep));
         }
 
         textSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                var_textSize = ori_textSize + ((int)(ori_textSize / 4) * i);
-                setDemoTextSize(var_textSize);
-                viewModel.setTextSize(var_textSize);
+                float delta = sizePerStep * i;
+                setDemoTextSize(defaultTextSize + delta);
+                viewModel.setTextSize(defaultTextSize + delta);
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
