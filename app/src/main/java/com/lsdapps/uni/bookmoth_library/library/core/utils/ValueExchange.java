@@ -1,12 +1,12 @@
 package com.lsdapps.uni.bookmoth_library.library.core.utils;
 
 public class ValueExchange {
-    public static int transparencyHexToPercent(int argbInt) {
+    public static int transparencyHexToSolidPercent(int argbInt) {
         int apart = (argbInt >> 24) & 0xFF;
         return (int)((1 - (apart/255f))*100);
     }
-    public static String makeTransparencyParseColorValue(int transparencyPercent, int color) {
-        int alpha = Math.max(0, Math.min(255, (int)(255-(transparencyPercent/100.0)*255)));
+    public static String makeTransparencyParseColorValue(int solidPercent, int color) {
+        int alpha = Math.max(0, Math.min(255, (int)(255-(solidPercent/100.0)*255)));
 
         int red = (color >> 16) & 0xFF;
         int green = (color >> 8) & 0xFF;
