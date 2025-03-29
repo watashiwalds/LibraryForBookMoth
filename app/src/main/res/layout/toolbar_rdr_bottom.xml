@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toStartOf="@id/rdr_imgbtn_chaplist"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/general"
-        app:srcCompat="@drawable/baseline_brightness_high_24" />
+        app:srcCompat="@drawable/baseline_remove_red_eye_24" />
 
     <ImageButton
         android:id="@+id/rdr_imgbtn_chaplist"
