@@ -11,12 +11,12 @@ public class ReaderColorAdjustViewModel extends ViewModel {
     private final MutableLiveData<Integer> brightness = new MutableLiveData<>();
     private final MutableLiveData<Integer> colorTint = new MutableLiveData<>();
     private final MutableLiveData<Integer> textColor = new MutableLiveData<>();
-    private final MutableLiveData<Integer> frameColor = new MutableLiveData<>();
+    private final MutableLiveData<Integer> backgroundColor = new MutableLiveData<>();
 
     public MutableLiveData<Integer> getBrightness() {return brightness;}
     public MutableLiveData<Integer> getColorTint() {return colorTint;}
     public MutableLiveData<Integer> getTextColor() {return textColor;}
-    public MutableLiveData<Integer> getFrameColor() {return frameColor;}
+    public MutableLiveData<Integer> getBackgroundColor() {return backgroundColor;}
 
     public void setBrightness(int value) {
         brightness.setValue(value);
@@ -27,7 +27,10 @@ public class ReaderColorAdjustViewModel extends ViewModel {
         textColor.setValue(intARGB);
         setting.setReaderTextColor(intARGB);
     }
-    public void setFrameColor(int intARGB) {frameColor.setValue(intARGB);}
+    public void setBackgroundColor(int intARGB) {
+        backgroundColor.setValue(intARGB);
+        setting.setReaderBackgroundColor(intARGB);
+    }
 
     private ManageSettingUseCase setting;
     public void loadSettings(ManageSettingUseCase setting) {
@@ -36,5 +39,6 @@ public class ReaderColorAdjustViewModel extends ViewModel {
         this.setting = setting;
         setBrightness(setting.getReaderBrightness());
         setTextColor(setting.getReaderTextColor());
+        setBackgroundColor(setting.getReaderBackgroundColor());
     }
 }

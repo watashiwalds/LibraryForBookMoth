@@ -2,9 +2,7 @@ package com.lsdapps.uni.bookmoth_library.library.ui.reader;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -305,7 +303,7 @@ public class ReaderActivity extends AppCompatActivity {
 
         colorAdjustViewModel.getBrightness().observe(this, v -> brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(v, colorAdjustViewModel.getColorTint().getValue()))));
         colorAdjustViewModel.getTextColor().observe(this, v -> contentView.setTextColor(v));
-        colorAdjustViewModel.getFrameColor().observe(this, v -> nestedContainer.setBackgroundColor(v));
+        colorAdjustViewModel.getBackgroundColor().observe(this, v -> nestedContainer.setBackgroundColor(v));
 
         loadVisualConfig();
     }
@@ -320,8 +318,7 @@ public class ReaderActivity extends AppCompatActivity {
         contentView.setTextSize(textFormatViewModel.getTextSize().getValue());
         brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(colorAdjustViewModel.getBrightness().getValue(), colorAdjustViewModel.getColorTint().getValue())));
         contentView.setTextColor(colorAdjustViewModel.getTextColor().getValue());
-
-        colorAdjustViewModel.setFrameColor(0xFF000000);
+        nestedContainer.setBackgroundColor(colorAdjustViewModel.getBackgroundColor().getValue());
     }
 
     private void initOnContentLoaded() {

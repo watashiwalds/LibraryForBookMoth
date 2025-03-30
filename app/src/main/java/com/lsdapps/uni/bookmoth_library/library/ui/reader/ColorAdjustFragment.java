@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +90,6 @@ public class ColorAdjustFragment extends Fragment {
         });
 
             //color things
-
         ImageTextSpinnerAdapter textCAdapter = new ImageTextSpinnerAdapter(requireContext(), textValues);
         textColor.setAdapter(textCAdapter);
         textColor.setSelection(textValues.indexOf(textValues.stream().filter(k -> k.getRid() == viewModel.getTextColor().getValue()).findFirst().get()));
@@ -106,11 +104,11 @@ public class ColorAdjustFragment extends Fragment {
 
         ImageTextSpinnerAdapter frameCAdapter = new ImageTextSpinnerAdapter(requireContext(), frameValues);
         frameColor.setAdapter(frameCAdapter);
-        frameColor.setSelection(frameValues.indexOf(frameValues.stream().filter(k -> k.getRid() == viewModel.getFrameColor().getValue()).findFirst().get()));
+        frameColor.setSelection(frameValues.indexOf(frameValues.stream().filter(k -> k.getRid() == viewModel.getBackgroundColor().getValue()).findFirst().get()));
         frameColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                viewModel.setFrameColor(frameValues.get(i).getRid());
+                viewModel.setBackgroundColor(frameValues.get(i).getRid());
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
