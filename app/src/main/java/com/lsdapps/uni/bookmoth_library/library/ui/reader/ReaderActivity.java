@@ -33,8 +33,10 @@ import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueExchange;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
+import com.lsdapps.uni.bookmoth_library.library.data.repo.SharedPreferencesRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.ManageSettingUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderColorAdjustViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderScrollViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderTextFormatViewModel;
@@ -100,7 +102,6 @@ public class ReaderActivity extends AppCompatActivity {
 
         initObjects();
         initGraphical();
-        loadVisualConfig();
         initFunctions();
         initLiveData();
 
@@ -307,18 +308,17 @@ public class ReaderActivity extends AppCompatActivity {
         textFormatViewModel.getFontFamily().observe(this, v -> contentView.setTypeface(ResourcesCompat.getFont(this, v)));
 
         colorAdjustViewModel.getBrightness().observe(this, v -> brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(v, colorAdjustViewModel.getColorTint().getValue()))));
-        colorAdjustViewModel.getTextColor().observe(this, v -> {
-            Log.d("RECEIVE TEXTCOLOR", String.valueOf(v));
-            contentView.setTextColor(v);
-        });
+        colorAdjustViewModel.getTextColor().observe(this, v -> contentView.setTextColor(v));
         colorAdjustViewModel.getFrameColor().observe(this, v -> nestedContainer.setBackgroundColor(v));
 
         loadVisualConfig();
     }
 
     private void loadVisualConfig() {
+        textFormatViewModel.loadSettings(new ManageSettingUseCase(new SharedPreferencesRepository(getSharedPreferences(AppConst.SHAREDPREFS_NAME, MODE_PRIVATE))));
+
         //TODO: Here lies dummy for on-coming config file loading
-        textFormatViewModel.setFontFamily(getResources().getIdentifier(readerSettings.getString("fontfamily", "alegreya"), "font", getPackageName()));
+        contentView.setTypeface(ResourcesCompat.getFont(this, textFormatViewModel.getFontFamily().getValue()));
         colorAdjustViewModel.setTextColor(0xFFF8F8F8);
         colorAdjustViewModel.setFrameColor(0xFF000000);
         colorAdjustViewModel.setBrightness(100);

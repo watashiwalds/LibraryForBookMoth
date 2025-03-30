@@ -108,6 +108,7 @@ public class TextFormatFragment extends Fragment {
 
         ArrayAdapter<String> fontListAdapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, availableFonts);
         fontFamily.setAdapter(fontListAdapter);
+        fontFamily.setSelection(ridFonts.indexOf(viewModel.getFontFamily().getValue()));
         fontFamily.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
