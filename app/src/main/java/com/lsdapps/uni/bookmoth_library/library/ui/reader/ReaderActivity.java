@@ -35,6 +35,7 @@ import com.lsdapps.uni.bookmoth_library.library.data.repo.SharedPreferencesRepos
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContentUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.ManageSettingUseCase;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderChapterListViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderColorAdjustViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderScrollViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderTextFormatViewModel;
@@ -48,6 +49,7 @@ public class ReaderActivity extends AppCompatActivity {
     private ReaderScrollViewModel scrollViewModel;
     private ReaderTextFormatViewModel textFormatViewModel;
     private ReaderColorAdjustViewModel colorAdjustViewModel;
+    private ReaderChapterListViewModel chaptersViewModel;
     private GetChapterContentUseCase getChapterContent;
     private FragmentManager fragmentManager;
     private SharedPreferences readerSettings;
@@ -68,6 +70,7 @@ public class ReaderActivity extends AppCompatActivity {
     private FrameLayout bottomExpansion;
     private Fragment textFormatFragment;
     private Fragment colorAdjustFragment;
+    private Fragment chapterListFragment;
     private int nowBottomExpansion;
 
     private TextView tv_title;
@@ -97,17 +100,18 @@ public class ReaderActivity extends AppCompatActivity {
         scrollViewModel = new ViewModelProvider(this).get(ReaderScrollViewModel.class);
         textFormatViewModel = new ViewModelProvider(this).get(ReaderTextFormatViewModel.class);
         colorAdjustViewModel = new ViewModelProvider(this).get(ReaderColorAdjustViewModel.class);
+        chaptersViewModel = new ViewModelProvider(this).get(ReaderChapterListViewModel.class);
+
+        chapters = (List<Chapter>) getIntent().getSerializableExtra("chapters");
+        nowIndex = getIntent().getIntExtra("index", 0);
+        work_title = getIntent().getStringExtra("worktitle");
+        chapter = chapters.get(nowIndex);
 
         initObjects();
         initGraphical();
         initFunctions();
         initLiveData();
 
-        chapters = (List<Chapter>) getIntent().getSerializableExtra("chapters");
-        nowIndex = getIntent().getIntExtra("index", 0);
-        work_title = getIntent().getStringExtra("worktitle");
-
-        chapter = chapters.get(nowIndex);
         displayHeaderInformation();
 
         fetchContent();
@@ -116,6 +120,7 @@ public class ReaderActivity extends AppCompatActivity {
     private void initObjects() {
         getChapterContent = new GetChapterContentUseCase(new LibApiRepository());
         fragmentManager = getSupportFragmentManager();
+        for (Fragment f : fragmentManager.getFragments()) fragmentManager.beginTransaction().remove(f).commit();
 
         nestedContainer = findViewById(R.id.rdr_nsv_content);
         headerBar = findViewById(R.id.rdr_tb_header);
@@ -138,13 +143,15 @@ public class ReaderActivity extends AppCompatActivity {
 
         textFormatFragment = TextFormatFragment.newInstance();
         colorAdjustFragment = ColorAdjustFragment.newInstance();
-//        expansion_chapterList = getLayoutInflater().inflate(R.layout.toolbar_rdr_popup_chapterlist, bottomExpansion, false);
+        chapterListFragment = ChapterListFragment.newInstance();
 
         fragmentManager.beginTransaction()
                 .add(R.id.rdr_fl_bottomexpand, textFormatFragment, String.valueOf(EXPANSION_TEXTFORMAT))
                 .add(R.id.rdr_fl_bottomexpand, colorAdjustFragment, String.valueOf(EXPANSION_COLORADJUST))
+                .add(R.id.rdr_fl_bottomexpand, chapterListFragment, String.valueOf(EXPANSION_CHAPTERLIST))
                 .hide(textFormatFragment)
                 .hide(colorAdjustFragment)
+                .hide(chapterListFragment)
                 .commit();
     }
 
@@ -176,9 +183,11 @@ public class ReaderActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .hide(textFormatFragment)
                 .hide(colorAdjustFragment)
+                .hide(chapterListFragment)
                 .commit();
         textFormatFragment.getView().setVisibility(View.GONE);
         colorAdjustFragment.getView().setVisibility(View.GONE);
+        chapterListFragment.getView().setVisibility(View.GONE);
         fragmentManager.beginTransaction().show(showThis).commit();
     }
 
@@ -293,6 +302,19 @@ public class ReaderActivity extends AppCompatActivity {
                     break;
             }
         });
+
+        bottomBar.findViewById(R.id.rdr_imgbtn_chaplist).setOnClickListener(v -> {
+            switch (nowBottomExpansion) {
+                case EXPANSION_NONE:
+                    nowBottomExpansion = EXPANSION_CHAPTERLIST;
+                    showManagedBottomFragments(chapterListFragment);
+                    setBottomExpansionVisibility(true);
+                    break;
+                default:
+                    setBottomExpansionVisibility(false);
+                    break;
+            }
+        });
     }
 
     private void initLiveData() {
@@ -305,20 +327,26 @@ public class ReaderActivity extends AppCompatActivity {
         colorAdjustViewModel.getTextColor().observe(this, v -> contentView.setTextColor(v));
         colorAdjustViewModel.getBackgroundColor().observe(this, v -> nestedContainer.setBackgroundColor(v));
 
-        loadVisualConfig();
+        loadExpansionData();
     }
 
-    private void loadVisualConfig() {
+    private void loadExpansionData() {
         ManageSettingUseCase settingUseCase = new ManageSettingUseCase(new SharedPreferencesRepository(getSharedPreferences(AppConst.SHAREDPREFS_NAME, MODE_PRIVATE)));
         textFormatViewModel.loadSettings(settingUseCase);
         colorAdjustViewModel.loadSettings(settingUseCase);
 
-        //TODO: Here lies dummy for on-coming config file loading
         contentView.setTypeface(ResourcesCompat.getFont(this, textFormatViewModel.getFontFamily().getValue()));
         contentView.setTextSize(textFormatViewModel.getTextSize().getValue());
         brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(colorAdjustViewModel.getBrightness().getValue(), colorAdjustViewModel.getColorTint().getValue())));
         contentView.setTextColor(colorAdjustViewModel.getTextColor().getValue());
         nestedContainer.setBackgroundColor(colorAdjustViewModel.getBackgroundColor().getValue());
+
+        chaptersViewModel.setChapterCounts(chapters.size());
+        chaptersViewModel.setNowChapterIndex(nowIndex);
+        chaptersViewModel.getNowChapterIndex().observe(this, v -> {
+            fetchChapter(v);
+            InnerToast.show(this, String.format(Locale.getDefault(), "%s %d", getString(R.string.reader_loadchaper), v+1));
+        });
     }
 
     private void initOnContentLoaded() {
@@ -346,6 +374,14 @@ public class ReaderActivity extends AppCompatActivity {
                 ErrorDialog.showError(ReaderActivity.this, errorMessage);
             }
         });
+    }
+
+    private boolean fetchChapter(int index) {
+        nowIndex = index;
+        chapter = chapters.get(index);
+        fetchContent();
+        displayHeaderInformation();
+        return true;
     }
 
     private boolean fetchNextChapter() {
