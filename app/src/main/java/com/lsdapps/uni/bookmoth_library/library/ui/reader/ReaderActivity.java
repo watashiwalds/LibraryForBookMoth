@@ -298,9 +298,6 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void initLiveData() {
-        colorAdjustViewModel.setBrightness(ValueExchange.transparencyHexToSolidPercent(((ColorDrawable)brightnessFilter.getBackground()).getColor()));
-        colorAdjustViewModel.setColorTint(((ColorDrawable)brightnessFilter.getBackground()).getColor());
-
         scrollViewModel.getBarScrollPosition().observe(this, v -> nestedContainer.scrollTo(0, v));
 
         textFormatViewModel.getTextSize().observe(this, contentView::setTextSize);
@@ -314,14 +311,16 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void loadVisualConfig() {
-        textFormatViewModel.loadSettings(new ManageSettingUseCase(new SharedPreferencesRepository(getSharedPreferences(AppConst.SHAREDPREFS_NAME, MODE_PRIVATE))));
+        ManageSettingUseCase settingUseCase = new ManageSettingUseCase(new SharedPreferencesRepository(getSharedPreferences(AppConst.SHAREDPREFS_NAME, MODE_PRIVATE)));
+        textFormatViewModel.loadSettings(settingUseCase);
+        colorAdjustViewModel.loadSettings(settingUseCase);
 
         //TODO: Here lies dummy for on-coming config file loading
         contentView.setTypeface(ResourcesCompat.getFont(this, textFormatViewModel.getFontFamily().getValue()));
         contentView.setTextSize(textFormatViewModel.getTextSize().getValue());
+        brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(colorAdjustViewModel.getBrightness().getValue(), colorAdjustViewModel.getColorTint().getValue())));
         colorAdjustViewModel.setTextColor(0xFFF8F8F8);
         colorAdjustViewModel.setFrameColor(0xFF000000);
-        colorAdjustViewModel.setBrightness(100);
     }
 
     private void initOnContentLoaded() {

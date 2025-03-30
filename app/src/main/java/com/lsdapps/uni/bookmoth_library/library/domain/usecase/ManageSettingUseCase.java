@@ -20,4 +20,10 @@ public class ManageSettingUseCase {
     public float getReaderTextSize() {
         return repo.getReaderTextSize();
     }
+    public void setReaderBrightness(int value) {
+        repo.setReaderBrightness(value);
+    }
+    public int getReaderBrightness() {
+        return repo.getReaderBrightness();
+    }
 }
