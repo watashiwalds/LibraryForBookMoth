@@ -18,7 +18,10 @@ public class ReaderTextFormatViewModel extends AndroidViewModel {
     }
 
     public LiveData<Float> getTextSize() {return textSize;}
-    public void setTextSize(float value) {textSize.setValue(value);}
+    public void setTextSize(float value) {
+        textSize.setValue(value);
+        setting.setReaderTextSize(value);
+    }
         //font family
     private final MutableLiveData<Integer> fontFamily = new MutableLiveData<>();
     public LiveData<Integer> getFontFamily() {return fontFamily;}
@@ -31,5 +34,6 @@ public class ReaderTextFormatViewModel extends AndroidViewModel {
     public void loadSettings(ManageSettingUseCase setting) {
         this.setting = setting;
         setFontFamily(getApplication().getResources().getIdentifier(setting.getReaderFont(), "font", getApplication().getPackageName()));
+        setTextSize(setting.getReaderTextSize());
     }
 }

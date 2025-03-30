@@ -298,7 +298,6 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void initLiveData() {
-        textFormatViewModel.setTextSize(contentView.getTextSize() / getResources().getDisplayMetrics().scaledDensity);
         colorAdjustViewModel.setBrightness(ValueExchange.transparencyHexToSolidPercent(((ColorDrawable)brightnessFilter.getBackground()).getColor()));
         colorAdjustViewModel.setColorTint(((ColorDrawable)brightnessFilter.getBackground()).getColor());
 
@@ -319,6 +318,7 @@ public class ReaderActivity extends AppCompatActivity {
 
         //TODO: Here lies dummy for on-coming config file loading
         contentView.setTypeface(ResourcesCompat.getFont(this, textFormatViewModel.getFontFamily().getValue()));
+        contentView.setTextSize(textFormatViewModel.getTextSize().getValue());
         colorAdjustViewModel.setTextColor(0xFFF8F8F8);
         colorAdjustViewModel.setFrameColor(0xFF000000);
         colorAdjustViewModel.setBrightness(100);

@@ -87,11 +87,9 @@ public class TextFormatFragment extends Fragment {
     private void initialize() {
         viewModel.getTextSize().observe(requireActivity(), v -> viewTextSize = v);
 
-        if (viewTextSize > defaultTextSize) {
-            float deltaSize = viewTextSize - defaultTextSize;
-            setDemoTextSize(viewTextSize);
-            textSize.setProgress((int)(deltaSize / sizePerStep));
-        }
+        float deltaSize = viewModel.getTextSize().getValue() - defaultTextSize;
+        setDemoTextSize(viewTextSize);
+        textSize.setProgress((int)(deltaSize / sizePerStep));
 
         textSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

@@ -3,7 +3,8 @@ package com.lsdapps.uni.bookmoth_library.library.data.repo;
 import android.content.SharedPreferences;
 
 public class SharedPreferencesRepository {
-    private static final String SETTING_FONTFAMILY = "font_family";
+    private static final String READER_FONTFAMILY = "reader_fontFamily";
+    private static final String READER_TEXTSIZE = "reader_textSize";
 
     private final SharedPreferences setting;
 
@@ -11,10 +12,16 @@ public class SharedPreferencesRepository {
         this.setting = setting;
     }
 
-    public void saveReaderFont(String fontName) {
-        setting.edit().putString(SETTING_FONTFAMILY, fontName).apply();
+    public void setReaderFont(String fontName) {
+        setting.edit().putString(READER_FONTFAMILY, fontName).apply();
     }
     public String getReaderFont() {
-        return setting.getString(SETTING_FONTFAMILY, "alegreya");
+        return setting.getString(READER_FONTFAMILY, "alegreya");
+    }
+    public void setReaderTextSize(float textSize) {
+        setting.edit().putFloat(READER_TEXTSIZE, textSize).apply();
+    }
+    public float getReaderTextSize() {
+        return setting.getFloat(READER_TEXTSIZE, 14.0f);
     }
 }
