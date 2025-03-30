@@ -56,13 +56,13 @@ public class ColorAdjustFragment extends Fragment {
         frameColor = v.findViewById(R.id.rdr_sp_framecolor);
 
         textValues = new ArrayList<>();
-        textValues.add(new ImageTextItem(getResources().getString(R.string.color_white), false, 0xFFF8F8F8));
-        textValues.add(new ImageTextItem(getResources().getString(R.string.color_black), false, 0xFF080808));
-        textValues.add(new ImageTextItem(getResources().getString(R.string.color_ink), false, 0xFF15195D));
+        textValues.add(new ImageTextItem(getResources().getString(R.string.color_white), false, getResources().getColor(R.color.text_white)));
+        textValues.add(new ImageTextItem(getResources().getString(R.string.color_black), false, getResources().getColor(R.color.text_black)));
+        textValues.add(new ImageTextItem(getResources().getString(R.string.color_ink), false, getResources().getColor(R.color.text_ink)));
         frameValues = new ArrayList<>();
-        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_amoled), false, 0xFF000000));
-        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_light), false, 0xFFFFFFFF));
-        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_paper), false, 0xFFFFFFEE));
+        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_amoled), false, getResources().getColor(R.color.bg_amodel)));
+        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_light), false, getResources().getColor(R.color.bg_light)));
+        frameValues.add(new ImageTextItem(getResources().getString(R.string.color_paper), false, getResources().getColor(R.color.bg_paper)));
 
         return v;
     }

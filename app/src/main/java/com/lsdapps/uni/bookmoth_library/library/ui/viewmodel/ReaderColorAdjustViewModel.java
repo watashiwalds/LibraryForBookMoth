@@ -23,8 +23,11 @@ public class ReaderColorAdjustViewModel extends ViewModel {
         setting.setReaderBrightness(value);
     }
     public void setColorTint(int value) {colorTint.setValue(value);}
-    public void setTextColor(int rid) {textColor.setValue(rid);}
-    public void setFrameColor(int rid) {frameColor.setValue(rid);}
+    public void setTextColor(int intARGB) {
+        textColor.setValue(intARGB);
+        setting.setReaderTextColor(intARGB);
+    }
+    public void setFrameColor(int intARGB) {frameColor.setValue(intARGB);}
 
     private ManageSettingUseCase setting;
     public void loadSettings(ManageSettingUseCase setting) {
@@ -32,5 +35,6 @@ public class ReaderColorAdjustViewModel extends ViewModel {
 
         this.setting = setting;
         setBrightness(setting.getReaderBrightness());
+        setTextColor(setting.getReaderTextColor());
     }
 }

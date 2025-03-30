@@ -319,7 +319,8 @@ public class ReaderActivity extends AppCompatActivity {
         contentView.setTypeface(ResourcesCompat.getFont(this, textFormatViewModel.getFontFamily().getValue()));
         contentView.setTextSize(textFormatViewModel.getTextSize().getValue());
         brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(colorAdjustViewModel.getBrightness().getValue(), colorAdjustViewModel.getColorTint().getValue())));
-        colorAdjustViewModel.setTextColor(0xFFF8F8F8);
+        contentView.setTextColor(colorAdjustViewModel.getTextColor().getValue());
+
         colorAdjustViewModel.setFrameColor(0xFF000000);
     }
 

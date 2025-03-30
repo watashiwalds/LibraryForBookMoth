@@ -26,4 +26,6 @@ public class ManageSettingUseCase {
     public int getReaderBrightness() {
         return repo.getReaderBrightness();
     }
+    public void setReaderTextColor(int intARGB) {repo.setReaderTextColor(intARGB);}
+    public int getReaderTextColor() {return repo.getReaderTextColor();}
 }

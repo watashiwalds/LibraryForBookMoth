@@ -6,6 +6,8 @@ public class SharedPreferencesRepository {
     private static final String READER_FONTFAMILY = "reader_fontFamily";
     private static final String READER_TEXTSIZE = "reader_textSize";
     private static final String READER_BRIGHTNESS = "reader_brightness";
+    public static final String READER_TEXTCOLOR = "reader_textcolor";
+    public static final String READET_BACKGROUNDCOLOR = "reader_backgroundcolor";
 
     private final SharedPreferences setting;
 
@@ -30,5 +32,11 @@ public class SharedPreferencesRepository {
     }
     public int getReaderBrightness() {
         return setting.getInt(READER_BRIGHTNESS, 100);
+    }
+    public void setReaderTextColor(int intARGB) {
+        setting.edit().putInt(READER_TEXTCOLOR, intARGB).apply();
+    }
+    public int getReaderTextColor() {
+        return setting.getInt(READER_TEXTCOLOR, 0xFF080808);
     }
 }
