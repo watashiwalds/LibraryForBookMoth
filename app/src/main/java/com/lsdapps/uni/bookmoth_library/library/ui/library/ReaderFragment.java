@@ -2,6 +2,7 @@ package com.lsdapps.uni.bookmoth_library.library.ui.library;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,11 @@ public class ReaderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         initObjects();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
         fetchOwnedWorks();
     }
 
@@ -61,6 +67,7 @@ public class ReaderFragment extends Fragment {
     }
 
     private void fetchOwnedWorks() {
+        Log.d("author fetchWorks", "fetchOwnedWorks: ");
         getOwnedWorks.run(AppConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
             @Override
             public void onSuccess(List<Work> body) {

@@ -1,6 +1,7 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.library;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetCreatedWorksUseCase;
+import com.lsdapps.uni.bookmoth_library.library.ui.adapter.AuthorPageRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
 
 import java.util.ArrayList;
@@ -29,7 +31,8 @@ public class AuthorFragment extends Fragment {
     View view;
     ArrayList<Work> works;
     RecyclerView rv_works;
-    WorkItemRecyclerViewAdapter rv_works_adapter;
+    GridLayoutManager rv_layoutManager;
+    AuthorPageRecyclerViewAdapter rv_works_adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,7 +44,12 @@ public class AuthorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         initObjects();
-        fetchCreatedWorks();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) fetchCreatedWorks();
     }
 
     private void initObjects() {
@@ -50,14 +58,26 @@ public class AuthorFragment extends Fragment {
         works = new ArrayList<Work>();
 
         rv_works = view.findViewById(R.id.lib_rv_writelist);
-        rv_works.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
-        rv_works_adapter = new WorkItemRecyclerViewAdapter(works, pos -> {
-            Toast.makeText(requireContext(), "TODO Open EditActivity " + pos, Toast.LENGTH_SHORT).show();
-        });
+        rv_layoutManager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
+        doLayoutConfig();
+        rv_works.setLayoutManager(rv_layoutManager);
+
+        rv_works_adapter = new AuthorPageRecyclerViewAdapter(works);
         rv_works.setAdapter(rv_works_adapter);
     }
 
+    private void doLayoutConfig() {
+        rv_layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if (position == AuthorPageRecyclerViewAdapter.VIEWTYPE_QUICKACTION) return 3;
+                return 1;
+            }
+        });
+    }
+
     private void fetchCreatedWorks() {
+        Log.d("reader fetchWorks", "fetchCreatedWorks: ");
         getCreatedWorks.run(AppConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
             @Override
             public void onSuccess(List<Work> body) {

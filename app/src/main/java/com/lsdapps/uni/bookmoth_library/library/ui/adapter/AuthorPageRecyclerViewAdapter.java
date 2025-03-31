@@ -1,0 +1,64 @@
+package com.lsdapps.uni.bookmoth_library.library.ui.adapter;
+
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
+import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewholder.QuickActionRecyclerViewHolder;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewholder.WorkItemRecyclerViewHolder;
+
+import java.util.List;
+
+public class AuthorPageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static int VIEWTYPE_QUICKACTION = 0;
+    public static int VIEWTYPE_WORKITEM = 1;
+
+    private List<Work> works;
+
+    public AuthorPageRecyclerViewAdapter(List<Work> works) {
+        this.works = works;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEWTYPE_QUICKACTION) {
+            return new QuickActionRecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_author_quickaction, parent, false));
+        } else {
+            //TODO: Click to open work's dashboard
+            return new WorkItemRecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_work_card, parent, false), null);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? VIEWTYPE_QUICKACTION : VIEWTYPE_WORKITEM;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof WorkItemRecyclerViewHolder) {
+            WorkItemRecyclerViewHolder hdr = (WorkItemRecyclerViewHolder) holder;
+            Work item = works.get(position - 1);
+
+            hdr.title.setText(item.getTitle());
+            hdr.author.setText(item.getAuthor_name());
+            Glide.with(hdr.cover)
+                    .load(AppConst.API_URL + AppConst.CDN_COVER + item.getCover_url())
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .into(hdr.cover);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return works.size() + 1;
+    }
+}

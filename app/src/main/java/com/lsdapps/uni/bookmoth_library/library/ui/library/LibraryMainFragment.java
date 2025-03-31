@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import com.google.android.material.button.MaterialButton;
 import com.lsdapps.uni.bookmoth_library.R;
 
 public class LibraryMainFragment extends Fragment {
-    FragmentTransaction mainFragTransact;
+    FragmentManager fragmentManager;
     Fragment readerFragment;
     Fragment authorFragment;
     View view;
@@ -42,9 +43,17 @@ public class LibraryMainFragment extends Fragment {
     }
 
     private void initObjects() {
-        mainFragTransact = getChildFragmentManager().beginTransaction();
+        fragmentManager = getChildFragmentManager();
+        for (Fragment f : fragmentManager.getFragments()) fragmentManager.beginTransaction().remove(f).commit();
         readerFragment = new ReaderFragment();
         authorFragment = new AuthorFragment();
+        fragmentManager.beginTransaction()
+                .add(R.id.lib_frame_main, readerFragment)
+                .hide(readerFragment)
+                .add(R.id.lib_frame_main, authorFragment)
+                .hide(authorFragment)
+                .commit();
+
         toggleMode = view.findViewById(R.id.lib_btnSwitchMode_main);
         dummyTitle = view.findViewById(R.id.dummyTitle);
     }
@@ -76,7 +85,11 @@ public class LibraryMainFragment extends Fragment {
     }
 
     private void changeFragment(Fragment frag) {
-        getChildFragmentManager().beginTransaction().replace(R.id.lib_frame_main, frag).commit();
+        fragmentManager.beginTransaction()
+                .hide(readerFragment)
+                .hide(authorFragment)
+                .commit();
+        fragmentManager.beginTransaction().show(frag).commit();
     }
 
     private void changeActivityVisual(int switchMode) {
