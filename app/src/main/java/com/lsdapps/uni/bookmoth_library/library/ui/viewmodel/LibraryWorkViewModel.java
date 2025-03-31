@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryWorkViewModel extends AndroidViewModel {
+    private final MutableLiveData<String> errorString = new MutableLiveData<>();
     private final GetOwnedWorksUseCase getOwnedWorks = new GetOwnedWorksUseCase(new LibApiRepository());
     private final GetCreatedWorksUseCase getCreatedWorks = new GetCreatedWorksUseCase(new LibApiRepository());
     private final MutableLiveData<List<Work>> ownedWorks = new MutableLiveData<>();
@@ -42,7 +43,8 @@ public class LibraryWorkViewModel extends AndroidViewModel {
 
             @Override
             public void onError(String errorMessage) {
-                ErrorDialog.showError(getApplication(), errorMessage);
+//                ErrorDialog.showError(getApplication(), errorMessage);
+                errorString.setValue(errorMessage);
             }
         });
     }
@@ -55,8 +57,11 @@ public class LibraryWorkViewModel extends AndroidViewModel {
 
             @Override
             public void onError(String errorMessage) {
-                ErrorDialog.showError(getApplication(), errorMessage);
+//                ErrorDialog.showError(getApplication(), errorMessage);
+                errorString.setValue(errorMessage);
             }
         });
     }
+
+    public LiveData<String> getErrorString() {return errorString;}
 }

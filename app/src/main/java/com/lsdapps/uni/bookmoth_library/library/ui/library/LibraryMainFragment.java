@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +18,11 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.LibraryWorkViewModel;
 
 public class LibraryMainFragment extends Fragment {
+    LibraryWorkViewModel viewModel;
     FragmentManager fragmentManager;
     Fragment readerFragment;
     Fragment authorFragment;
@@ -39,10 +43,13 @@ public class LibraryMainFragment extends Fragment {
         this.view = view;
         initObjects();
         initFunctions();
+        initLiveData();
         changeListMode(MODE_READER);
     }
 
     private void initObjects() {
+        viewModel = new ViewModelProvider(requireActivity()).get(LibraryWorkViewModel.class);
+
         fragmentManager = getChildFragmentManager();
         for (Fragment f : fragmentManager.getFragments()) fragmentManager.beginTransaction().remove(f).commit();
         readerFragment = new ReaderFragment();
@@ -62,6 +69,10 @@ public class LibraryMainFragment extends Fragment {
         toggleMode.setOnClickListener(v -> {
             changeListMode(MODE_TOGGLE);
         });
+    }
+
+    private void initLiveData() {
+        viewModel.getErrorString().observe(requireActivity(), v -> ErrorDialog.showError(requireContext(), v));
     }
 
     private final int MODE_TOGGLE = 0;
