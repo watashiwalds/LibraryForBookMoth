@@ -3,8 +3,8 @@
     <string name="mainnav_thuvien">Thư viện</string>
     <string name="libmode_toAuthor">Viết tác phẩm</string>
     <string name="libmode_toReader">Đọc tác phẩm</string>
-    <string name="libmode_title_author">THƯ VIỆN ĐỌC</string>
-    <string name="libmode_title_reader">TRANG TÁC GIẢ</string>
+    <string name="libmode_title_author">TRANG TÁC GIẢ</string>
+    <string name="libmode_title_reader">THƯ VIỆN ĐỌC</string>
     <string name="liblabel_work_detail">Tác phẩm</string>
     <string name="chapter_chapter">Chương </string>
     <string name="contentselection_discuss">Trích dẫn</string>
