@@ -218,6 +218,9 @@ public class ReaderActivity extends AppCompatActivity {
         contentView.setOnClickListener(view -> {
             setBarsGraphicalVisibility(!barVisible);
         });
+        findViewById(R.id.rdr_ll_content).setOnClickListener(v -> {
+            setBarsGraphicalVisibility(!barVisible);
+        });
 
         //setup custom function when selecting text (also remove copy function)
         contentView.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
