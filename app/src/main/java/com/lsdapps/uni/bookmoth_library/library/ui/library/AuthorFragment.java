@@ -18,10 +18,12 @@ import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetCreatedWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.AuthorPageRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.LibraryWorkViewModel;
 
@@ -66,6 +68,9 @@ public class AuthorFragment extends Fragment {
         rv_works.setLayoutManager(rv_layoutManager);
 
         rv_works_adapter = new AuthorPageRecyclerViewAdapter(works);
+        rv_works_adapter.attachAddWorkListener(pos -> {
+            InnerToast.show(requireContext(), "Add work, please.");
+        });
         rv_works.setAdapter(rv_works_adapter);
     }
 

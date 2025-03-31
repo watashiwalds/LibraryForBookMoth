@@ -11,7 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
-import com.lsdapps.uni.bookmoth_library.library.ui.viewholder.QuickActionRecyclerViewHolder;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewholder.AuthorQuickActionRecyclerViewHolder;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewholder.WorkItemRecyclerViewHolder;
 
 import java.util.List;
@@ -22,18 +22,29 @@ public class AuthorPageRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     private List<Work> works;
 
+    private OnItemClickListener workClickListener;
+    private OnItemClickListener addWorkListener;
+
     public AuthorPageRecyclerViewAdapter(List<Work> works) {
         this.works = works;
+    }
+
+    public void attachAddWorkListener(OnItemClickListener listener) {
+        addWorkListener = listener;
+    }
+
+    public void attachWorkClickListener(OnItemClickListener listener) {
+        workClickListener = listener;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEWTYPE_QUICKACTION) {
-            return new QuickActionRecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_author_quickaction, parent, false));
+            return new AuthorQuickActionRecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_author_quickaction, parent, false));
         } else {
             //TODO: Click to open work's dashboard
-            return new WorkItemRecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_work_card, parent, false), null);
+            return new WorkItemRecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_work_card, parent, false), workClickListener);
         }
     }
 
@@ -44,6 +55,10 @@ public class AuthorPageRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof AuthorQuickActionRecyclerViewHolder) {
+            AuthorQuickActionRecyclerViewHolder hdr = (AuthorQuickActionRecyclerViewHolder) holder;
+            hdr.btnNewWork.setOnClickListener(v -> addWorkListener.onItemClick(-1));
+        } else
         if (holder instanceof WorkItemRecyclerViewHolder) {
             WorkItemRecyclerViewHolder hdr = (WorkItemRecyclerViewHolder) holder;
             Work item = works.get(position - 1);
