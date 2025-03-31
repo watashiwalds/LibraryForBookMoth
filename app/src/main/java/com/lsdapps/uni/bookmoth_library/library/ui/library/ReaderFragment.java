@@ -48,7 +48,7 @@ public class ReaderFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        fetchOwnedWorks();
+        if (!hidden) fetchOwnedWorks();
     }
 
     private void initObjects() {
@@ -73,7 +73,7 @@ public class ReaderFragment extends Fragment {
             public void onSuccess(List<Work> body) {
                 if (!works.isEmpty()) works.clear();
                 works.addAll(body);
-                rv_works_adapter.notifyItemRangeInserted(0, works.size());
+                rv_works_adapter.notifyDataSetChanged();
             }
 
             @Override

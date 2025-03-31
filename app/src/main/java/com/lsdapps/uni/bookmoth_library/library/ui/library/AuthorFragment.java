@@ -83,7 +83,7 @@ public class AuthorFragment extends Fragment {
             public void onSuccess(List<Work> body) {
                 if (!works.isEmpty()) works.clear();
                 works.addAll(body);
-                rv_works_adapter.notifyItemRangeInserted(0, works.size());
+                rv_works_adapter.notifyDataSetChanged();
             }
 
             @Override
