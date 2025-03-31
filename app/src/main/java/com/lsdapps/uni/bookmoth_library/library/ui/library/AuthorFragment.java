@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,14 +23,15 @@ import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetCreatedWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.AuthorPageRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.LibraryWorkViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorFragment extends Fragment {
-    GetCreatedWorksUseCase getCreatedWorks;
+    LibraryWorkViewModel viewModel;
     View view;
-    ArrayList<Work> works;
+    List<Work> works = new ArrayList<>();
     RecyclerView rv_works;
     GridLayoutManager rv_layoutManager;
     AuthorPageRecyclerViewAdapter rv_works_adapter;
@@ -44,16 +46,17 @@ public class AuthorFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.view = view;
         initObjects();
+        initLiveData();
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) fetchCreatedWorks();
+        if (!hidden) viewModel.fetchCreatedWorks();
     }
 
     private void initObjects() {
-        getCreatedWorks = new GetCreatedWorksUseCase(new LibApiRepository());
+        viewModel = new ViewModelProvider(requireActivity()).get(LibraryWorkViewModel.class);
 
         works = new ArrayList<Work>();
 
@@ -76,20 +79,11 @@ public class AuthorFragment extends Fragment {
         });
     }
 
-    private void fetchCreatedWorks() {
-        Log.d("reader fetchWorks", "fetchCreatedWorks: ");
-        getCreatedWorks.run(AppConst.TEST_TOKEN, new InnerCallback<List<Work>>() {
-            @Override
-            public void onSuccess(List<Work> body) {
-                if (!works.isEmpty()) works.clear();
-                works.addAll(body);
-                rv_works_adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                ErrorDialog.showError(getParentFragment().getContext(), errorMessage);
-            }
+    private void initLiveData() {
+        viewModel.getCreatedWorks().observe(requireActivity(), v -> {
+            works.clear();
+            works.addAll(v);
+            rv_works_adapter.notifyDataSetChanged();
         });
     }
 }
