@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,10 +20,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
-import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.CreateWorkViewModel;
+
+import java.util.Locale;
 
 public class CreateWorkActivity extends AppCompatActivity {
     private CreateWorkViewModel viewModel;
@@ -88,10 +92,7 @@ public class CreateWorkActivity extends AppCompatActivity {
             pickImgArl.launch(pickImg);
         });
         btn_submit.setOnClickListener(v -> {
-            if (isFormInputLegit()) {
-                viewModel.setInfoBundle(compileInfoBundle());
-                InnerToast.show(this, "Do check infos");
-            }
+            if (isFormInputLegit()) finalInfoCheck(compileInfoBundle());
         });
     }
 
@@ -122,5 +123,30 @@ public class CreateWorkActivity extends AppCompatActivity {
         }
         infos.putInt("price", price);
         return infos;
+    }
+
+    private void finalInfoCheck(Bundle infos) {
+        BottomSheetDialog finalCheck = new BottomSheetDialog(this);
+        View finalCheckView = LayoutInflater.from(this).inflate(R.layout.dialog_creatework_finalcheck, null);
+        ((ImageView)finalCheckView.findViewById(R.id.addwork_fin_img)).setImageURI(infos.getParcelable("cover_uri"));
+        ((TextView)finalCheckView.findViewById(R.id.addwork_fin_title)).setText(infos.getString("title"));
+        ((TextView)finalCheckView.findViewById(R.id.addwork_fin_price)).setText(String.format(Locale.getDefault(), "%s: %d", getString(R.string.general_price), infos.getInt("price")));
+        ((TextView)finalCheckView.findViewById(R.id.addwork_fin_desc)).setText(infos.getString("description"));
+        finalCheckView.findViewById(R.id.addwork_fin_cancel).setOnClickListener(v -> {
+            finalCheck.dismiss();
+        });
+        finalCheckView.findViewById(R.id.addwork_fin_submit).setOnClickListener(v -> {
+            InnerToast.show(this, "Do backend to add this work");
+            /**
+             * TODO: Make backend and visual
+             * idea: send request via ViewModel
+             * on the waiting time, show a gif with loading circle and disable all tapping
+             * when ViewModel finished, end the activity
+             */
+            viewModel.setInfoBundle(infos);
+            finalCheck.dismiss();
+        });
+        finalCheck.setContentView(finalCheckView);
+        finalCheck.show();
     }
 }

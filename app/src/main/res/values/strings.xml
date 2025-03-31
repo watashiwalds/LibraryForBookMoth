@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">bookmoth_library</string>
+    <string name="general_submit">Xác nhận</string>
+    <string name="general_cancel">Huỷ bỏ</string>
+    <string name="general_price">Điểm giá</string>
     <string name="mainnav_thuvien">Thư viện</string>
     <string name="libmode_toAuthor">Viết tác phẩm</string>
     <string name="libmode_toReader">Đọc tác phẩm</string>
@@ -33,4 +36,5 @@
     <string name="addwork_ui_headerguide">Hãy bắt đầu câu chuyện của bạn!\nLưu ý rằng các trường dấu * là bắt buộc!</string>
     <string name="addwork_ui_footerguide">Bạn có thể thêm chương sau khi đã tạo tác phẩm</string>
     <string name="addwork_btn_submit">Xác nhận thông tin</string>
+    <string name="addwork_ui_finalcheck">Bạn chuẩn bị tạo tác phẩm mới như sau:</string>
 </resources>
