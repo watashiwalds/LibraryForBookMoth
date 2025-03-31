@@ -1,0 +1,126 @@
+package com.lsdapps.uni.bookmoth_library.library.ui.authorcrud;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.CreateWorkViewModel;
+
+public class CreateWorkActivity extends AppCompatActivity {
+    private CreateWorkViewModel viewModel;
+
+    private ImageButton btn_back;
+    private Button btn_submit;
+    private Button btn_addcover;
+
+    private TextView inp_title;
+    private TextView inp_desc;
+    private Uri inp_cover_uri;
+    private TextView inp_price;
+
+    private ImageView img_coverpreview;
+
+    private String credentialToken;
+
+    private ActivityResultLauncher<Intent> pickImgArl = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            res -> {
+                if (res.getResultCode() == Activity.RESULT_OK && res.getData() != null) {
+                    inp_cover_uri = res.getData().getData();
+                    img_coverpreview.setImageURI(inp_cover_uri);
+                }
+            }
+    );
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_create_work);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        credentialToken = getIntent().getStringExtra("credential");
+
+        initObjects();
+        initFunctions();
+    }
+
+    private void initObjects() {
+        viewModel = new ViewModelProvider(this).get(CreateWorkViewModel.class);
+
+        btn_addcover = findViewById(R.id.addwork_btn_addcover);
+        btn_submit = findViewById(R.id.addwork_btn_submit);
+        btn_back = findViewById(R.id.imgbtn_back);
+
+        img_coverpreview = findViewById(R.id.addwork_img_coverpreview);
+
+        inp_title = findViewById(R.id.addwork_title);
+        inp_desc = findViewById(R.id.addwork_description);
+        inp_price = findViewById(R.id.addwork_price);
+    }
+
+    private void initFunctions() {
+        btn_back.setOnClickListener(v -> finish());
+        btn_addcover.setOnClickListener(v -> {
+            Intent pickImg = new Intent(Intent.ACTION_PICK);
+            pickImg.setType("image/*");
+            pickImgArl.launch(pickImg);
+        });
+        btn_submit.setOnClickListener(v -> {
+            if (isFormInputLegit()) {
+                viewModel.setInfoBundle(compileInfoBundle());
+                InnerToast.show(this, "Do check infos");
+            }
+        });
+    }
+
+    private boolean isFormInputLegit() {
+        boolean res = true;
+
+        if (inp_title.getText() == null || inp_title.getText().toString().isEmpty()) {
+            inp_title.setError(getString(R.string.addwork_input_title_error_blank));
+            res = false;
+        } else inp_title.setError(null);
+        if (inp_price.getText() == null || inp_title.getText().toString().isEmpty()) {
+            inp_price.setError(getString(R.string.addwork_input_pricing_warning_defaultprice));
+        } else inp_price.setError(null);
+
+        return res;
+    }
+
+    private Bundle compileInfoBundle() {
+        Bundle infos = new Bundle();
+        infos.putString("title", inp_title.getText().toString());
+        infos.putString("description", inp_desc.getText().toString());
+        infos.putParcelable("cover_uri", inp_cover_uri);
+        int price;
+        try {
+            price = Integer.parseInt(inp_price.getText().toString());
+        } catch (Exception e) {
+            price = 0;
+        }
+        infos.putInt("price", price);
+        return infos;
+    }
+}

@@ -1,5 +1,6 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.library;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetCreatedWorksUs
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.AuthorPageRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.CreateWorkActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.LibraryWorkViewModel;
 
 import java.util.ArrayList;
@@ -69,7 +71,9 @@ public class AuthorFragment extends Fragment {
 
         rv_works_adapter = new AuthorPageRecyclerViewAdapter(works);
         rv_works_adapter.attachAddWorkListener(pos -> {
-            InnerToast.show(requireContext(), "Add work, please.");
+            Intent createWork = new Intent(requireContext(), CreateWorkActivity.class);
+            createWork.putExtra("credential", AppConst.TEST_TOKEN);
+            startActivity(createWork);
         });
         rv_works.setAdapter(rv_works_adapter);
     }

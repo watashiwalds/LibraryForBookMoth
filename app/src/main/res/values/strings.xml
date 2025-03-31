@@ -23,4 +23,14 @@
     <string name="color_paper">Giấy vàng</string>
     <string name="author_addchapter">Chương mới</string>
     <string name="author_addwork">Tác phẩm mới</string>
+    <string name="addwork_ui_title">Thêm tác phẩm mới</string>
+    <string name="addwork_input_title">Tiêu đề của tác phẩm *</string>
+    <string name="addwork_input_title_error_blank">Tiêu đề không để trống</string>
+    <string name="addwork_input_pricing">Số điểm dùng đọc *</string>
+    <string name="addwork_input_pricing_warning_defaultprice">Để trống sẽ đặt số điểm là 0</string>
+    <string name="addwork_input_description">Mô tả tác phẩm</string>
+    <string name="addwork_button_addcover">Thêm ảnh bìa</string>
+    <string name="addwork_ui_headerguide">Hãy bắt đầu câu chuyện của bạn!\nLưu ý rằng các trường dấu * là bắt buộc!</string>
+    <string name="addwork_ui_footerguide">Bạn có thể thêm chương sau khi đã tạo tác phẩm</string>
+    <string name="addwork_btn_submit">Xác nhận thông tin</string>
 </resources>
