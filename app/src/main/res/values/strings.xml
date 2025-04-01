@@ -42,7 +42,9 @@
     <string name="addchapter_ui_title">Thêm chương mới</string>
     <string name="addchapter_ui_guide_whenaddtowork">Chương mới sẽ được thêm vào tác phẩm với vị trí của chương mới nhất</string>
     <string name="addchapter_input_forwork">Tác phẩm sẽ thêm chương mới *</string>
+    <string name="addchapter_input_forwork_error_notfound">Hãy chọn tác phẩm có trong danh sách</string>
     <string name="addchapter_ui_guide_chapterinfos">Hãy nhập nội dung chương tại đây</string>
     <string name="addchapter_input_title">Tiêu đề chương</string>
-    <string name="addchapter_button_addcontent">Thêm nội dung</string>
+    <string name="addchapter_button_addcontent">Thêm nội dung *</string>
+    <string name="addchapter_ui_guide_supportedfiletype">Hỗ trợ tệp .docx, .txt, .md</string>
 </resources>

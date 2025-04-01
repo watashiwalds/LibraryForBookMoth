@@ -148,7 +148,7 @@
             style="@android:style/Widget.Material.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/addwork_btn_submit" />
+            android:text="@string/general_submit" />
 
         <FrameLayout
             android:layout_width="0dp"

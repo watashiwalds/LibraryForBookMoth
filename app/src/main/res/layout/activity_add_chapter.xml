@@ -71,34 +71,30 @@
                 android:id="@+id/addchapter_forwork"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:padding="16dp"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
-            android:id="@+id/addchapter_fl_chapterinfos"
+            android:id="@+id/addchapter_ll_chapterinfos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="8dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="4dp"
-                android:paddingBottom="4dp"
-                android:text="@string/addchapter_ui_guide_chapterinfos"/>
+            android:visibility="invisible"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:hint="@string/addchapter_input_title">
+                android:hint="@string/addchapter_input_title"
+                android:paddingBottom="8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/addchapter_title"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -114,7 +110,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/addchapter_button_addcontent"
                     android:textSize="16dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -123,17 +118,43 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
+                    android:ellipsize="end"
                     android:gravity="center|start"
+                    android:maxLines="1"
                     android:textSize="16sp"
-                    android:text="testname.docx"
                     app:layout_constraintBottom_toBottomOf="@id/addchapter_btn_addcontent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/addchapter_btn_addcontent"
                     app:layout_constraintTop_toTopOf="@id/addchapter_btn_addcontent" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/addchapter_ui_guide_supportedfiletype"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/addchapter_btn_addcontent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/addchapter_btn_submit"
+            style="@android:style/Widget.Material.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/general_submit" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="16dp" />
 
     </LinearLayout>
 

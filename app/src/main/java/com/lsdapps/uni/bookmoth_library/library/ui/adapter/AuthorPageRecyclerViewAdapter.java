@@ -24,6 +24,7 @@ public class AuthorPageRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     private OnItemClickListener workClickListener;
     private OnItemClickListener addWorkListener;
+    private OnItemClickListener addChapterListener;
 
     public AuthorPageRecyclerViewAdapter(List<Work> works) {
         this.works = works;
@@ -31,6 +32,10 @@ public class AuthorPageRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     public void attachAddWorkListener(OnItemClickListener listener) {
         addWorkListener = listener;
+    }
+
+    public void attachAddChapteristener(OnItemClickListener listener) {
+        addChapterListener = listener;
     }
 
     public void attachWorkClickListener(OnItemClickListener listener) {
@@ -58,6 +63,7 @@ public class AuthorPageRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         if (holder instanceof AuthorQuickActionRecyclerViewHolder) {
             AuthorQuickActionRecyclerViewHolder hdr = (AuthorQuickActionRecyclerViewHolder) holder;
             hdr.btnNewWork.setOnClickListener(v -> addWorkListener.onItemClick(-1));
+            hdr.btnNewChapter.setOnClickListener(V -> addChapterListener.onItemClick((-1)));
         } else
         if (holder instanceof WorkItemRecyclerViewHolder) {
             WorkItemRecyclerViewHolder hdr = (WorkItemRecyclerViewHolder) holder;

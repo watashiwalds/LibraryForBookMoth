@@ -26,9 +26,11 @@ import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetCreatedWorksUs
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.AuthorPageRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.AddChapterActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.CreateWorkActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.LibraryWorkViewModel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +76,12 @@ public class AuthorFragment extends Fragment {
             Intent createWork = new Intent(requireContext(), CreateWorkActivity.class);
             createWork.putExtra("credential", AppConst.TEST_TOKEN);
             startActivity(createWork);
+        });
+        rv_works_adapter.attachAddChapteristener(pos -> {
+            Intent addChapter = new Intent(requireContext(), AddChapterActivity.class);
+            addChapter.putExtra("credential", AppConst.TEST_TOKEN);
+            addChapter.putExtra("works", (Serializable) works);
+            startActivity(addChapter);
         });
         rv_works.setAdapter(rv_works_adapter);
     }
