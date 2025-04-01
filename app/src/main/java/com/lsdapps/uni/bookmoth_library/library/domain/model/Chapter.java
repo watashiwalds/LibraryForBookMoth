@@ -30,4 +30,6 @@ public class Chapter implements Serializable {
     public String getContent_url() {
         return content_url;
     }
+
+    public void setTitle(String title) {this.title = title;}
 }

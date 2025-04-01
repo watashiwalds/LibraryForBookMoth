@@ -47,4 +47,13 @@ public interface LibApiService {
             @Header("Authorization") String token,
             @Part MultipartBody.Part cover,
             @Part("json") RequestBody info);
+
+    @Multipart
+    @POST("/libapi/work/{wid}/chapter/post")
+    Call<ResponseBody> postChapter(
+        @Header("Authorization") String token,
+        @Path("wid") int work_id,
+        @Part MultipartBody.Part content,
+        @Part("json") RequestBody info
+    );
 }

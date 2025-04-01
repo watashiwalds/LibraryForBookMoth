@@ -21,6 +21,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueGen;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.AddChapterViewModel;
@@ -44,6 +46,7 @@ public class AddChapterActivity extends AppCompatActivity {
     private Button btn_submit;
 
     private List<Work> works;
+    private List<String> dropdownString;
     private Uri inp_content_uri;
     private String token;
 
@@ -75,13 +78,14 @@ public class AddChapterActivity extends AppCompatActivity {
         initObjects();
         initFunctions();
         initGraphics();
+        initLiveData();
     }
 
     private void initObjects() {
         viewModel = new ViewModelProvider(this).get(AddChapterViewModel.class);
 
         inp_forwork = findViewById(R.id.addchapter_forwork);
-        List<String> dropdownString = new ArrayList<>();
+        dropdownString = new ArrayList<>();
         for (Work w : works) dropdownString.add(String.format(Locale.getDefault(), "%s - %s", DateTimeFormat.format(w.getPost_date(), DateTimeFormat.DATE_ONLY), w.getTitle()));
         ArrayAdapter<String> dropdownAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dropdownString);
         inp_forwork.setAdapter(dropdownAdapter);
@@ -111,9 +115,48 @@ public class AddChapterActivity extends AppCompatActivity {
             pickFile.addCategory(Intent.CATEGORY_OPENABLE);
             pickContentFile.launch(pickFile);
         });
+        btn_submit.setOnClickListener(v -> {
+            if (isFormInputLegit()) viewModel.setInfoBundle(compileInfoBundle(), this);
+        });
     }
 
     private void initGraphics() {
         ly_chapterinfo.setVisibility(View.INVISIBLE);
+    }
+
+    private void initLiveData() {
+        viewModel.getMessage().observe(this, v -> {
+            if (v.isEmpty()) {
+                InnerToast.show(this, getString(R.string.addwork_res_success));
+                finish();
+            } else {
+                ErrorDialog.showError(this, String.format(Locale.getDefault(), "%s:\n%s", getString(R.string.addwork_res_failed), v));
+            }
+        });
+    }
+
+    private Bundle compileInfoBundle() {
+        Bundle infos = new Bundle();
+        infos.putString("credential", token);
+        infos.putInt("work_id", works.get(dropdownString.indexOf(inp_forwork.getText().toString())).getWork_id());
+        infos.putString("title", inp_title.getText().toString().isBlank() ? null : inp_title.getText().toString());
+        infos.putParcelable("content_uri", inp_content_uri);
+        infos.putString("filename", tv_filename.getText().toString());
+        return infos;
+    }
+
+    private boolean isFormInputLegit() {
+        boolean res = true;
+
+        if (inp_forwork.getText() == null || inp_forwork.getText().toString().isEmpty() || !dropdownString.contains(inp_forwork.getText().toString())) {
+            inp_forwork.setError(getString(R.string.addchapter_input_forwork_error_notfound));
+            res = false;
+        } else inp_forwork.setError(null);
+        if (inp_content_uri == null) {
+            tv_filename.setText(getString(R.string.addchapter_input_addcontent_error_notfound));
+            res = false;
+        }
+
+        return res;
     }
 }

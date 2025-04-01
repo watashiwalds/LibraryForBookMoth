@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueGen;
@@ -127,9 +128,19 @@ public class LibApiRepository {
                 RequestBody.create(MediaType.parse("image/*"), cover) :
                 null;
         MultipartBody.Part coverFormatRes = resFile != null ?
-                MultipartBody.Part.createFormData("cover", "cover.jpeg", resFile) :
+                MultipartBody.Part.createFormData("cover", "cover", resFile) :
                 null;
         RequestBody resJson = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(info));
         api.postWork(token, coverFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
+    }
+
+    public void postChapter(String token, int work_id, File content, String filename, Chapter info, InnerCallback<String> callback) {
+        RequestBody resFile = content != null ?
+                RequestBody.create(MediaType.parse("application/octet-stream"), content) :
+                null;
+        if (resFile == null) return;
+        MultipartBody.Part contentFormatRes = MultipartBody.Part.createFormData("content", filename, resFile);
+        RequestBody resJson = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(info));
+        api.postChapter(token, work_id, contentFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
     }
 }

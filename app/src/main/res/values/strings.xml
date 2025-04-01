@@ -46,5 +46,6 @@
     <string name="addchapter_ui_guide_chapterinfos">Hãy nhập nội dung chương tại đây</string>
     <string name="addchapter_input_title">Tiêu đề chương</string>
     <string name="addchapter_button_addcontent">Thêm nội dung *</string>
+    <string name="addchapter_input_addcontent_error_notfound">Phải có nội dung</string>
     <string name="addchapter_ui_guide_supportedfiletype">Hỗ trợ tệp .docx, .txt, .md</string>
 </resources>
