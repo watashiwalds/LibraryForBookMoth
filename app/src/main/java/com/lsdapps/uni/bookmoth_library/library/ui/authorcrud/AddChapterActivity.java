@@ -127,10 +127,10 @@ public class AddChapterActivity extends AppCompatActivity {
     private void initLiveData() {
         viewModel.getMessage().observe(this, v -> {
             if (v.isEmpty()) {
-                InnerToast.show(this, getString(R.string.addwork_res_success));
+                InnerToast.show(this, getString(R.string.addchapter_res_success));
                 finish();
             } else {
-                ErrorDialog.showError(this, String.format(Locale.getDefault(), "%s:\n%s", getString(R.string.addwork_res_failed), v));
+                ErrorDialog.showError(this, String.format(Locale.getDefault(), "%s:\n%s", getString(R.string.addchapter_res_failed), v));
             }
         });
     }

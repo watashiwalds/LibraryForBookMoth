@@ -48,4 +48,6 @@
     <string name="addchapter_button_addcontent">Thêm nội dung *</string>
     <string name="addchapter_input_addcontent_error_notfound">Phải có nội dung</string>
     <string name="addchapter_ui_guide_supportedfiletype">Hỗ trợ tệp .docx, .txt, .md</string>
+    <string name="addchapter_res_success">Thêm chương mới thành công</string>
+    <string name="addchapter_res_failed">Thêm chương mới thất bại</string>
 </resources>
