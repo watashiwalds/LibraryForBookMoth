@@ -123,8 +123,12 @@ public class LibApiRepository {
     }
 
     public void postWork(String token, File cover, Work info, InnerCallback<String> callback) {
-        RequestBody resFile = RequestBody.create(MediaType.parse("image/*"), cover);
-        MultipartBody.Part coverFormatRes = MultipartBody.Part.createFormData("cover", "cover.jpeg", resFile);
+        RequestBody resFile = cover != null ?
+                RequestBody.create(MediaType.parse("image/*"), cover) :
+                null;
+        MultipartBody.Part coverFormatRes = resFile != null ?
+                MultipartBody.Part.createFormData("cover", "cover.jpeg", resFile) :
+                null;
         RequestBody resJson = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(info));
         api.postWork(token, coverFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
     }

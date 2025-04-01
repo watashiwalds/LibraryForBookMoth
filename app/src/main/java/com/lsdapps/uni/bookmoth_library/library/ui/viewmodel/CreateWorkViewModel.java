@@ -1,6 +1,7 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -32,12 +33,27 @@ public class CreateWorkViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public void setInfoBundle(Bundle infos) {
+    public void setInfoBundle(Bundle infos, Context context) {
         infoBundle.setValue(infos);
 
-        File coverImage = new File("");
+        File coverImage = null;
 //        TODO: Make a working image parsing
-        ValueGen.makeEmptyFile(coverImage);
+        if (infos.getParcelable("cover_uri") != null) try {
+            InputStream inpStream = context.getContentResolver().openInputStream(infos.getParcelable("cover_uri"));
+            if (!(inpStream == null)) {
+                coverImage = new File(context.getCacheDir(), "coverImage");
+                FileOutputStream outStream = new FileOutputStream(coverImage);
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inpStream.read(buffer)) > 0) {
+                    outStream.write(buffer, 0, length);
+                }
+                outStream.close();
+            }
+            inpStream.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         Work work =  new Work();
         work.setProfile_id(AppConst.PROFILE_ID);

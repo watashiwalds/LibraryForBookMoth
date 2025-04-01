@@ -150,7 +150,7 @@ public class CreateWorkActivity extends AppCompatActivity {
             finalCheck.dismiss();
         });
         finalCheckView.findViewById(R.id.addwork_fin_submit).setOnClickListener(v -> {
-            viewModel.setInfoBundle(infos);
+            viewModel.setInfoBundle(infos, this);
             finalCheck.dismiss();
         });
         finalCheck.setContentView(finalCheckView);
