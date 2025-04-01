@@ -2,7 +2,6 @@ package com.lsdapps.uni.bookmoth_library.library.ui.library;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +14,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lsdapps.uni.bookmoth_library.R;
-import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
-import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
-import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
-import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
-import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetOwnedWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.LibraryWorkViewModel;
-import com.lsdapps.uni.bookmoth_library.library.ui.workdetail.WorkDetailActivity;
+import com.lsdapps.uni.bookmoth_library.library.ui.details.WorkDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.UnaryOperator;
 
 public class ReaderFragment extends Fragment {
     LibraryWorkViewModel viewModel;
