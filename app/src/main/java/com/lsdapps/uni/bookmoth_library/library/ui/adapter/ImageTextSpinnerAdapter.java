@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.lsdapps.uni.bookmoth_library.R;
-import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueExchange;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueGen;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewdata.ImageTextItem;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class ImageTextSpinnerAdapter extends ArrayAdapter<ImageTextItem> {
         TextView text = view.findViewById(R.id.item_text);
 
         ImageTextItem item = items.get(pos);
-        if (!item.isImage()) display.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(0, item.getRid())));
+        if (!item.isImage()) display.setBackgroundColor(Color.parseColor(ValueGen.makeTransparencyParseColorValue(0, item.getRid())));
         text.setText(item.getText());
 
         return view;

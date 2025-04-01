@@ -49,4 +49,24 @@ public class Work implements Serializable {
     public String getCover_url() {
         return cover_url;
     }
+
+    public void setProfile_id(int profile_id) {
+        this.profile_id = profile_id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCover_url(String cover_url) {
+        this.cover_url = cover_url;
+    }
 }

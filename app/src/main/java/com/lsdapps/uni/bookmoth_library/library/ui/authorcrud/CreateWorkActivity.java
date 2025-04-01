@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.CreateWorkViewModel;
 
@@ -68,6 +70,7 @@ public class CreateWorkActivity extends AppCompatActivity {
 
         initObjects();
         initFunctions();
+        initLiveData();
     }
 
     private void initObjects() {
@@ -93,6 +96,17 @@ public class CreateWorkActivity extends AppCompatActivity {
         });
         btn_submit.setOnClickListener(v -> {
             if (isFormInputLegit()) finalInfoCheck(compileInfoBundle());
+        });
+    }
+
+    private void initLiveData() {
+        viewModel.getMessage().observe(this, v -> {
+            if (v.isEmpty()) {
+                InnerToast.show(this, getString(R.string.addwork_res_success));
+                finish();
+            } else {
+                ErrorDialog.showError(this, String.format(Locale.getDefault(), "%s:\n%s", getString(R.string.addwork_res_failed), v));
+            }
         });
     }
 
@@ -136,13 +150,6 @@ public class CreateWorkActivity extends AppCompatActivity {
             finalCheck.dismiss();
         });
         finalCheckView.findViewById(R.id.addwork_fin_submit).setOnClickListener(v -> {
-            InnerToast.show(this, "Do backend to add this work");
-            /**
-             * TODO: Make backend and visual
-             * idea: send request via ViewModel
-             * on the waiting time, show a gif with loading circle and disable all tapping
-             * when ViewModel finished, end the activity
-             */
             viewModel.setInfoBundle(infos);
             finalCheck.dismiss();
         });

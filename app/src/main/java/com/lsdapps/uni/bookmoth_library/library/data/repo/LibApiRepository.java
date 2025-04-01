@@ -4,19 +4,26 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 
+import com.google.gson.Gson;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueGen;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.data.remote.LibApiService;
 import com.lsdapps.uni.bookmoth_library.library.data.remote.RetrofitClient;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -113,5 +120,12 @@ public class LibApiRepository {
 
     public void getChapterById(int chapter_id, InnerCallback<Chapter> callback) {
 
+    }
+
+    public void postWork(String token, File cover, Work info, InnerCallback<String> callback) {
+        RequestBody resFile = RequestBody.create(MediaType.parse("image/*"), cover);
+        MultipartBody.Part coverFormatRes = MultipartBody.Part.createFormData("cover", "cover.jpeg", resFile);
+        RequestBody resJson = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(info));
+        api.postWork(token, coverFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
     }
 }

@@ -29,7 +29,7 @@ import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.UniversalAnimate;
-import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueExchange;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueGen;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.SharedPreferencesRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
@@ -326,7 +326,7 @@ public class ReaderActivity extends AppCompatActivity {
         textFormatViewModel.getTextSize().observe(this, contentView::setTextSize);
         textFormatViewModel.getFontFamily().observe(this, v -> contentView.setTypeface(ResourcesCompat.getFont(this, v)));
 
-        colorAdjustViewModel.getBrightness().observe(this, v -> brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(v, colorAdjustViewModel.getColorTint().getValue()))));
+        colorAdjustViewModel.getBrightness().observe(this, v -> brightnessFilter.setBackgroundColor(Color.parseColor(ValueGen.makeTransparencyParseColorValue(v, colorAdjustViewModel.getColorTint().getValue()))));
         colorAdjustViewModel.getTextColor().observe(this, v -> contentView.setTextColor(v));
         colorAdjustViewModel.getBackgroundColor().observe(this, v -> nestedContainer.setBackgroundColor(v));
 
@@ -340,7 +340,7 @@ public class ReaderActivity extends AppCompatActivity {
 
         contentView.setTypeface(ResourcesCompat.getFont(this, textFormatViewModel.getFontFamily().getValue()));
         contentView.setTextSize(textFormatViewModel.getTextSize().getValue());
-        brightnessFilter.setBackgroundColor(Color.parseColor(ValueExchange.makeTransparencyParseColorValue(colorAdjustViewModel.getBrightness().getValue(), colorAdjustViewModel.getColorTint().getValue())));
+        brightnessFilter.setBackgroundColor(Color.parseColor(ValueGen.makeTransparencyParseColorValue(colorAdjustViewModel.getBrightness().getValue(), colorAdjustViewModel.getColorTint().getValue())));
         contentView.setTextColor(colorAdjustViewModel.getTextColor().getValue());
         nestedContainer.setBackgroundColor(colorAdjustViewModel.getBackgroundColor().getValue());
 

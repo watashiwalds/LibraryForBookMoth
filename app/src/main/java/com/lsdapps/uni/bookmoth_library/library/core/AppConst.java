@@ -6,6 +6,7 @@ public class AppConst {
     public static final String CDN_CONTENT = "/libapi/cdn/content/";
 
     public static final String TEST_TOKEN = "Bearer tokenof1";
+    public static final int PROFILE_ID = 1;
 
     public static final String SHAREDPREFS_NAME = "BookmothLib";
 }

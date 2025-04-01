@@ -37,4 +37,6 @@
     <string name="addwork_ui_footerguide">Bạn có thể thêm chương sau khi đã tạo tác phẩm</string>
     <string name="addwork_btn_submit">Xác nhận thông tin</string>
     <string name="addwork_ui_finalcheck">Bạn chuẩn bị tạo tác phẩm mới như sau:</string>
+    <string name="addwork_res_success">Thêm tác phẩm mới thành công</string>
+    <string name="addwork_res_failed">Thêm tác phẩm mới thất bại</string>
 </resources>

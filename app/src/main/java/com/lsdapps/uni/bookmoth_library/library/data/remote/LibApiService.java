@@ -6,6 +6,8 @@ import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -38,4 +40,11 @@ public interface LibApiService {
 
     @GET("/libapi/chapter/{cid}")
     Call<Chapter> getChapterById(@Path("cid") int chapter_id);
+
+    @Multipart
+    @POST("/libapi/work/post")
+    Call<ResponseBody> postWork(
+            @Header("Authorization") String token,
+            @Part MultipartBody.Part cover,
+            @Part("json") RequestBody info);
 }

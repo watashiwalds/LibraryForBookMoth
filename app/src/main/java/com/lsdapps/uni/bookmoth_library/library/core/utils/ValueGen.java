@@ -1,6 +1,9 @@
 package com.lsdapps.uni.bookmoth_library.library.core.utils;
 
-public class ValueExchange {
+import java.io.File;
+import java.io.IOException;
+
+public class ValueGen {
     public static int transparencyHexToSolidPercent(int argbInt) {
         int apart = (argbInt >> 24) & 0xFF;
         return (int)((1 - (apart/255f))*100);
@@ -13,5 +16,11 @@ public class ValueExchange {
         int blue = color & 0xFF;
 
         return String.format("#%02X%02X%02X%02X", alpha, red, green, blue);
+    }
+
+    public static void makeEmptyFile(File file) {
+        try {
+            file.createNewFile();
+        } catch (IOException ignored) {}
     }
 }
