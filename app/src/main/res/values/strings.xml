@@ -24,8 +24,10 @@
     <string name="color_light">Sáng</string>
     <string name="color_amoled">AMOLED</string>
     <string name="color_paper">Giấy vàng</string>
-    <string name="author_addchapter">Chương mới</string>
-    <string name="author_addwork">Tác phẩm mới</string>
+    <string name="button_addchapter_label">Chương mới</string>
+    <string name="button_addwork_label">Tác phẩm mới</string>
+    <string name="button_deletework_label">Xoá tác phẩm</string>
+    <string name="button_editwork_label">Sửa thông tin</string>
     <string name="addwork_ui_title">Thêm tác phẩm mới</string>
     <string name="addwork_input_title">Tiêu đề của tác phẩm *</string>
     <string name="addwork_input_title_error_blank">Tiêu đề không để trống</string>
@@ -50,4 +52,9 @@
     <string name="addchapter_ui_guide_supportedfiletype">Hỗ trợ tệp .docx, .txt, .md</string>
     <string name="addchapter_res_success">Thêm chương mới thành công</string>
     <string name="addchapter_res_failed">Thêm chương mới thất bại</string>
+    <string name="workdash_ui_title">Thông tin tác phẩm</string>
+    <string name="workdash_ui_viewcount">Tổng lượt xem</string>
+    <string name="workdash_ui_followcount">Lượt theo dõi</string>
+    <string name="workdash_ui_lastupdate">Cập nhật cuối</string>
+    <string name="workdash_ui_price">Giá hiện tại</string>
 </resources>
