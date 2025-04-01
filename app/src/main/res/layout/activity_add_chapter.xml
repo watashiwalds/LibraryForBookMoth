@@ -45,6 +45,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -59,13 +60,13 @@
             android:layout_height="wrap_content"
             android:paddingHorizontal="4dp"
             android:paddingBottom="4dp"
-            android:text="@string/addchapter_ui_guide_whenaddtowork"/>
+            android:text="@string/addchapter_ui_guide_whenaddtowork" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:hint="@string/addchapter_input_forwork">
+            android:hint="@string/addchapter_input_forwork"
+            android:paddingBottom="8dp">
 
             <AutoCompleteTextView
                 android:id="@+id/addchapter_forwork"
@@ -142,8 +143,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/addchapter_btn_submit"
@@ -157,5 +157,27 @@
             android:layout_height="16dp" />
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#88000000"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ImageView
+            android:id="@+id/frame_loading_gif"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

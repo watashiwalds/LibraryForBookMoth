@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
@@ -40,6 +42,7 @@ public class CreateWorkActivity extends AppCompatActivity {
     private TextView inp_desc;
     private Uri inp_cover_uri;
     private TextView inp_price;
+    private FrameLayout frame_loading;
 
     private ImageView img_coverpreview;
 
@@ -85,6 +88,8 @@ public class CreateWorkActivity extends AppCompatActivity {
         inp_title = findViewById(R.id.addwork_title);
         inp_desc = findViewById(R.id.addwork_description);
         inp_price = findViewById(R.id.addwork_price);
+
+        frame_loading = findViewById(R.id.frame_loading);
     }
 
     private void initFunctions() {
@@ -101,6 +106,7 @@ public class CreateWorkActivity extends AppCompatActivity {
 
     private void initLiveData() {
         viewModel.getMessage().observe(this, v -> {
+            frame_loading.setVisibility(View.GONE);
             if (v.isEmpty()) {
                 InnerToast.show(this, getString(R.string.addwork_res_success));
                 finish();
@@ -152,6 +158,8 @@ public class CreateWorkActivity extends AppCompatActivity {
         finalCheckView.findViewById(R.id.addwork_fin_submit).setOnClickListener(v -> {
             viewModel.setInfoBundle(infos, this);
             finalCheck.dismiss();
+            frame_loading.setVisibility(View.VISIBLE);
+            Glide.with(this).load(R.drawable.animation_loading).into((ImageView)findViewById(R.id.frame_loading_gif));
         });
         finalCheck.setContentView(finalCheckView);
         finalCheck.show();

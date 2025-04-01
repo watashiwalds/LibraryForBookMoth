@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +21,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
@@ -44,6 +47,7 @@ public class AddChapterActivity extends AppCompatActivity {
     private Button btn_addcontent;
     private ImageButton btn_back;
     private Button btn_submit;
+    private FrameLayout frame_loading;
 
     private List<Work> works;
     private List<String> dropdownString;
@@ -98,6 +102,8 @@ public class AddChapterActivity extends AppCompatActivity {
         btn_addcontent = findViewById(R.id.addchapter_btn_addcontent);
         btn_back = findViewById(R.id.imgbtn_back);
         btn_submit = findViewById(R.id.addchapter_btn_submit);
+
+        frame_loading = findViewById(R.id.frame_loading);
     }
 
     private void initFunctions() {
@@ -116,7 +122,11 @@ public class AddChapterActivity extends AppCompatActivity {
             pickContentFile.launch(pickFile);
         });
         btn_submit.setOnClickListener(v -> {
-            if (isFormInputLegit()) viewModel.setInfoBundle(compileInfoBundle(), this);
+            if (isFormInputLegit()) {
+                viewModel.setInfoBundle(compileInfoBundle(), this);
+                frame_loading.setVisibility(View.VISIBLE);
+                Glide.with(this).load(R.drawable.animation_loading).into((ImageView)findViewById(R.id.frame_loading_gif));
+            }
         });
     }
 
@@ -126,6 +136,7 @@ public class AddChapterActivity extends AppCompatActivity {
 
     private void initLiveData() {
         viewModel.getMessage().observe(this, v -> {
+            frame_loading.setVisibility(View.GONE);
             if (v.isEmpty()) {
                 InnerToast.show(this, getString(R.string.addchapter_res_success));
                 finish();
