@@ -1,8 +1,9 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.authorcrud;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -10,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,10 +21,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
-import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ValueGen;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.AddChapterViewModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +44,18 @@ public class AddChapterActivity extends AppCompatActivity {
     private Button btn_submit;
 
     private List<Work> works;
+    private Uri inp_content_uri;
     private String token;
+
+    private ActivityResultLauncher<Intent> pickContentFile = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        res -> {
+            if (res.getResultCode() == AddChapterActivity.RESULT_OK && res.getData() != null) {
+                inp_content_uri = res.getData().getData();
+                tv_filename.setText(ValueGen.getFileNameFromUri(this, inp_content_uri));
+            }
+        }
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +100,17 @@ public class AddChapterActivity extends AppCompatActivity {
         inp_forwork.setOnClickListener(v -> inp_forwork.showDropDown());
         inp_forwork.setOnItemClickListener((adapterView, view, i, l) -> ly_chapterinfo.setVisibility(View.VISIBLE));
         btn_back.setOnClickListener(v -> finish());
+        btn_addcontent.setOnClickListener(v -> {
+            Intent pickFile = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            pickFile.setType("*/*");
+            pickFile.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+                    "text/plain", // .txt
+                    "text/markdown" // .md
+            });
+            pickFile.addCategory(Intent.CATEGORY_OPENABLE);
+            pickContentFile.launch(pickFile);
+        });
     }
 
     private void initGraphics() {

@@ -1,5 +1,10 @@
 package com.lsdapps.uni.bookmoth_library.library.core.utils;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.OpenableColumns;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -22,5 +27,23 @@ public class ValueGen {
         try {
             file.createNewFile();
         } catch (IOException ignored) {}
+    }
+
+    public static String getFileNameFromUri(Context context, Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = context.getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    if (nameIndex != -1) {
+                        result = cursor.getString(nameIndex);
+                    }
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getLastPathSegment();
+        }
+        return result;
     }
 }
