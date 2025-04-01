@@ -1,16 +1,30 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.details;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
+import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDashboardRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.WorkDashboardViewModel;
 
 public class WorkDashboardActivity extends AppCompatActivity {
+    private WorkDashboardViewModel viewModel;
+
+    private RecyclerView rv;
+    private WorkDashboardRecyclerViewAdapter rv_adapter;
+
+    private Work work;
+    private ImageButton btn_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +36,25 @@ public class WorkDashboardActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        work = (Work) getIntent().getSerializableExtra("work");
+
+        initObjects();
+        initFunctions();
+    }
+
+    private void initObjects() {
+        viewModel = new ViewModelProvider(this).get(WorkDashboardViewModel.class);
+
+        rv = findViewById(R.id.workdash_rv_details);
+        rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rv_adapter = new WorkDashboardRecyclerViewAdapter(work);
+        rv.setAdapter(rv_adapter);
+
+        btn_back = findViewById(R.id.imgbtn_back);
+    }
+
+    private void initFunctions() {
+        btn_back.setOnClickListener(v -> finish());
     }
 }

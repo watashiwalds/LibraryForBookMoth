@@ -143,4 +143,8 @@ public class LibApiRepository {
         RequestBody resJson = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(info));
         api.postChapter(token, work_id, contentFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
     }
+
+    public void getWorkStats(String token, int work_id, InnerCallback<ResponseBody> callback) {
+        api.getWorkStats(token, work_id).enqueue(NoProcessingCallback.make(callback));
+    }
 }

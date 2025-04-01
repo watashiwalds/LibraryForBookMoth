@@ -1,0 +1,100 @@
+package com.lsdapps.uni.bookmoth_library.library.ui.adapter;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
+import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
+import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewholder.ChapterItemRecyclerViewHolder;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewholder.WorkDashboardActionRecyclerViewHolder;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewholder.WorkDashboardStatsRecyclerViewHolder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class WorkDashboardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static int VIEWTYPE_STATS = 0;
+    private static int VIEWTYPE_QUICKACTION = 1;
+    private static int VIEWTYPE_CHAPTERS = 2;
+
+    private OnItemClickListener addChapter = null;
+    private OnItemClickListener deleteWork = null;
+    private OnItemClickListener editWork = null;
+    private OnItemClickListener chapterClick = null;
+
+    private Work work;
+    private List<Chapter> chapters = new ArrayList<>();
+
+    public WorkDashboardRecyclerViewAdapter(Work work) {
+        this.work = work;
+    }
+
+    public void attachQuickActionListener(OnItemClickListener addChapter, OnItemClickListener deleteWork, OnItemClickListener editWork) {
+        this.addChapter = addChapter;
+        this.deleteWork = deleteWork;
+        this.editWork = editWork;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? VIEWTYPE_STATS : position == 1 ? VIEWTYPE_QUICKACTION : VIEWTYPE_CHAPTERS;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEWTYPE_STATS) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_obj_workdash_stats, parent, false);
+            return new WorkDashboardStatsRecyclerViewHolder(v);
+        } else if (viewType == VIEWTYPE_QUICKACTION) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_workdash_quickaction, parent, false);
+            return new WorkDashboardActionRecyclerViewHolder(v);
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chapter_list, parent, false);
+            return new ChapterItemRecyclerViewHolder(v, chapterClick);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof WorkDashboardStatsRecyclerViewHolder) {
+            WorkDashboardStatsRecyclerViewHolder hdr = (WorkDashboardStatsRecyclerViewHolder) holder;
+            if (work.getCover_url() != null && !work.getCover_url().isBlank()) {
+                Glide.with(hdr.cover)
+                        .load(AppConst.API_URL + AppConst.CDN_COVER + work.getCover_url())
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(hdr.cover);
+            }
+            hdr.author.setText(work.getAuthor_name());
+            hdr.title.setText(work.getTitle());
+        }
+        else if (holder instanceof WorkDashboardActionRecyclerViewHolder) {
+            WorkDashboardActionRecyclerViewHolder hdr = (WorkDashboardActionRecyclerViewHolder) holder;
+            // TODO: Finalize the click function
+//            hdr.fl_addChapter.setOnClickListener(v -> addChapter.onItemClick(work.getWork_id()));
+//            hdr.fl_deleteWork.setOnClickListener(v -> deleteWork.onItemClick(work.getWork_id()));
+//            hdr.fl_editWork.setOnClickListener(v -> editWork.onItemClick(work.getWork_id()));
+        } else {
+            ChapterItemRecyclerViewHolder hdr = (ChapterItemRecyclerViewHolder) holder;
+            hdr.arrayIndex = (chapters.size() - 1) - (position - 2);
+            Chapter item = chapters.get(hdr.arrayIndex);
+            hdr.index.setText(String.valueOf(chapters.indexOf(item)+1));
+            hdr.pdate.setText(DateTimeFormat.format(item.getPost_date(), DateTimeFormat.DATE_TIME));
+            hdr.title.setText(item.getTitle());
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return chapters.size() + 2;
+    }
+}

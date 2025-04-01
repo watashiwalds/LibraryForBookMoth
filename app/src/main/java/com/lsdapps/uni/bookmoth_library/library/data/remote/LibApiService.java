@@ -56,4 +56,10 @@ public interface LibApiService {
         @Part MultipartBody.Part content,
         @Part("json") RequestBody info
     );
+
+    @GET("/libapi/work/{wid}/stats")
+    Call<ResponseBody> getWorkStats(
+        @Header("Authorization") String token,
+        @Path("wid") int work_id
+    );
 }
