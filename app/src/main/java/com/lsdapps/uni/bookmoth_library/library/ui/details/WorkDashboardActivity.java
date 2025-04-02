@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDashboardRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.AddChapterActivity;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewclass.BottomConfirmDialog;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.WorkDashboardViewModel;
 
 import java.util.ArrayList;
@@ -72,12 +74,31 @@ public class WorkDashboardActivity extends AppCompatActivity {
         btn_back.setOnClickListener(v -> finish());
 
         rv_adapter.attachQuickActionListener(
-            pos -> {
+            wid -> {
                 Intent it = new Intent(this, AddChapterActivity.class);
                 it.putExtra("works", new ArrayList<Work>(Arrays.asList(work)));
                 startActivity(it);
             },
-            null, null);
+            wid -> {
+                BottomConfirmDialog cf = new BottomConfirmDialog(this);
+                cf.setTitle(getString(R.string.remwork_confirm_title));
+                cf.setClarifyText(getString(R.string.remwork_confirm_clarify));
+                cf.setFinalActionNote(getString(R.string.general_areyousure));
+                cf.setSubmitClickNeeded(3);
+                cf.setOnMadeDecisionListener(new BottomConfirmDialog.OnMadeDecisionListener() {
+                    @Override
+                    public void cancel() {
+                        cf.dismiss();
+                    }
+
+                    @Override
+                    public void submit() {
+                        cf.dismiss();
+                        InnerToast.show(WorkDashboardActivity.this, "The work will be deleted: " + String.valueOf(wid));
+                    }
+                });
+                cf.show();
+            }, null);
     }
 
     private void initLiveData() {
