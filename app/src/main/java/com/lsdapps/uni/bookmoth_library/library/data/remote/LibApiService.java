@@ -62,4 +62,10 @@ public interface LibApiService {
         @Header("Authorization") String token,
         @Path("wid") int work_id
     );
+
+    @DELETE("/libapi/work/{wid}/delete")
+    Call<ResponseBody> deleteWork(
+        @Header("Authorization") String token,
+        @Path("wid") int work_id
+    );
 }

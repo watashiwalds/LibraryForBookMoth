@@ -2,7 +2,10 @@ package com.lsdapps.uni.bookmoth_library.library.ui.details;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -14,8 +17,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
+import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
@@ -28,6 +33,7 @@ import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.WorkDashboardViewMo
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class WorkDashboardActivity extends AppCompatActivity {
     private WorkDashboardViewModel viewModel;
@@ -94,7 +100,9 @@ public class WorkDashboardActivity extends AppCompatActivity {
                     @Override
                     public void submit() {
                         cf.dismiss();
-                        InnerToast.show(WorkDashboardActivity.this, "The work will be deleted: " + String.valueOf(wid));
+                        findViewById(R.id.frame_loading).setVisibility(View.VISIBLE);
+                        Glide.with(WorkDashboardActivity.this).load(R.drawable.animation_loading).into((ImageView)findViewById(R.id.frame_loading_gif));
+                        viewModel.removeWork(wid);
                     }
                 });
                 cf.show();
@@ -112,6 +120,15 @@ public class WorkDashboardActivity extends AppCompatActivity {
             chapters.clear();
             chapters.addAll(v);
             rv_adapter.notifyDataSetChanged();
+        });
+        viewModel.getMessage().observe(this, v -> {
+            findViewById(R.id.frame_loading).setVisibility(View.GONE);
+            if (v.isEmpty()) {
+                InnerToast.show(this, getString(R.string.remwork_res_success));
+                finish();
+            } else {
+                ErrorDialog.showError(this, String.format(Locale.getDefault(), "%s:\n%s", getString(R.string.remwork_res_failed), v));
+            }
         });
     }
 }

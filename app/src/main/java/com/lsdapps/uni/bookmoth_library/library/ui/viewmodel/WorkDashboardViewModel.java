@@ -11,6 +11,7 @@ import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChaptersOfWorkUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetWorkStatsUseCase;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.RemoveWorkUseCase;
 
 import java.util.List;
 
@@ -19,6 +20,10 @@ import okhttp3.ResponseBody;
 public class WorkDashboardViewModel extends ViewModel {
     private final GetWorkStatsUseCase getWorkStats = new GetWorkStatsUseCase(new LibApiRepository());
     private final GetChaptersOfWorkUseCase getChaptersOfWork = new GetChaptersOfWorkUseCase(new LibApiRepository());
+    private final RemoveWorkUseCase removeWork = new RemoveWorkUseCase(new LibApiRepository());
+
+    private final MutableLiveData<String> message = new MutableLiveData<>();
+    public LiveData<String> getMessage() {return message;}
 
     private final MutableLiveData<WorkStats> workStats = new MutableLiveData<>();
     public LiveData<WorkStats> getWorkStats() {return workStats;}
@@ -55,6 +60,20 @@ public class WorkDashboardViewModel extends ViewModel {
 
             @Override
             public void onError(String errorMessage) {}
+        });
+    }
+
+    public void removeWork(int work_id) {
+        removeWork.run(AppConst.TEST_TOKEN, work_id, new InnerCallback<String>() {
+            @Override
+            public void onSuccess(String body) {
+                message.setValue("");
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                message.setValue(errorMessage);
+            }
         });
     }
 

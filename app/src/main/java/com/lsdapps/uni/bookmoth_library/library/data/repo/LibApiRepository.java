@@ -147,4 +147,8 @@ public class LibApiRepository {
     public void getWorkStats(String token, int work_id, InnerCallback<ResponseBody> callback) {
         api.getWorkStats(token, work_id).enqueue(NoProcessingCallback.make(callback));
     }
+
+    public void deleteWork(String token, int work_id, InnerCallback<String> callback) {
+        api.deleteWork(token, work_id).enqueue(MessageOnlyCallback.make(callback));
+    }
 }
