@@ -62,15 +62,16 @@ public class BottomConfirmDialog extends BottomSheetDialog {
 
     public void setSubmitClickNeeded(int count) {
         clickNeeded = count > 0 ? count : 1;
+        btnSubmit.setText(String.format("%s (%d)", ori_submittext, clickNeeded-clickClicked));
     }
 
     public void setOnMadeDecisionListener(OnMadeDecisionListener listener) {
         btnCancel.setOnClickListener(v -> listener.cancel());
         btnSubmit.setOnClickListener(v -> {
             clickClicked++;
-            if (clickNeeded > clickClicked+1)
+            if (clickNeeded > clickClicked)
                 btnSubmit.setText(String.format("%s (%d)", ori_submittext, clickNeeded-clickClicked));
-            else if (clickNeeded == clickClicked+1)
+            else if (clickNeeded == clickClicked)
                 btnSubmit.setText(ori_submittext);
             else
                 listener.submit();

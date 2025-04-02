@@ -57,4 +57,7 @@
     <string name="workdash_ui_followcount">Lượt theo dõi</string>
     <string name="workdash_ui_lastupdate">Cập nhật cuối</string>
     <string name="workdash_ui_price">Giá hiện tại</string>
+    <string name="remwork_confirm_title">Xoá tác phẩm</string>
+    <string name="remwork_confirm_clarify">Hành động này sẽ khiến tất cả dữ liệu liên quan (gồm các chương, lượt xem, nội dung,...) bị xoá khỏi máy chủ</string>
+    <string name="general_areyousure">Bạn chắc chắn với hành động này chứ?</string>
 </resources>
