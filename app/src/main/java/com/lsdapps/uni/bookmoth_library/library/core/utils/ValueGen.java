@@ -46,4 +46,8 @@ public class ValueGen {
         }
         return result;
     }
+
+    public static <T> T isNull(T value, T defaultValue) {
+        return value != null ? value : defaultValue;
+    }
 }
