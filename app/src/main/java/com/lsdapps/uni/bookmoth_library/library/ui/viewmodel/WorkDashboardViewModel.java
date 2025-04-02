@@ -8,17 +8,27 @@ import com.google.gson.Gson;
 import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
+import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChaptersOfWorkUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetWorkStatsUseCase;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 
 public class WorkDashboardViewModel extends ViewModel {
     private final GetWorkStatsUseCase getWorkStats = new GetWorkStatsUseCase(new LibApiRepository());
+    private final GetChaptersOfWorkUseCase getChaptersOfWork = new GetChaptersOfWorkUseCase(new LibApiRepository());
 
     private final MutableLiveData<WorkStats> workStats = new MutableLiveData<>();
     public LiveData<WorkStats> getWorkStats() {return workStats;}
     private void setWorkStats(WorkStats stats) {workStats.setValue(stats);}
-    public void fetchWorkStats(int work_id) {
+
+    private final MutableLiveData<List<Chapter>> chapters = new MutableLiveData<>();
+    public LiveData<List<Chapter>> getChapters() {return chapters;}
+    private void setChapters(List<Chapter> chapters) {this.chapters.setValue(chapters);}
+
+    public void fetchWork(int work_id) {
         getWorkStats.run(AppConst.TEST_TOKEN, work_id, new InnerCallback<ResponseBody>() {
             @Override
             public void onSuccess(ResponseBody body) {
@@ -28,6 +38,19 @@ public class WorkDashboardViewModel extends ViewModel {
                     WorkStats stats = gson.fromJson(json, WorkStats.class);
                     setWorkStats(stats);
                 } catch (Exception ignored) {}
+                fetchChapters(work_id);
+            }
+
+            @Override
+            public void onError(String errorMessage) {}
+        });
+    }
+
+    private void fetchChapters(int work_id) {
+        getChaptersOfWork.run(work_id, null, new InnerCallback<List<Chapter>>() {
+            @Override
+            public void onSuccess(List<Chapter> body) {
+                setChapters(body);
             }
 
             @Override

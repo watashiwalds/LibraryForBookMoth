@@ -32,10 +32,11 @@ public class WorkDashboardRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private OnItemClickListener chapterClick = null;
 
     private Work work;
-    private List<Chapter> chapters = new ArrayList<>();
+    private List<Chapter> chapters;
 
-    public WorkDashboardRecyclerViewAdapter(Work work) {
+    public WorkDashboardRecyclerViewAdapter(Work work, List<Chapter> chapters) {
         this.work = work;
+        this.chapters = chapters;
     }
 
     public void attachQuickActionListener(OnItemClickListener addChapter, OnItemClickListener deleteWork, OnItemClickListener editWork) {
@@ -83,7 +84,8 @@ public class WorkDashboardRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 //            hdr.fl_addChapter.setOnClickListener(v -> addChapter.onItemClick(work.getWork_id()));
 //            hdr.fl_deleteWork.setOnClickListener(v -> deleteWork.onItemClick(work.getWork_id()));
 //            hdr.fl_editWork.setOnClickListener(v -> editWork.onItemClick(work.getWork_id()));
-        } else {
+        }
+        else if (holder instanceof ChapterItemRecyclerViewHolder) {
             ChapterItemRecyclerViewHolder hdr = (ChapterItemRecyclerViewHolder) holder;
             hdr.arrayIndex = (chapters.size() - 1) - (position - 2);
             Chapter item = chapters.get(hdr.arrayIndex);
