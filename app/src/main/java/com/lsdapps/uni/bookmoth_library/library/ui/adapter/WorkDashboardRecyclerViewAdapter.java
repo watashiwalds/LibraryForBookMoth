@@ -71,7 +71,7 @@ public class WorkDashboardRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             WorkDashboardStatsRecyclerViewHolder hdr = (WorkDashboardStatsRecyclerViewHolder) holder;
             if (work.getCover_url() != null && !work.getCover_url().isBlank()) {
                 Glide.with(hdr.cover)
-                        .load(AppConst.API_URL + AppConst.CDN_COVER + work.getCover_url())
+                        .load(AppConst.API_URL + AppConst.CDN_COVER + work.getCover_url() + "?v=" + System.currentTimeMillis())
                         .into(hdr.cover);
             }
             hdr.author.setText(work.getAuthor_name());
