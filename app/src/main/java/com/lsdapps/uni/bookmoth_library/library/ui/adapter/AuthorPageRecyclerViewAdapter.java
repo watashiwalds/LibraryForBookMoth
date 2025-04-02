@@ -72,8 +72,7 @@ public class AuthorPageRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             hdr.title.setText(item.getTitle());
             hdr.author.setText(item.getAuthor_name());
             Glide.with(hdr.cover)
-                    .load(AppConst.API_URL + AppConst.CDN_COVER + item.getCover_url())
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .load(AppConst.API_URL + AppConst.CDN_COVER + item.getCover_url() + "?v=" + System.currentTimeMillis())
                     .into(hdr.cover);
         }
     }
