@@ -13,14 +13,14 @@ import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
-import com.lsdapps.uni.bookmoth_library.library.domain.usecase.CreateWorkUseCase;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.AddWorkUseCase;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
 public class AddWorkViewModel extends AndroidViewModel {
-    private final CreateWorkUseCase createWork = new CreateWorkUseCase(new LibApiRepository());
+    private final AddWorkUseCase createWork = new AddWorkUseCase(new LibApiRepository());
 
     private final MutableLiveData<Bundle> infoBundle = new MutableLiveData<>();
     private final MutableLiveData<String> message = new MutableLiveData<>();

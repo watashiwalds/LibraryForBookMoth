@@ -6,9 +6,9 @@ import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 
 import java.io.File;
 
-public class CreateWorkUseCase {
+public class AddWorkUseCase {
     private LibApiRepository repo;
-    public CreateWorkUseCase(LibApiRepository repo) {this.repo = repo;}
+    public AddWorkUseCase(LibApiRepository repo) {this.repo = repo;}
     public void run(String token, File cover, Work work, InnerCallback<String> callback) {
         repo.postWork(token, cover, work, callback);
     }
