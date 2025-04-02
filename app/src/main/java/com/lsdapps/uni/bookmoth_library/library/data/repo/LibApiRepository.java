@@ -151,4 +151,15 @@ public class LibApiRepository {
     public void deleteWork(String token, int work_id, InnerCallback<String> callback) {
         api.deleteWork(token, work_id).enqueue(MessageOnlyCallback.make(callback));
     }
+
+    public void putWork(String token, int work_id, File cover, Work info, InnerCallback<String> callback) {
+        RequestBody resFile = cover != null ?
+                RequestBody.create(MediaType.parse("image/*"), cover) :
+                null;
+        MultipartBody.Part coverFormatRes = resFile != null ?
+                MultipartBody.Part.createFormData("cover", "cover", resFile) :
+                null;
+        RequestBody resJson = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(info));
+        api.putWork(token, work_id, coverFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
+    }
 }

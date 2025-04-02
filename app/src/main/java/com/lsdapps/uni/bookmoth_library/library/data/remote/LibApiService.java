@@ -68,4 +68,12 @@ public interface LibApiService {
         @Header("Authorization") String token,
         @Path("wid") int work_id
     );
+
+    @Multipart
+    @PUT("/libapi/work/{wid}/put")
+    Call<ResponseBody> putWork(
+            @Header("Authorization") String token,
+            @Path("wid") int work_id,
+            @Part MultipartBody.Part cover,
+            @Part("json") RequestBody info);
 }

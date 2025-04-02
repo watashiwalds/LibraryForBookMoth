@@ -63,4 +63,7 @@
     <string name="remwork_res_success">Xoá tác phẩm thành công</string>
     <string name="remwork_res_failed">Xoá tác phẩm thất bại</string>
     <string name="updatework_ui_title">Sửa thông tin tác phẩm</string>
+    <string name="updatework_res_success">Sửa tác phẩm thành công</string>
+    <string name="updatework_res_failed">Sửa tác phẩm thất bại</string>
+    <string name="updatework_confirm_clarify">Bạn đang thực hiện sửa tác phẩm. Tổng thể thông tin tác phẩm sẽ được cập nhật như dưới</string>
 </resources>
