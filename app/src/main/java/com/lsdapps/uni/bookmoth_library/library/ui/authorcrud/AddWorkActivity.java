@@ -119,11 +119,11 @@ public class AddWorkActivity extends AppCompatActivity {
         boolean res = true;
 
         if (inp_title.getText() == null || inp_title.getText().toString().isEmpty()) {
-            inp_title.setError(getString(R.string.addwork_input_title_error_blank));
+            inp_title.setError(getString(R.string.work_input_title_error_blank));
             res = false;
         } else inp_title.setError(null);
         if (inp_price.getText() == null || inp_title.getText().toString().isEmpty()) {
-            inp_price.setError(getString(R.string.addwork_input_pricing_warning_defaultprice));
+            inp_price.setError(getString(R.string.work_input_pricing_warning_defaultprice));
         } else inp_price.setError(null);
 
         return res;
