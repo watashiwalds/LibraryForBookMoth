@@ -13,9 +13,11 @@
         android:text="warning bold title"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/dgcf_clarify1"
@@ -23,9 +25,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="some infos and clarity to explain what will happend"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dgcf_title" />
+        app:layout_constraintTop_toBottomOf="@+id/dgcf_title"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/dgcf_clarify2"
@@ -34,9 +38,11 @@
         android:layout_marginTop="8dp"
         android:text="secondary warning"
         android:textAlignment="center"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dgcf_fl_additionview" />
+        app:layout_constraintTop_toBottomOf="@+id/dgcf_fl_additionview"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/confirm_cancel"
