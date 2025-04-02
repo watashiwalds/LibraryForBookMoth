@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewclass.BottomConfirmDialog;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.CreateWorkViewModel;
 
 import java.util.Locale;
@@ -146,22 +147,29 @@ public class CreateWorkActivity extends AppCompatActivity {
     }
 
     private void finalInfoCheck(Bundle infos) {
-        BottomSheetDialog finalCheck = new BottomSheetDialog(this);
-        View finalCheckView = LayoutInflater.from(this).inflate(R.layout.dialog_creatework_finalcheck, null);
-        ((ImageView)finalCheckView.findViewById(R.id.addwork_fin_img)).setImageURI(infos.getParcelable("cover_uri"));
-        ((TextView)finalCheckView.findViewById(R.id.addwork_fin_title)).setText(infos.getString("title"));
-        ((TextView)finalCheckView.findViewById(R.id.addwork_fin_price)).setText(String.format(Locale.getDefault(), "%s: %d", getString(R.string.general_price), infos.getInt("price")));
-        ((TextView)finalCheckView.findViewById(R.id.addwork_fin_desc)).setText(infos.getString("description"));
-        finalCheckView.findViewById(R.id.addwork_fin_cancel).setOnClickListener(v -> {
-            finalCheck.dismiss();
+        BottomConfirmDialog finalCheckDialog = new BottomConfirmDialog(this);
+        finalCheckDialog.setTitle(getString(R.string.addwork_confirm_title));
+        finalCheckDialog.setClarifyText(getString(R.string.addwork_confirm_clarify));
+        View infosReviewView = LayoutInflater.from(this).inflate(R.layout.dialog_addwork_infosreview, null);
+            ((ImageView)infosReviewView.findViewById(R.id.addwork_fin_img)).setImageURI(infos.getParcelable("cover_uri"));
+            ((TextView)infosReviewView.findViewById(R.id.addwork_fin_title)).setText(infos.getString("title"));
+            ((TextView)infosReviewView.findViewById(R.id.addwork_fin_price)).setText(String.format(Locale.getDefault(), "%s: %d", getString(R.string.general_price), infos.getInt("price")));
+            ((TextView)infosReviewView.findViewById(R.id.addwork_fin_desc)).setText(infos.getString("description"));
+        finalCheckDialog.setClarifyView(infosReviewView);
+        finalCheckDialog.setOnMadeDecisionListener(new BottomConfirmDialog.OnMadeDecisionListener() {
+            @Override
+            public void cancel() {
+                finalCheckDialog.dismiss();
+            }
+
+            @Override
+            public void submit() {
+                viewModel.setInfoBundle(infos, CreateWorkActivity.this);
+                finalCheckDialog.dismiss();
+                frame_loading.setVisibility(View.VISIBLE);
+                Glide.with(CreateWorkActivity.this).load(R.drawable.animation_loading).into((ImageView)findViewById(R.id.frame_loading_gif));
+            }
         });
-        finalCheckView.findViewById(R.id.addwork_fin_submit).setOnClickListener(v -> {
-            viewModel.setInfoBundle(infos, this);
-            finalCheck.dismiss();
-            frame_loading.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.drawable.animation_loading).into((ImageView)findViewById(R.id.frame_loading_gif));
-        });
-        finalCheck.setContentView(finalCheckView);
-        finalCheck.show();
+        finalCheckDialog.show();
     }
 }

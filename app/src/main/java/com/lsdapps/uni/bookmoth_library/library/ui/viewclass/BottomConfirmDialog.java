@@ -22,7 +22,7 @@ public class BottomConfirmDialog extends BottomSheetDialog {
     private Button btnCancel;
     private Button btnSubmit;
     private String ori_submittext;
-    private int clickNeeded = 1;
+    private int clickNeeded = 0;
     private int clickClicked = 0;
 
     public BottomConfirmDialog(@NonNull Context context) {

@@ -37,8 +37,8 @@
     <string name="addwork_button_addcover">Thêm ảnh bìa</string>
     <string name="addwork_ui_headerguide">Hãy bắt đầu câu chuyện của bạn!\nLưu ý rằng các trường dấu * là bắt buộc!</string>
     <string name="addwork_ui_footerguide">Bạn có thể thêm chương sau khi đã tạo tác phẩm</string>
-    <string name="addwork_btn_submit">Xác nhận thông tin</string>
-    <string name="addwork_ui_finalcheck">Bạn chuẩn bị tạo tác phẩm mới như sau:</string>
+    <string name="addwork_confirm_title">Xác nhận thông tin</string>
+    <string name="addwork_confirm_clarify">Bạn đang thực hiện tạo tác phẩm mới với thông tin như dưới</string>
     <string name="addwork_res_success">Thêm tác phẩm mới thành công</string>
     <string name="addwork_res_failed">Thêm tác phẩm mới thất bại</string>
     <string name="addchapter_ui_title">Thêm chương mới</string>
