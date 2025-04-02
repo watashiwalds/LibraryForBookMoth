@@ -132,6 +132,10 @@ public class AddChapterActivity extends AppCompatActivity {
 
     private void initGraphics() {
         ly_chapterinfo.setVisibility(View.INVISIBLE);
+        if (dropdownString.size() == 1) {
+            inp_forwork.setText(dropdownString.get(0), false);
+            ly_chapterinfo.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initLiveData() {

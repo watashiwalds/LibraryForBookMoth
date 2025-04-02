@@ -81,7 +81,7 @@ public class WorkDashboardRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         else if (holder instanceof WorkDashboardActionRecyclerViewHolder) {
             WorkDashboardActionRecyclerViewHolder hdr = (WorkDashboardActionRecyclerViewHolder) holder;
             // TODO: Finalize the click function
-//            hdr.fl_addChapter.setOnClickListener(v -> addChapter.onItemClick(work.getWork_id()));
+            hdr.fl_addChapter.setOnClickListener(v -> addChapter.onItemClick(work.getWork_id()));
 //            hdr.fl_deleteWork.setOnClickListener(v -> deleteWork.onItemClick(work.getWork_id()));
 //            hdr.fl_editWork.setOnClickListener(v -> editWork.onItemClick(work.getWork_id()));
         }

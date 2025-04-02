@@ -1,5 +1,6 @@
 package com.lsdapps.uni.bookmoth_library.library.ui.details;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -17,10 +18,13 @@ import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
+import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDashboardRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.AddChapterActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.WorkDashboardViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class WorkDashboardActivity extends AppCompatActivity {
@@ -66,6 +70,14 @@ public class WorkDashboardActivity extends AppCompatActivity {
 
     private void initFunctions() {
         btn_back.setOnClickListener(v -> finish());
+
+        rv_adapter.attachQuickActionListener(
+            pos -> {
+                Intent it = new Intent(this, AddChapterActivity.class);
+                it.putExtra("works", new ArrayList<Work>(Arrays.asList(work)));
+                startActivity(it);
+            },
+            null, null);
     }
 
     private void initLiveData() {
