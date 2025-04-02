@@ -19,13 +19,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-public class CreateWorkViewModel extends AndroidViewModel {
+public class AddWorkViewModel extends AndroidViewModel {
     private final CreateWorkUseCase createWork = new CreateWorkUseCase(new LibApiRepository());
 
     private final MutableLiveData<Bundle> infoBundle = new MutableLiveData<>();
     private final MutableLiveData<String> message = new MutableLiveData<>();
 
-    public CreateWorkViewModel(@NonNull Application application) {
+    public AddWorkViewModel(@NonNull Application application) {
         super(application);
     }
 

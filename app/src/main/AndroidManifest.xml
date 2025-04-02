@@ -22,7 +22,7 @@
             android:name=".library.ui.authorcrud.AddChapterActivity"
             android:exported="false" />
         <activity
-            android:name=".library.ui.authorcrud.CreateWorkActivity"
+            android:name=".library.ui.authorcrud.AddWorkActivity"
             android:exported="false" />
         <activity
             android:name=".library.ui.reader.ReaderActivity"

@@ -2,11 +2,9 @@ package com.lsdapps.uni.bookmoth_library.library.ui.library;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,17 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
-import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
-import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
-import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
-import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
-import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetCreatedWorksUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.AuthorPageRecyclerViewAdapter;
-import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
-import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.AddChapterActivity;
-import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.CreateWorkActivity;
+import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.AddWorkActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.details.WorkDashboardActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.LibraryWorkViewModel;
 
@@ -74,7 +65,7 @@ public class AuthorFragment extends Fragment {
 
         rv_works_adapter = new AuthorPageRecyclerViewAdapter(works);
         rv_works_adapter.attachAddWorkListener(pos -> {
-            Intent createWork = new Intent(requireContext(), CreateWorkActivity.class);
+            Intent createWork = new Intent(requireContext(), AddWorkActivity.class);
             createWork.putExtra("credential", AppConst.TEST_TOKEN);
             startActivity(createWork);
         });

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,17 +22,16 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewclass.BottomConfirmDialog;
-import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.CreateWorkViewModel;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.AddWorkViewModel;
 
 import java.util.Locale;
 
-public class CreateWorkActivity extends AppCompatActivity {
-    private CreateWorkViewModel viewModel;
+public class AddWorkActivity extends AppCompatActivity {
+    private AddWorkViewModel viewModel;
 
     private ImageButton btn_back;
     private Button btn_submit;
@@ -63,7 +61,7 @@ public class CreateWorkActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_create_work);
+        setContentView(R.layout.activity_add_work);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -78,7 +76,7 @@ public class CreateWorkActivity extends AppCompatActivity {
     }
 
     private void initObjects() {
-        viewModel = new ViewModelProvider(this).get(CreateWorkViewModel.class);
+        viewModel = new ViewModelProvider(this).get(AddWorkViewModel.class);
 
         btn_addcover = findViewById(R.id.addwork_btn_addcover);
         btn_submit = findViewById(R.id.addwork_btn_submit);
@@ -164,10 +162,10 @@ public class CreateWorkActivity extends AppCompatActivity {
 
             @Override
             public void submit() {
-                viewModel.setInfoBundle(infos, CreateWorkActivity.this);
+                viewModel.setInfoBundle(infos, AddWorkActivity.this);
                 finalCheckDialog.dismiss();
                 frame_loading.setVisibility(View.VISIBLE);
-                Glide.with(CreateWorkActivity.this).load(R.drawable.animation_loading).into((ImageView)findViewById(R.id.frame_loading_gif));
+                Glide.with(AddWorkActivity.this).load(R.drawable.animation_loading).into((ImageView)findViewById(R.id.frame_loading_gif));
             }
         });
         finalCheckDialog.show();
