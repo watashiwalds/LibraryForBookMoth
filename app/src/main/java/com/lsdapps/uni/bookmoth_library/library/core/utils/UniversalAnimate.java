@@ -11,19 +11,19 @@ public class UniversalAnimate {
     public static void animateWallHiding(ViewGroup tb, int placement, boolean doHiding) {
         switch (placement) {
             case PLACEMENT_TOP:
-                tb.setTranslationY(!doHiding ? -tb.getHeight() : 0);
+                if (!doHiding) tb.setTranslationY(-tb.getHeight());
                 ObjectAnimator.ofFloat(tb, "translationY", doHiding ? -tb.getHeight() : 0).setDuration(200).start();
                 break;
             case PLACEMENT_END:
-                tb.setTranslationX(!doHiding ? tb.getWidth() : 0);
+                if (!doHiding) tb.setTranslationY(tb.getWidth());
                 ObjectAnimator.ofFloat(tb, "translationX", doHiding ? tb.getWidth() : 0).setDuration(200).start();
                 break;
             case PLACEMENT_BOTTOM:
-                tb.setTranslationY(!doHiding ? tb.getHeight() : 0);
+                if (!doHiding) tb.setTranslationY(tb.getHeight());
                 ObjectAnimator.ofFloat(tb, "translationY", doHiding ? tb.getHeight() : 0).setDuration(200).start();
                 break;
             case PLACEMENT_START:
-                tb.setTranslationX(!doHiding ? -tb.getWidth() : 0);
+                if (!doHiding) tb.setTranslationY(-tb.getWidth());
                 ObjectAnimator.ofFloat(tb, "translationX", doHiding ? -tb.getWidth() : 0).setDuration(200).start();
                 break;
         }
