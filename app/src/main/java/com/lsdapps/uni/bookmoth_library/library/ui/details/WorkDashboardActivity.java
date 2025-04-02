@@ -27,6 +27,7 @@ import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDashboardRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.AddChapterActivity;
+import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.UpdateWorkActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewclass.BottomConfirmDialog;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.WorkDashboardViewModel;
 
@@ -106,7 +107,12 @@ public class WorkDashboardActivity extends AppCompatActivity {
                     }
                 });
                 cf.show();
-            }, null);
+            },
+            wid -> {
+                Intent it = new Intent(this, UpdateWorkActivity.class);
+                it.putExtra("work", work);
+                startActivity(it);
+            });
     }
 
     private void initLiveData() {

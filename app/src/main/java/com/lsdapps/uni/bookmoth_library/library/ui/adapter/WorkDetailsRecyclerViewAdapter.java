@@ -58,7 +58,6 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             if (work.getCover_url() != null && !work.getCover_url().isBlank()) {
                 Glide.with(hdr.cover)
                         .load(AppConst.API_URL + AppConst.CDN_COVER + work.getCover_url())
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .into(hdr.cover);
             }
             hdr.author.setText(work.getAuthor_name());
