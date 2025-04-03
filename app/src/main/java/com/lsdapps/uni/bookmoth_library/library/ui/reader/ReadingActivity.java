@@ -37,6 +37,7 @@ import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChapterContent
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.ManageSettingUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderChapterListViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderColorAdjustViewModel;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderMainViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderScrollViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderTextFormatViewModel;
 
@@ -47,11 +48,11 @@ import java.util.Locale;
 import io.noties.markwon.Markwon;
 
 public class ReadingActivity extends AppCompatActivity {
+    private ReaderMainViewModel readerViewModel;
     private ReaderScrollViewModel scrollViewModel;
     private ReaderTextFormatViewModel textFormatViewModel;
     private ReaderColorAdjustViewModel colorAdjustViewModel;
     private ReaderChapterListViewModel chaptersViewModel;
-    private GetChapterContentUseCase getChapterContent;
     private FragmentManager fragmentManager;
     private SharedPreferences readerSettings;
 
@@ -113,6 +114,7 @@ public class ReadingActivity extends AppCompatActivity {
 
         readerSettings = getSharedPreferences("BookmothLib_Reader", MODE_PRIVATE);
 
+        readerViewModel = new ViewModelProvider(this).get(ReaderMainViewModel.class);
         scrollViewModel = new ViewModelProvider(this).get(ReaderScrollViewModel.class);
         textFormatViewModel = new ViewModelProvider(this).get(ReaderTextFormatViewModel.class);
         colorAdjustViewModel = new ViewModelProvider(this).get(ReaderColorAdjustViewModel.class);
@@ -135,7 +137,6 @@ public class ReadingActivity extends AppCompatActivity {
     }
 
     private void initObjects() {
-        getChapterContent = new GetChapterContentUseCase(new LibApiRepository());
         fragmentManager = getSupportFragmentManager();
         for (Fragment f : fragmentManager.getFragments()) fragmentManager.beginTransaction().remove(f).commit();
 
@@ -348,6 +349,16 @@ public class ReadingActivity extends AppCompatActivity {
         colorAdjustViewModel.getBackgroundColor().observe(this, v -> nestedContainer.setBackgroundColor(v));
 
         loadExpansionData();
+
+        readerViewModel.getMarkdownString().observe(this, v -> {
+            makeMarkwon.setMarkdown(contentView, v);
+            initOnContentLoaded();
+        });
+        readerViewModel.getMessage().observe(this, v -> {
+            if (!v.isBlank()) {
+                ErrorDialog.showError(this, v);
+            }
+        });
     }
 
     private void loadExpansionData() {
@@ -382,18 +393,7 @@ public class ReadingActivity extends AppCompatActivity {
     }
 
     private void fetchContent() {
-        getChapterContent.run(AppConst.TEST_TOKEN, chapter.getContent_url(), new InnerCallback<String>() {
-            @Override
-            public void onSuccess(String body) {
-                makeMarkwon.setMarkdown(contentView, body);
-                initOnContentLoaded();
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                ErrorDialog.showError(ReadingActivity.this, errorMessage);
-            }
-        });
+        readerViewModel.fetchChapterContent(chapter);
     }
 
     private boolean fetchChapter(int index) {
