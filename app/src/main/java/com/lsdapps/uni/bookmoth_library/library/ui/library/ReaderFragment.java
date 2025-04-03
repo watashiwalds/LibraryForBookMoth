@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
-import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkItemRecyclerViewAdapter;
+import com.lsdapps.uni.bookmoth_library.library.ui.adapter.ReaderPageRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.LibraryWorkViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.details.WorkDetailActivity;
 
@@ -27,7 +27,10 @@ public class ReaderFragment extends Fragment {
     View view;
     List<Work> works = new ArrayList<>();
     RecyclerView rv_works;
-    WorkItemRecyclerViewAdapter rv_works_adapter;
+    GridLayoutManager rv_layoutManager;
+    ReaderPageRecyclerViewAdapter rv_works_adapter;
+
+    private int gridColSize = 3;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,12 +55,25 @@ public class ReaderFragment extends Fragment {
         viewModel = new ViewModelProvider(requireActivity()).get(LibraryWorkViewModel.class);
 
         rv_works = view.findViewById(R.id.lib_rv_writelist);
-        rv_works.setLayoutManager(new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false));
-        rv_works_adapter = new WorkItemRecyclerViewAdapter(works, pos -> {
-            Intent detailsActiv = new Intent(getContext(), WorkDetailActivity.class);
-            detailsActiv.putExtra("work", works.get(pos));
-            startActivity(detailsActiv);
+        rv_layoutManager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
+        rv_layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position == 0 ? gridColSize : 1;
+            }
         });
+        rv_works.setLayoutManager(rv_layoutManager);
+        rv_works_adapter = new ReaderPageRecyclerViewAdapter(
+                works,
+                pos -> {
+                    Intent detailsActiv = new Intent(getContext(), WorkDetailActivity.class);
+                    detailsActiv.putExtra("work", works.get(pos - 1));
+                    startActivity(detailsActiv);
+                },
+                view -> {
+                    viewModel.fetchOwnedWorks();
+                },
+                50);
         rv_works.setAdapter(rv_works_adapter);
     }
 

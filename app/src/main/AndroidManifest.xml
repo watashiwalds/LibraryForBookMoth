@@ -31,7 +31,7 @@
             android:name=".library.ui.authorcrud.AddWorkActivity"
             android:exported="false" />
         <activity
-            android:name=".library.ui.reader.ReaderActivity"
+            android:name=".library.ui.reader.ReadingActivity"
             android:exported="false" />
         <activity
             android:name=".library.ui.details.WorkDetailActivity"

@@ -29,7 +29,6 @@ public class LibraryMainFragment extends Fragment {
     View view;
 
     MaterialButton toggleMode;
-    TextView dummyTitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,7 +61,6 @@ public class LibraryMainFragment extends Fragment {
                 .commit();
 
         toggleMode = view.findViewById(R.id.lib_btnSwitchMode_main);
-        dummyTitle = view.findViewById(R.id.dummyTitle);
     }
 
     private void initFunctions() {
@@ -109,13 +107,11 @@ public class LibraryMainFragment extends Fragment {
                 toggleMode.setText(R.string.libmode_toAuthor);
                 toggleMode.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.baseline_edit_square_24));
                 toggleMode.setTag("reader");
-                dummyTitle.setText(R.string.libmode_title_reader);
                 break;
             case MODE_AUTHOR:
                 toggleMode.setText(R.string.libmode_toReader);
                 toggleMode.setIcon(ContextCompat.getDrawable(requireContext(), R.drawable.baseline_menu_book_24));
                 toggleMode.setTag("author");
-                dummyTitle.setText(R.string.libmode_title_author);
                 break;
         }
     }
