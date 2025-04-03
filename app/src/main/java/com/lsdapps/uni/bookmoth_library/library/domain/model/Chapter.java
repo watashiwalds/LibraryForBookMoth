@@ -32,4 +32,16 @@ public class Chapter implements Serializable {
     }
 
     public void setTitle(String title) {this.title = title;}
+
+    public void setWork_id(int work_id) {
+        this.work_id = work_id;
+    }
+
+    public void setPost_date(String post_date) {
+        this.post_date = post_date;
+    }
+
+    public void setContent_url(String content_url) {
+        this.content_url = content_url;
+    }
 }

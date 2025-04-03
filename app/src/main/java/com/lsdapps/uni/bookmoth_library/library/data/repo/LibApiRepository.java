@@ -166,4 +166,15 @@ public class LibApiRepository {
     public void deleteChapter(String token, int chapter_id, InnerCallback<String> callback) {
         api.deleteChapter(token, chapter_id).enqueue(MessageOnlyCallback.make(callback));
     }
+
+    public void putChapter(String token, int chapter_id, File content, String filename, Chapter info, InnerCallback<String> callback) {
+        RequestBody resFile = content != null ?
+                RequestBody.create(MediaType.parse("application/octet-stream"), content) :
+                null;
+        MultipartBody.Part contentFormatRes = resFile != null ?
+                MultipartBody.Part.createFormData("content", filename, resFile) :
+                null;
+        RequestBody resJson = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(info));
+        api.postChapter(token, chapter_id, contentFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
+    }
 }

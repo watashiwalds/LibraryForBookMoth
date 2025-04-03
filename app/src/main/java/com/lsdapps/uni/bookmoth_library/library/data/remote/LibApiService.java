@@ -82,4 +82,12 @@ public interface LibApiService {
             @Header("Authorization") String token,
             @Path("cid") int chapter_id
     );
+
+    @Multipart
+    @PUT("/libapi/chapter/{wid}/put")
+    Call<ResponseBody> putChapter(
+            @Header("Authorization") String token,
+            @Path("cid") int chapter_id,
+            @Part MultipartBody.Part content,
+            @Part("json") RequestBody info);
 }
