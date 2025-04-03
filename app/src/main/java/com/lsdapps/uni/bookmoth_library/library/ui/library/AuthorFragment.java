@@ -71,8 +71,8 @@ public class AuthorFragment extends Fragment {
         });
         rv_works_adapter.attachAddChapteristener(pos -> {
             Intent addChapter = new Intent(requireContext(), AddChapterActivity.class);
-            addChapter.putExtra("credential", AppConst.TEST_TOKEN);
-            addChapter.putExtra("works", (Serializable) works);
+            Bundle req = AddChapterActivity.makeRequirementBundle(AppConst.TEST_TOKEN, works);
+            addChapter.putExtra("requirement", req);
             startActivity(addChapter);
         });
         rv_works_adapter.attachWorkClickListener(pos -> {

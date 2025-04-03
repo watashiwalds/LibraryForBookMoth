@@ -31,6 +31,7 @@ import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.AddChapterViewModel;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -49,7 +50,7 @@ public class AddChapterActivity extends AppCompatActivity {
     private Button btn_submit;
     private FrameLayout frame_loading;
 
-    private List<Work> works;
+    private List<Work> works = new ArrayList<>();;
     private List<String> dropdownString;
     private Uri inp_content_uri;
     private String token;
@@ -64,6 +65,19 @@ public class AddChapterActivity extends AppCompatActivity {
         }
     );
 
+    /**
+     * Tạo Bundle với values cần thiết cho hoạt động của AddChapterActivity
+     * @param token Token xác thực
+     * @param works Danh sách tác phẩm
+     * @return Bundle, key="requirement"
+     */
+    public static Bundle makeRequirementBundle(String token, List<Work> works) {
+        Bundle req = new Bundle();
+        req.putString("credential", token);
+        req.putSerializable("works", (Serializable) works);
+        return req;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,9 +89,11 @@ public class AddChapterActivity extends AppCompatActivity {
             return insets;
         });
 
-        token = getIntent().getStringExtra("credential");
-        works = (List<Work>) getIntent().getSerializableExtra("works");
-        if (works == null) works = new ArrayList<>();
+        if (getIntent().getBundleExtra("requirement") != null) {
+            Bundle req = getIntent().getBundleExtra("requirement");
+            token = req.getString("credential");
+            works = (List<Work>) req.getSerializable("works");
+        }
 
         initObjects();
         initFunctions();
