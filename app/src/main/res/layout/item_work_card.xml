@@ -53,4 +53,14 @@
             app:layout_constraintTop_toBottomOf="@+id/awork_tv_title" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/indicator_new"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/shape_circle_new"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

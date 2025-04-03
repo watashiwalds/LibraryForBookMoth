@@ -41,11 +41,22 @@
         android:id="@+id/chapter_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
         android:ellipsize="end"
         android:singleLine="true"
         android:text="The chapter's name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/imageView11"
         app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/chapter_pdate"
+        app:layout_constraintStart_toEndOf="@+id/chapter_pdate"
+        app:layout_constraintTop_toTopOf="@+id/chapter_pdate"
+        app:srcCompat="@drawable/shape_circle_new"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
