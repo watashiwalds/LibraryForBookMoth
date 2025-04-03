@@ -9,7 +9,9 @@ import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.core.InnerCallback;
 import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
+import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChaptersOfWorkUseCase;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetWorkByIdUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetWorkStatsUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.RemoveChapterUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.RemoveWorkUseCase;
@@ -28,6 +30,7 @@ public class WorkDashboardViewModel extends ViewModel {
     public static final int ACTION_REMWORK = 0;
     public static final int ACTION_REMCHAP = 1;
     private int action;
+
     public LiveData<String> getMessage() {return message;}
     public int getAction() {return action;}
 
@@ -62,6 +65,7 @@ public class WorkDashboardViewModel extends ViewModel {
             @Override
             public void onSuccess(List<Chapter> body) {
                 setChapters(body);
+                fetchWorkInfo(work_id);
             }
 
             @Override
@@ -121,5 +125,20 @@ public class WorkDashboardViewModel extends ViewModel {
         public float getPrice() {
             return price;
         }
+    }
+
+    private final GetWorkByIdUseCase getWorkById = new GetWorkByIdUseCase(new LibApiRepository());
+    private final MutableLiveData<Work> work = new MutableLiveData<>();
+    public LiveData<Work> getWork() {return work;}
+    private void fetchWorkInfo(int work_id) {
+        getWorkById.run(work_id, new InnerCallback<Work>() {
+            @Override
+            public void onSuccess(Work body) {
+                work.setValue(body);
+            }
+
+            @Override
+            public void onError(String errorMessage) {}
+        });
     }
 }

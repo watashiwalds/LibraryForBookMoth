@@ -45,7 +45,8 @@ public class WorkDashboardActivity extends AppCompatActivity {
     private RecyclerView rv;
     private WorkDashboardRecyclerViewAdapter rv_adapter;
 
-    private Work work;
+    private int work_id;
+    private Work work = new Work();
     private List<Chapter> chapters = new ArrayList<>();
     private ImageButton btn_back;
 
@@ -60,13 +61,19 @@ public class WorkDashboardActivity extends AppCompatActivity {
             return insets;
         });
 
-        work = (Work) getIntent().getSerializableExtra("work");
+        work_id = getIntent().getIntExtra("work_id", 0);
 
         initObjects();
         initFunctions();
         initLiveData();
 
-        viewModel.fetchWork(work.getWork_id());
+        viewModel.fetchWork(work_id);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.fetchWork(work_id);
     }
 
     private void initObjects() {
@@ -172,6 +179,9 @@ public class WorkDashboardActivity extends AppCompatActivity {
         viewModel.getChapters().observe(this, v -> {
             chapters.clear();
             chapters.addAll(v);
+        });
+        viewModel.getWork().observe(this, v -> {
+            Work.cloneValue(work, v);
             rv_adapter.notifyDataSetChanged();
         });
         viewModel.getMessage().observe(this, v -> {
