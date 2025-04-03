@@ -9,4 +9,5 @@ public class AppConst {
     public static final int PROFILE_ID = 1;
 
     public static final String SHAREDPREFS_NAME = "BookmothLib";
+    public static final String SQLITEDB_NAME = "BookmothLib.db";
 }
