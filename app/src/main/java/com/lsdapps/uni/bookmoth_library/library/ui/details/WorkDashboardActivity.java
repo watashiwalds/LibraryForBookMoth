@@ -30,6 +30,7 @@ import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDashboardRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.AddChapterActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.UpdateWorkActivity;
+import com.lsdapps.uni.bookmoth_library.library.ui.reader.ReaderActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewclass.BottomConfirmDialog;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.WorkDashboardViewModel;
 
@@ -120,12 +121,18 @@ public class WorkDashboardActivity extends AppCompatActivity {
             View chapterQAView = LayoutInflater.from(this).inflate(R.layout.item_workdash_chapterquickaction, null);
             ((TextView)chapterQAView.findViewById(R.id.wdchapter_tv_toolbartitle)).setText(String.format(Locale.getDefault(), "%s %d", getString(R.string.chapter_chapter), pos+1));
             chapterQAView.findViewById(R.id.wdchapter_fl_readchapter).setOnClickListener(v -> {
-                InnerToast.show(this, "Read chapter " + chapters.get(pos).getContent_url());
+                chapterActionDialog.dismiss();
+                Intent it = new Intent(this, ReaderActivity.class);
+                Bundle req = ReaderActivity.makeRequirementBundle(chapters, work.getTitle(), pos);
+                it.putExtra("requirement", req);
+                startActivity(it);
             });
             chapterQAView.findViewById(R.id.wdchapter_fl_deletechapter).setOnClickListener(v -> {
+                chapterActionDialog.dismiss();
                 InnerToast.show(this, "Delete chapter " + chapters.get(pos).getChapter_id());
             });
             chapterQAView.findViewById(R.id.wdchapter_fl_editchapter).setOnClickListener(v -> {
+                chapterActionDialog.dismiss();
                 InnerToast.show(this, "Edit chapter " + chapters.get(pos).getChapter_id());
             });
             chapterActionDialog.setContentView(chapterQAView);
