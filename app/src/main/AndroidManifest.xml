@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Bookmoth_library"
         tools:targetApi="31">
         <activity
+            android:name=".library.ui.authorcrud.UpdateChapterActivity"
+            android:exported="false" />
+        <activity
             android:name=".library.ui.authorcrud.UpdateWorkActivity"
             android:exported="false" />
         <activity

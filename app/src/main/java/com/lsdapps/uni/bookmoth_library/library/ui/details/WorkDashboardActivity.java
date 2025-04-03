@@ -30,6 +30,7 @@ import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDashboardRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.AddChapterActivity;
+import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.UpdateChapterActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.UpdateWorkActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.reader.ReaderActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewclass.BottomConfirmDialog;
@@ -154,7 +155,9 @@ public class WorkDashboardActivity extends AppCompatActivity {
             });
             chapterQAView.findViewById(R.id.wdchapter_fl_editchapter).setOnClickListener(v -> {
                 chapterActionDialog.dismiss();
-                InnerToast.show(this, "Edit chapter " + chapters.get(pos).getChapter_id());
+                Intent it = new Intent(this, UpdateChapterActivity.class);
+                it.putExtra("chapter", chapters.get(pos));
+                startActivity(it);
             });
             chapterActionDialog.setContentView(chapterQAView);
             chapterActionDialog.show();

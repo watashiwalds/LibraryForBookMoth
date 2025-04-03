@@ -175,6 +175,6 @@ public class LibApiRepository {
                 MultipartBody.Part.createFormData("content", filename, resFile) :
                 null;
         RequestBody resJson = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(info));
-        api.postChapter(token, chapter_id, contentFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
+        api.putChapter(token, chapter_id, contentFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
     }
 }

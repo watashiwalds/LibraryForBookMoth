@@ -47,11 +47,11 @@ public class UpdateChapterViewModel extends ViewModel {
         Chapter chapter = new Chapter();
         chapter.setTitle(infos.getString("title"));
 
-        int work_id = infos.getInt("work_id");
+        int chapter_id = infos.getInt("chapter_id");
 
         String filename = infos.getString("filename");
 
-        updateChapter.run(token, work_id, contentFile, filename, chapter, new InnerCallback<String>() {
+        updateChapter.run(token, chapter_id, contentFile, filename, chapter, new InnerCallback<String>() {
             @Override
             public void onSuccess(String body) {
                 message.setValue("");

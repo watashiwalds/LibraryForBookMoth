@@ -73,4 +73,12 @@
     <string name="remchap_confirm_clarify">Hành động này sẽ khiến chương và nội dung chương bị xoá khỏi máy chủ</string>
     <string name="remchap_res_success">Xoá chươnng thành công</string>
     <string name="remchap_res_failed">Xoá chương thất bại</string>
+    <string name="updatechapter_ui_title">Sửa chương</string>
+    <string name="updatechapter_input_title">Tiêu đề chương</string>
+    <string name="updatechapter_button_addcontent">Thay nội dung</string>
+    <string name="updatechapter_ui_guide_supportedfiletype">Hỗ trợ tệp .docx, .txt, .md</string>
+    <string name="updatechapter_res_success">Sửa chương thành công</string>
+    <string name="updatechapter_res_failed">Sửa chương thất bại</string>
+    <string name="updatechapter_confirm_title">Sửa chương</string>
+    <string name="updatechapter_confirm_clarify">Trong trường hợp sửa nội dung chương, thông tin của chương sẽ được cập nhật</string>
 </resources>
