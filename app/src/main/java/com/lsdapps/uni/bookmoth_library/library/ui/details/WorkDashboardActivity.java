@@ -2,6 +2,7 @@ package com.lsdapps.uni.bookmoth_library.library.ui.details;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.lsdapps.uni.bookmoth_library.R;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
@@ -113,6 +115,22 @@ public class WorkDashboardActivity extends AppCompatActivity {
                 it.putExtra("work", work);
                 startActivity(it);
             });
+        rv_adapter.attachChapterClickListener(pos -> {
+            BottomSheetDialog chapterActionDialog = new BottomSheetDialog(this);
+            View chapterQAView = LayoutInflater.from(this).inflate(R.layout.item_workdash_chapterquickaction, null);
+            ((TextView)chapterQAView.findViewById(R.id.wdchapter_tv_toolbartitle)).setText(String.format(Locale.getDefault(), "%s %d", getString(R.string.chapter_chapter), pos+1));
+            chapterQAView.findViewById(R.id.wdchapter_fl_readchapter).setOnClickListener(v -> {
+                InnerToast.show(this, "Read chapter " + chapters.get(pos).getContent_url());
+            });
+            chapterQAView.findViewById(R.id.wdchapter_fl_deletechapter).setOnClickListener(v -> {
+                InnerToast.show(this, "Delete chapter " + chapters.get(pos).getChapter_id());
+            });
+            chapterQAView.findViewById(R.id.wdchapter_fl_editchapter).setOnClickListener(v -> {
+                InnerToast.show(this, "Edit chapter " + chapters.get(pos).getChapter_id());
+            });
+            chapterActionDialog.setContentView(chapterQAView);
+            chapterActionDialog.show();
+        });
     }
 
     private void initLiveData() {

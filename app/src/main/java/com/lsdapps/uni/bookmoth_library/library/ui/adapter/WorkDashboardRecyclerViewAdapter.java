@@ -45,6 +45,10 @@ public class WorkDashboardRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         this.editWork = editWork;
     }
 
+    public void attachChapterClickListener(OnItemClickListener chapterClick) {
+        this.chapterClick = chapterClick;
+    }
+
     @Override
     public int getItemViewType(int position) {
         return position == 0 ? VIEWTYPE_STATS : position == 1 ? VIEWTYPE_QUICKACTION : VIEWTYPE_CHAPTERS;

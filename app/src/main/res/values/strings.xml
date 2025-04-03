@@ -66,4 +66,7 @@
     <string name="updatework_res_success">Sửa tác phẩm thành công</string>
     <string name="updatework_res_failed">Sửa tác phẩm thất bại</string>
     <string name="updatework_confirm_clarify">Bạn đang thực hiện sửa tác phẩm. Tổng thể thông tin tác phẩm sẽ được cập nhật như dưới</string>
+    <string name="button_readchapter_label">Đọc chương</string>
+    <string name="button_deletechapter_label">Xoá chương</string>
+    <string name="button_editchapter_label">Sửa chương</string>
 </resources>
