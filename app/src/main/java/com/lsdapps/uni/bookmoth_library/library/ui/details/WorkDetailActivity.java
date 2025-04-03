@@ -2,6 +2,7 @@ package com.lsdapps.uni.bookmoth_library.library.ui.details;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
@@ -55,7 +56,15 @@ public class WorkDetailActivity extends AppCompatActivity {
         initFunctions();
         initLiveData();
 
-        viewModel.fetchChapters(work.getWork_id());
+        viewModel.fetchData(work.getWork_id());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        rv_workDetails.post(() -> {
+            viewModel.fetchData(work.getWork_id());
+        });
     }
 
     private void initObjects() {
@@ -85,11 +94,17 @@ public class WorkDetailActivity extends AppCompatActivity {
     }
 
     private void initLiveData() {
+        viewModel.getWork().observe(this, v -> {
+            Work.cloneValue(work, v);
+        });
         viewModel.getChapters().observe(this, v -> {
             chapters.clear();
             chapters.addAll(v);
+        });
+        viewModel.getReadChapters().observe(this, v -> {
             readChapters.clear();
-            readChapters.addAll(viewModel.getReadChapters());
+            readChapters.addAll(v);
+            Log.d("READER ACTIVITY", String.valueOf(readChapters.size()));
             rv_workDetails_adapter.notifyDataSetChanged();
         });
     }

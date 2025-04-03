@@ -30,7 +30,7 @@ public class DateTimeFormat {
             else
                 return "";
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            return "";
         }
     }
 }

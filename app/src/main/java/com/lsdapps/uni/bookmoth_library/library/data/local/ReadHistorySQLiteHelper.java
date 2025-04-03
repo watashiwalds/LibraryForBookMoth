@@ -19,6 +19,9 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
     public static final String WORK = "work_id";
     public static final String POSTDATE = "post_date";
 
+    private final SQLiteDatabase wr = getWritableDatabase();
+    private final SQLiteDatabase rd = getReadableDatabase();
+
     public ReadHistorySQLiteHelper(@Nullable Context context) {
         super(context, AppConst.SQLITEDB_NAME, null, 1);
     }
@@ -26,8 +29,8 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String query = "create table " + TABLENAME + " ( " +
-                ID + " interger primary key, " +
-                WORK + " interger, " +
+                ID + " integer primary key, " +
+                WORK + " integer, " +
                 POSTDATE + " datetime )";
         sqLiteDatabase.execSQL(query);
     }
@@ -38,17 +41,18 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
         cv.put(WORK, rec.getWork_id());
         cv.put(POSTDATE, DateTimeFormat.format(rec.getPost_date(), DateTimeFormat.SQLITE));
         if (!isRead(rec.getChapter_id())) insert(cv);
-        else update(rec.getChapter_id(), cv);
     }
 
     public boolean isRead(int chapter_id) {
-        Cursor cr = getReadableDatabase().rawQuery("select " + ID + " from " + TABLENAME + " where " + ID + " = " + chapter_id, null);
+        Cursor cr = rd.rawQuery("select " + ID + " from " + TABLENAME + " where " + ID + " = " + chapter_id, null);
         cr.moveToFirst();
-        return !cr.isAfterLast();
+        boolean res = !cr.isAfterLast();
+        cr.close();
+        return res;
     }
 
     public boolean isOutdated(int chapter_id, String post_date) {
-        Cursor cr = getReadableDatabase().rawQuery("select " + POSTDATE + " from " + TABLENAME + " where " + ID + " = " + chapter_id, null);
+        Cursor cr = rd.rawQuery("select " + POSTDATE + " from " + TABLENAME + " where " + ID + " = " + chapter_id + " limit 1", null);
         cr.moveToFirst();
         boolean res;
         if (cr.isAfterLast())
@@ -56,24 +60,26 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
         else {
             String recorded_date = cr.getString(cr.getColumnIndexOrThrow(POSTDATE));
             res = !recorded_date.equalsIgnoreCase(DateTimeFormat.format(post_date, DateTimeFormat.SQLITE));
+//            Log.d("SQLITEREAD", String.format("%s %s %s", recorded_date, DateTimeFormat.format(post_date, DateTimeFormat.SQLITE), res ? "true" : "false"));
             if (res) {
                 delete(chapter_id);
             }
         }
+        cr.close();
         return res;
     }
 
     private void insert(ContentValues cv) {
-        getWritableDatabase().insert(TABLENAME, null, cv);
+        wr.insert(TABLENAME, null, cv);
     }
 
     private void update(int chapter_id, ContentValues cv) {
         if (cv.containsKey(ID)) cv.remove(ID);
-        getWritableDatabase().update(TABLENAME, cv, ID + " = " + chapter_id, null);
+        wr.update(TABLENAME, cv, ID + " = " + chapter_id, null);
     }
 
     private void delete(int chapter_id) {
-        getWritableDatabase().delete(TABLENAME, ID + " = " + chapter_id, null);
+        wr.delete(TABLENAME, ID + " = " + chapter_id, null);
     }
 
     @Override
