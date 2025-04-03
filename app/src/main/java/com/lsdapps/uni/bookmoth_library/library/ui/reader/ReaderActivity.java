@@ -129,11 +129,12 @@ public class ReaderActivity extends AppCompatActivity {
         initObjects();
         initGraphical();
         initFunctions();
+
+        fetchContent();
+
         initLiveData();
 
         displayHeaderInformation();
-
-        fetchContent();
     }
 
     private void initObjects() {
