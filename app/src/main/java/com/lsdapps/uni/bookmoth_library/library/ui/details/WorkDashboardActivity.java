@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.lsdapps.uni.bookmoth_library.R;
+import com.lsdapps.uni.bookmoth_library.library.core.AppConst;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.DateTimeFormat;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
@@ -86,7 +87,8 @@ public class WorkDashboardActivity extends AppCompatActivity {
         rv_adapter.attachQuickActionListener(
             wid -> {
                 Intent it = new Intent(this, AddChapterActivity.class);
-                it.putExtra("works", new ArrayList<Work>(Arrays.asList(work)));
+                Bundle req = AddChapterActivity.makeRequirementBundle(AppConst.TEST_TOKEN, new ArrayList<Work>(Arrays.asList(work)));
+                it.putExtra("requirement", req);
                 startActivity(it);
             },
             wid -> {
