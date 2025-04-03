@@ -48,7 +48,7 @@ public class WorkDetailsViewModel extends AndroidViewModel {
     private void makeReadChapters(List<Chapter> chapters) {
         List<Integer> reads = new ArrayList<>();
         for (Chapter c : chapters) {
-            if (!readHistory.isOutdated(c.getChapter_id(), c.getPost_date())) reads.add(c.getChapter_id());
+            if (readHistory.isRead(c.getChapter_id())) reads.add(c.getChapter_id());
         }
         readChapters.setValue(reads);
         Log.d("READED MODEL", String.valueOf(reads.size()));

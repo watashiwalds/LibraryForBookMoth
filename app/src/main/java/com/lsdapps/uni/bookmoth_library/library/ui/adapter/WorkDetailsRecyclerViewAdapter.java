@@ -78,7 +78,7 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             hdr.index.setText(String.valueOf(chapters.indexOf(item)+1));
             hdr.pdate.setText(DateTimeFormat.format(item.getPost_date(), DateTimeFormat.DATE_TIME));
             hdr.title.setText(item.getTitle());
-            if (!readChapters.contains(item.getChapter_id())) hdr.indicator_new.setVisibility(View.VISIBLE);
+//            if (!readChapters.contains(Integer.valueOf(item.getChapter_id()))) hdr.indicator_new.setVisibility(View.VISIBLE);
         }
     }
 
