@@ -48,7 +48,6 @@ public class AuthorPageRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         if (viewType == VIEWTYPE_QUICKACTION) {
             return new AuthorQuickActionRecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_author_quickaction, parent, false));
         } else {
-            //TODO: Click to open work's dashboard
             return new WorkItemRecyclerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_work_card, parent, false), workClickListener);
         }
     }
