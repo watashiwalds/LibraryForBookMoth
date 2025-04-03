@@ -45,11 +45,11 @@
         android:singleLine="true"
         android:text="The chapter's name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/imageView11"
+        app:layout_constraintStart_toStartOf="@+id/indicator_new"
         app:layout_constraintTop_toTopOf="@+id/textView2" />
 
     <ImageView
-        android:id="@+id/imageView11"
+        android:id="@+id/indicator_new"
         android:layout_width="8dp"
         android:layout_height="8dp"
         android:layout_marginStart="8dp"

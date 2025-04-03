@@ -25,7 +25,6 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        Log.d("SQLITEHELPER", "onCreate: ");
         String query = "create table " + TABLENAME + " ( " +
                 ID + " interger primary key, " +
                 WORK + " interger, " +
@@ -34,11 +33,10 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
     }
 
     public void record(ReadHistory rec) {
-        Log.d("SQLITEHELPER", String.valueOf(rec.getChapter_id()));
         ContentValues cv = new ContentValues();
         cv.put(ID, rec.getChapter_id());
         cv.put(WORK, rec.getWork_id());
-        cv.put(POSTDATE, rec.getPost_date());
+        cv.put(POSTDATE, DateTimeFormat.format(rec.getPost_date(), DateTimeFormat.SQLITE));
         if (!isRead(rec.getChapter_id())) insert(cv);
         else update(rec.getChapter_id(), cv);
     }
@@ -59,9 +57,7 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
             String recorded_date = cr.getString(cr.getColumnIndexOrThrow(POSTDATE));
             res = !recorded_date.equalsIgnoreCase(DateTimeFormat.format(post_date, DateTimeFormat.SQLITE));
             if (res) {
-                ContentValues cv = new ContentValues();
-                cv.put(POSTDATE, DateTimeFormat.format(post_date, DateTimeFormat.SQLITE));
-                update(chapter_id, cv);
+                delete(chapter_id);
             }
         }
         return res;
@@ -74,6 +70,10 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
     private void update(int chapter_id, ContentValues cv) {
         if (cv.containsKey(ID)) cv.remove(ID);
         getWritableDatabase().update(TABLENAME, cv, ID + " = " + chapter_id, null);
+    }
+
+    private void delete(int chapter_id) {
+        getWritableDatabase().delete(TABLENAME, ID + " = " + chapter_id, null);
     }
 
     @Override

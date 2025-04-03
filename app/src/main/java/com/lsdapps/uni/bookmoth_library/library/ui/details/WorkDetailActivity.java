@@ -32,6 +32,7 @@ public class WorkDetailActivity extends AppCompatActivity {
 
     Work work;
     ArrayList<Chapter> chapters;
+    ArrayList<Integer> readChapters;
 
     RecyclerView rv_workDetails;
     WorkDetailsRecyclerViewAdapter rv_workDetails_adapter;
@@ -62,10 +63,11 @@ public class WorkDetailActivity extends AppCompatActivity {
 
         work = (Work) getIntent().getSerializableExtra("work");
         chapters = new ArrayList<>();
+        readChapters = new ArrayList<>();
 
         rv_workDetails = findViewById(R.id.wkdt_rv_details);
         rv_workDetails.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        rv_workDetails_adapter = new WorkDetailsRecyclerViewAdapter(work, chapters, pos -> {
+        rv_workDetails_adapter = new WorkDetailsRecyclerViewAdapter(work, chapters, readChapters, pos -> {
             Intent reader = new Intent(this, ReadingActivity.class);
             Bundle req = ReadingActivity.makeRequirementBundle(chapters, work.getTitle(), pos);
             reader.putExtra("requirement", req);
@@ -86,6 +88,8 @@ public class WorkDetailActivity extends AppCompatActivity {
         viewModel.getChapters().observe(this, v -> {
             chapters.clear();
             chapters.addAll(v);
+            readChapters.clear();
+            readChapters.addAll(viewModel.getReadChapters());
             rv_workDetails_adapter.notifyDataSetChanged();
         });
     }

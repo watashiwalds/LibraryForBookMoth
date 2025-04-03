@@ -26,11 +26,13 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     private Work work;
     private List<Chapter> chapters;
+    private List<Integer> readChapters;
     private OnItemClickListener chapterClick;
 
-    public WorkDetailsRecyclerViewAdapter(Work work, List<Chapter> chapters, OnItemClickListener chapterClick) {
+    public WorkDetailsRecyclerViewAdapter(Work work, List<Chapter> chapters, List<Integer> readChapters, OnItemClickListener chapterClick) {
         this.work = work;
         this.chapters = chapters;
+        this.readChapters = readChapters;
         this.chapterClick = chapterClick;
     }
 
@@ -76,6 +78,7 @@ public class WorkDetailsRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
             hdr.index.setText(String.valueOf(chapters.indexOf(item)+1));
             hdr.pdate.setText(DateTimeFormat.format(item.getPost_date(), DateTimeFormat.DATE_TIME));
             hdr.title.setText(item.getTitle());
+            if (!readChapters.contains(item.getChapter_id())) hdr.indicator_new.setVisibility(View.VISIBLE);
         }
     }
 
