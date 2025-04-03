@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/addwork_fin_img"
+            android:id="@+id/work_fin_img"
             android:layout_width="90dp"
             android:layout_height="120dp"
             android:scaleType="centerCrop"
@@ -26,7 +26,7 @@
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
-            android:id="@+id/addwork_fin_title"
+            android:id="@+id/work_fin_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -34,29 +34,29 @@
             android:ellipsize="end"
             android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/addwork_fin_img"
+            app:layout_constraintStart_toEndOf="@+id/work_fin_img"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/addwork_fin_price"
+            android:id="@+id/work_fin_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/addwork_fin_title"
-            app:layout_constraintStart_toStartOf="@+id/addwork_fin_title"
-            app:layout_constraintTop_toBottomOf="@+id/addwork_fin_title" />
+            app:layout_constraintEnd_toEndOf="@+id/work_fin_title"
+            app:layout_constraintStart_toStartOf="@+id/work_fin_title"
+            app:layout_constraintTop_toBottomOf="@+id/work_fin_title" />
 
         <TextView
-            android:id="@+id/addwork_fin_desc"
+            android:id="@+id/work_fin_desc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:maxLines="3"
             android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/addwork_fin_price"
-            app:layout_constraintStart_toStartOf="@+id/addwork_fin_price"
-            app:layout_constraintTop_toBottomOf="@+id/addwork_fin_price" />
+            app:layout_constraintEnd_toEndOf="@+id/work_fin_price"
+            app:layout_constraintStart_toStartOf="@+id/work_fin_price"
+            app:layout_constraintTop_toBottomOf="@+id/work_fin_price" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

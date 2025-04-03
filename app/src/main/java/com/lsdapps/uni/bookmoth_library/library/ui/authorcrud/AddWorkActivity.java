@@ -148,11 +148,11 @@ public class AddWorkActivity extends AppCompatActivity {
         BottomConfirmDialog finalCheckDialog = new BottomConfirmDialog(this);
         finalCheckDialog.setTitle(getString(R.string.addwork_confirm_title));
         finalCheckDialog.setClarifyText(getString(R.string.addwork_confirm_clarify));
-        View infosReviewView = LayoutInflater.from(this).inflate(R.layout.dialog_addwork_infosreview, null);
-            ((ImageView)infosReviewView.findViewById(R.id.addwork_fin_img)).setImageURI(infos.getParcelable("cover_uri"));
-            ((TextView)infosReviewView.findViewById(R.id.addwork_fin_title)).setText(infos.getString("title"));
-            ((TextView)infosReviewView.findViewById(R.id.addwork_fin_price)).setText(String.format(Locale.getDefault(), "%s: %d", getString(R.string.general_price), infos.getInt("price")));
-            ((TextView)infosReviewView.findViewById(R.id.addwork_fin_desc)).setText(infos.getString("description"));
+        View infosReviewView = LayoutInflater.from(this).inflate(R.layout.dialog_work_infosreview, null);
+            ((ImageView)infosReviewView.findViewById(R.id.work_fin_img)).setImageURI(infos.getParcelable("cover_uri"));
+            ((TextView)infosReviewView.findViewById(R.id.work_fin_title)).setText(infos.getString("title"));
+            ((TextView)infosReviewView.findViewById(R.id.work_fin_price)).setText(String.format(Locale.getDefault(), "%s: %d", getString(R.string.general_price), infos.getInt("price")));
+            ((TextView)infosReviewView.findViewById(R.id.work_fin_desc)).setText(infos.getString("description"));
         finalCheckDialog.setClarifyView(infosReviewView);
         finalCheckDialog.setOnMadeDecisionListener(new BottomConfirmDialog.OnMadeDecisionListener() {
             @Override
