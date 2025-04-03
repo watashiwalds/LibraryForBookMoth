@@ -11,6 +11,7 @@ import com.lsdapps.uni.bookmoth_library.library.data.repo.LibApiRepository;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChaptersOfWorkUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetWorkStatsUseCase;
+import com.lsdapps.uni.bookmoth_library.library.domain.usecase.RemoveChapterUseCase;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.RemoveWorkUseCase;
 
 import java.util.List;
@@ -21,9 +22,14 @@ public class WorkDashboardViewModel extends ViewModel {
     private final GetWorkStatsUseCase getWorkStats = new GetWorkStatsUseCase(new LibApiRepository());
     private final GetChaptersOfWorkUseCase getChaptersOfWork = new GetChaptersOfWorkUseCase(new LibApiRepository());
     private final RemoveWorkUseCase removeWork = new RemoveWorkUseCase(new LibApiRepository());
+    private final RemoveChapterUseCase removeChapter = new RemoveChapterUseCase(new LibApiRepository());
 
     private final MutableLiveData<String> message = new MutableLiveData<>();
+    public static final int ACTION_REMWORK = 0;
+    public static final int ACTION_REMCHAP = 1;
+    private int action;
     public LiveData<String> getMessage() {return message;}
+    public int getAction() {return action;}
 
     private final MutableLiveData<WorkStats> workStats = new MutableLiveData<>();
     public LiveData<WorkStats> getWorkStats() {return workStats;}
@@ -64,7 +70,23 @@ public class WorkDashboardViewModel extends ViewModel {
     }
 
     public void removeWork(int work_id) {
+        action = ACTION_REMWORK;
         removeWork.run(AppConst.TEST_TOKEN, work_id, new InnerCallback<String>() {
+            @Override
+            public void onSuccess(String body) {
+                message.setValue("");
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                message.setValue(errorMessage);
+            }
+        });
+    }
+
+    public void removeChaper(int chapter_id) {
+        action = ACTION_REMCHAP;
+        removeChapter.run(AppConst.TEST_TOKEN, chapter_id, new InnerCallback<String>() {
             @Override
             public void onSuccess(String body) {
                 message.setValue("");

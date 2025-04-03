@@ -76,4 +76,10 @@ public interface LibApiService {
             @Path("wid") int work_id,
             @Part MultipartBody.Part cover,
             @Part("json") RequestBody info);
+
+    @DELETE("/libapi/chapter/{cid}/delete")
+    Call<ResponseBody> deleteChapter(
+            @Header("Authorization") String token,
+            @Path("cid") int chapter_id
+    );
 }

@@ -69,4 +69,8 @@
     <string name="button_readchapter_label">Đọc chương</string>
     <string name="button_deletechapter_label">Xoá chương</string>
     <string name="button_editchapter_label">Sửa chương</string>
+    <string name="remchap_confirm_title">Xoá chương</string>
+    <string name="remchap_confirm_clarify">Hành động này sẽ khiến chương và nội dung chương bị xoá khỏi máy chủ</string>
+    <string name="remchap_res_success">Xoá chươnng thành công</string>
+    <string name="remchap_res_failed">Xoá chương thất bại</string>
 </resources>

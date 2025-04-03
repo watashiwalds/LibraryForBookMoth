@@ -131,7 +131,26 @@ public class WorkDashboardActivity extends AppCompatActivity {
             });
             chapterQAView.findViewById(R.id.wdchapter_fl_deletechapter).setOnClickListener(v -> {
                 chapterActionDialog.dismiss();
-                InnerToast.show(this, "Delete chapter " + chapters.get(pos).getChapter_id());
+                BottomConfirmDialog cf = new BottomConfirmDialog(this);
+                cf.setTitle(getString(R.string.remchap_confirm_title));
+                cf.setClarifyText(getString(R.string.remchap_confirm_clarify));
+                cf.setFinalActionNote(getString(R.string.general_areyousure));
+                cf.setSubmitClickNeeded(3);
+                cf.setOnMadeDecisionListener(new BottomConfirmDialog.OnMadeDecisionListener() {
+                    @Override
+                    public void cancel() {
+                        cf.dismiss();
+                    }
+
+                    @Override
+                    public void submit() {
+                        cf.dismiss();
+                        findViewById(R.id.frame_loading).setVisibility(View.VISIBLE);
+                        Glide.with(WorkDashboardActivity.this).load(R.drawable.animation_loading).into((ImageView) findViewById(R.id.frame_loading_gif));
+                        viewModel.removeChaper(chapters.get(pos).getChapter_id());
+                    }
+                });
+                cf.show();
             });
             chapterQAView.findViewById(R.id.wdchapter_fl_editchapter).setOnClickListener(v -> {
                 chapterActionDialog.dismiss();
@@ -156,11 +175,21 @@ public class WorkDashboardActivity extends AppCompatActivity {
         });
         viewModel.getMessage().observe(this, v -> {
             findViewById(R.id.frame_loading).setVisibility(View.GONE);
+            String successString = "";
+            String failedString = "";
+            if (viewModel.getAction() == WorkDashboardViewModel.ACTION_REMWORK) {
+                successString = getString(R.string.remwork_res_success);
+                failedString = getString(R.string.remwork_res_failed);
+            }
+            else if (viewModel.getAction() == WorkDashboardViewModel.ACTION_REMCHAP) {
+                successString = getString(R.string.remchap_res_success);
+                failedString = getString(R.string.remchap_res_failed);
+            }
             if (v.isEmpty()) {
-                InnerToast.show(this, getString(R.string.remwork_res_success));
+                InnerToast.show(this, successString);
                 finish();
             } else {
-                ErrorDialog.showError(this, String.format(Locale.getDefault(), "%s:\n%s", getString(R.string.remwork_res_failed), v));
+                ErrorDialog.showError(this, String.format(Locale.getDefault(), "%s:\n%s", failedString, v));
             }
         });
     }

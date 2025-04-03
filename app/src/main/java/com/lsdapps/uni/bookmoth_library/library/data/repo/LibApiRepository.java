@@ -162,4 +162,8 @@ public class LibApiRepository {
         RequestBody resJson = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(info));
         api.putWork(token, work_id, coverFormatRes, resJson).enqueue(MessageOnlyCallback.make(callback));
     }
+
+    public void deleteChapter(String token, int chapter_id, InnerCallback<String> callback) {
+        api.deleteChapter(token, chapter_id).enqueue(MessageOnlyCallback.make(callback));
+    }
 }
