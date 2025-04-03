@@ -14,12 +14,14 @@ public class WorkItemRecyclerViewHolder extends RecyclerView.ViewHolder {
     public ImageView cover;
     public TextView title;
     public TextView author;
+    public ImageView indicator_new;
 
     public WorkItemRecyclerViewHolder(@NonNull View itemView, OnItemClickListener listener) {
         super(itemView);
         cover = itemView.findViewById(R.id.awork_img_cover);
         title = itemView.findViewById(R.id.awork_tv_title);
         author = itemView.findViewById(R.id.awork_tv_author);
+        indicator_new = itemView.findViewById(R.id.indicator_new);
 
         itemView.setOnClickListener(v -> {
             if (listener != null) {

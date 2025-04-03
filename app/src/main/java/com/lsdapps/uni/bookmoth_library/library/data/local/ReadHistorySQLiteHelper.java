@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -17,7 +18,6 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
     public static final String ID = "chapter_id";
     public static final String WORK = "work_id";
     public static final String POSTDATE = "post_date";
-    public static final String READDATE = "read_date";
 
     public ReadHistorySQLiteHelper(@Nullable Context context) {
         super(context, AppConst.SQLITEDB_NAME, null, 1);
@@ -25,20 +25,20 @@ public class ReadHistorySQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        Log.d("SQLITEHELPER", "onCreate: ");
         String query = "create table " + TABLENAME + " ( " +
                 ID + " interger primary key, " +
                 WORK + " interger, " +
-                POSTDATE + " datetime, " +
-                READDATE + " datetime )";
+                POSTDATE + " datetime )";
         sqLiteDatabase.execSQL(query);
     }
 
     public void record(ReadHistory rec) {
+        Log.d("SQLITEHELPER", String.valueOf(rec.getChapter_id()));
         ContentValues cv = new ContentValues();
         cv.put(ID, rec.getChapter_id());
         cv.put(WORK, rec.getWork_id());
         cv.put(POSTDATE, rec.getPost_date());
-        cv.put(READDATE, rec.getRead_date());
         if (!isRead(rec.getChapter_id())) insert(cv);
         else update(rec.getChapter_id(), cv);
     }
