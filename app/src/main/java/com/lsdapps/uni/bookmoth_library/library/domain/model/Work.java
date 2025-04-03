@@ -69,4 +69,32 @@ public class Work implements Serializable {
     public void setCover_url(String cover_url) {
         this.cover_url = cover_url;
     }
+
+    void setWork_id(int work_id) {
+        this.work_id = work_id;
+    }
+
+    void setAuthor_name(String author_name) {
+        this.author_name = author_name;
+    }
+
+    void setPost_date(String post_date) {
+        this.post_date = post_date;
+    }
+
+    void setView_count(int view_count) {
+        this.view_count = view_count;
+    }
+
+    public static void cloneValue(Work to, Work from) {
+        to.setWork_id(from.getWork_id());
+        to.setDescription(from.description);
+        to.setPrice(from.getPrice());
+        to.setAuthor_name(from.getAuthor_name());
+        to.setTitle(from.getTitle());
+        to.setProfile_id(from.getProfile_id());
+        to.setPost_date(from.getPost_date());
+        to.setCover_url(from.getCover_url());
+        to.setView_count(from.getView_count());
+    }
 }
