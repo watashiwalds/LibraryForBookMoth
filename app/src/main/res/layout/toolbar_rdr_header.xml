@@ -28,6 +28,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
+        android:singleLine="true"
         android:text="The chapter's title goes here"
         android:textColor="@color/general"
         android:textSize="16sp"
