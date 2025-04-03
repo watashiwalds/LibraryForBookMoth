@@ -20,7 +20,7 @@ import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChaptersOfWorkUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDetailsRecyclerViewAdapter;
-import com.lsdapps.uni.bookmoth_library.library.ui.reader.ReaderActivity;
+import com.lsdapps.uni.bookmoth_library.library.ui.reader.ReadingActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +62,8 @@ public class WorkDetailActivity extends AppCompatActivity {
         rv_workDetails = findViewById(R.id.wkdt_rv_details);
         rv_workDetails.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rv_workDetails_adapter = new WorkDetailsRecyclerViewAdapter(work, chapters, pos -> {
-            Intent reader = new Intent(this, ReaderActivity.class);
-            Bundle req = ReaderActivity.makeRequirementBundle(chapters, work.getTitle(), pos);
+            Intent reader = new Intent(this, ReadingActivity.class);
+            Bundle req = ReadingActivity.makeRequirementBundle(chapters, work.getTitle(), pos);
             reader.putExtra("requirement", req);
             startActivity(reader);
         });

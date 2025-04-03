@@ -46,7 +46,7 @@ import java.util.Locale;
 
 import io.noties.markwon.Markwon;
 
-public class ReaderActivity extends AppCompatActivity {
+public class ReadingActivity extends AppCompatActivity {
     private ReaderScrollViewModel scrollViewModel;
     private ReaderTextFormatViewModel textFormatViewModel;
     private ReaderColorAdjustViewModel colorAdjustViewModel;
@@ -391,7 +391,7 @@ public class ReaderActivity extends AppCompatActivity {
 
             @Override
             public void onError(String errorMessage) {
-                ErrorDialog.showError(ReaderActivity.this, errorMessage);
+                ErrorDialog.showError(ReadingActivity.this, errorMessage);
             }
         });
     }

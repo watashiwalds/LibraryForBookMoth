@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,12 +26,11 @@ import com.lsdapps.uni.bookmoth_library.library.core.utils.ErrorDialog;
 import com.lsdapps.uni.bookmoth_library.library.core.utils.InnerToast;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Chapter;
 import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
-import com.lsdapps.uni.bookmoth_library.library.ui.adapter.OnItemClickListener;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDashboardRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.AddChapterActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.UpdateChapterActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.authorcrud.UpdateWorkActivity;
-import com.lsdapps.uni.bookmoth_library.library.ui.reader.ReaderActivity;
+import com.lsdapps.uni.bookmoth_library.library.ui.reader.ReadingActivity;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewclass.BottomConfirmDialog;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.WorkDashboardViewModel;
 
@@ -125,8 +123,8 @@ public class WorkDashboardActivity extends AppCompatActivity {
             ((TextView)chapterQAView.findViewById(R.id.wdchapter_tv_toolbartitle)).setText(String.format(Locale.getDefault(), "%s %d", getString(R.string.chapter_chapter), pos+1));
             chapterQAView.findViewById(R.id.wdchapter_fl_readchapter).setOnClickListener(v -> {
                 chapterActionDialog.dismiss();
-                Intent it = new Intent(this, ReaderActivity.class);
-                Bundle req = ReaderActivity.makeRequirementBundle(chapters, work.getTitle(), pos);
+                Intent it = new Intent(this, ReadingActivity.class);
+                Bundle req = ReadingActivity.makeRequirementBundle(chapters, work.getTitle(), pos);
                 it.putExtra("requirement", req);
                 startActivity(it);
             });
