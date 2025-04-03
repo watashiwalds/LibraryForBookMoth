@@ -12,6 +12,7 @@
         android:layout_height="32dp"
         android:background="#00FFFFFF"
         android:scaleType="centerCrop"
+        android:tint="@color/general"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_refresh_24" />

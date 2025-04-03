@@ -73,7 +73,7 @@ public class ReaderFragment extends Fragment {
                 view -> {
                     viewModel.fetchOwnedWorks();
                 },
-                50);
+                66);
         rv_works.setAdapter(rv_works_adapter);
     }
 
