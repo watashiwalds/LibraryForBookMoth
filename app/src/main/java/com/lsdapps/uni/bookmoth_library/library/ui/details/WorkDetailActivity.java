@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,12 +22,13 @@ import com.lsdapps.uni.bookmoth_library.library.domain.model.Work;
 import com.lsdapps.uni.bookmoth_library.library.domain.usecase.GetChaptersOfWorkUseCase;
 import com.lsdapps.uni.bookmoth_library.library.ui.adapter.WorkDetailsRecyclerViewAdapter;
 import com.lsdapps.uni.bookmoth_library.library.ui.reader.ReadingActivity;
+import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.WorkDetailsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WorkDetailActivity extends AppCompatActivity {
-    GetChaptersOfWorkUseCase getChaptersOfWork;
+    WorkDetailsViewModel viewModel;
 
     Work work;
     ArrayList<Chapter> chapters;
@@ -50,11 +52,13 @@ public class WorkDetailActivity extends AppCompatActivity {
 
         initObjects();
         initFunctions();
-        fetchChapters(work.getWork_id());
+        initLiveData();
+
+        viewModel.fetchChapters(work.getWork_id());
     }
 
     private void initObjects() {
-        getChaptersOfWork = new GetChaptersOfWorkUseCase(new LibApiRepository());
+        viewModel = new ViewModelProvider(this).get(WorkDetailsViewModel.class);
 
         work = (Work) getIntent().getSerializableExtra("work");
         chapters = new ArrayList<>();
@@ -78,19 +82,11 @@ public class WorkDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchChapters(int work_id) {
-        getChaptersOfWork.run(work_id, null, new InnerCallback<List<Chapter>>() {
-            @Override
-            public void onSuccess(List<Chapter> body) {
-                if (!chapters.isEmpty()) chapters.clear();
-                chapters.addAll(body);
-                rv_workDetails_adapter.notifyItemRangeInserted(1, chapters.size());
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                ErrorDialog.showError(WorkDetailActivity.this, errorMessage);
-            }
+    private void initLiveData() {
+        viewModel.getChapters().observe(this, v -> {
+            chapters.clear();
+            chapters.addAll(v);
+            rv_workDetails_adapter.notifyDataSetChanged();
         });
     }
 }
