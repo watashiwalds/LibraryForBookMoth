@@ -66,8 +66,6 @@ public class WorkDashboardActivity extends AppCompatActivity {
         initObjects();
         initFunctions();
         initLiveData();
-
-        viewModel.fetchWork(work_id);
     }
 
     @Override

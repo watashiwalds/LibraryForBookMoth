@@ -55,8 +55,6 @@ public class WorkDetailActivity extends AppCompatActivity {
         initObjects();
         initFunctions();
         initLiveData();
-
-        viewModel.fetchData(work.getWork_id());
     }
 
     @Override
@@ -104,7 +102,6 @@ public class WorkDetailActivity extends AppCompatActivity {
         viewModel.getReadChapters().observe(this, v -> {
             readChapters.clear();
             readChapters.addAll(v);
-            Log.d("READER ACTIVITY", String.valueOf(readChapters.size()));
             rv_workDetails_adapter.notifyDataSetChanged();
         });
     }
