@@ -40,6 +40,7 @@ import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderColorAdjustVi
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderScrollViewModel;
 import com.lsdapps.uni.bookmoth_library.library.ui.viewmodel.ReaderTextFormatViewModel;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
@@ -84,6 +85,21 @@ public class ReaderActivity extends AppCompatActivity {
 
     private Boolean barVisible = true;
 
+    /**
+     * Tạo Bundle gồm các giá trị cần thết cho các hoạt động của ReaderActivity
+     * @param chapters List of Chapter của related Work
+     * @param worktitle Tiêu đề tác phẩm
+     * @param chapterIndex Chapter được mở (according to chapter list above)
+     * @return Bundle để truyền vào Intent, key="requirement"
+     */
+    public static Bundle makeRequirementBundle(List<Chapter> chapters, String worktitle, int chapterIndex) {
+        Bundle bd = new Bundle();
+        bd.putSerializable("chapters", (Serializable) chapters);
+        bd.putString("worktitle", worktitle);
+        bd.putInt("index", chapterIndex);
+        return bd;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,10 +118,13 @@ public class ReaderActivity extends AppCompatActivity {
         colorAdjustViewModel = new ViewModelProvider(this).get(ReaderColorAdjustViewModel.class);
         chaptersViewModel = new ViewModelProvider(this).get(ReaderChapterListViewModel.class);
 
-        chapters = (List<Chapter>) getIntent().getSerializableExtra("chapters");
-        nowIndex = getIntent().getIntExtra("index", 0);
-        work_title = getIntent().getStringExtra("worktitle");
-        chapter = chapters.get(nowIndex);
+        if (getIntent().getBundleExtra("requirement") != null) {
+            Bundle req = getIntent().getBundleExtra("requirement");
+            chapters = (List<Chapter>) req.getSerializable("chapters");
+            nowIndex = req.getInt("index", 0);
+            work_title = req.getString("worktitle");
+            chapter = chapters.get(nowIndex);
+        }
 
         initObjects();
         initGraphical();
